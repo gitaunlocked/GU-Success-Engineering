@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Nuxt app",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"if exist node_modules rd /s /q node_modules && if exist .nuxt rd /s /q .nuxt && npm install && npm run dev"
+			],
+			"isBackground": true,
+			"group": "build"
+		}
+	]
+}

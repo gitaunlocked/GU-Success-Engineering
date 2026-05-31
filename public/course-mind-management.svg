@@ -1,0 +1,18 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="36" fill="#F5F3FF"/>
+  <circle cx="664" cy="120" r="58" fill="#7A10FF" fill-opacity="0.16"/>
+  <circle cx="132" cy="400" r="74" fill="#D61C75" fill-opacity="0.12"/>
+  <path d="M294 180C294 122.562 340.562 76 398 76V76C455.438 76 502 122.562 502 180V252C502 309.438 455.438 356 398 356V356C340.562 356 294 309.438 294 252V180Z" fill="white" stroke="#7A10FF" stroke-width="18"/>
+  <path d="M332 192C350.667 170.667 371 160 393 160C415 160 435.333 170.667 454 192" stroke="#D61C75" stroke-width="14" stroke-linecap="round"/>
+  <path d="M354 230C365.333 244 379.667 251 397 251C414.333 251 429 244 441 230" stroke="#F97316" stroke-width="14" stroke-linecap="round"/>
+  <path d="M398 356V432" stroke="#7A10FF" stroke-width="18" stroke-linecap="round"/>
+  <path d="M332 432H464" stroke="#7A10FF" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="248" cy="186" r="22" fill="#F97316"/>
+  <circle cx="550" cy="192" r="22" fill="#D61C75"/>
+  <circle cx="270" cy="286" r="16" fill="#FB7185"/>
+  <circle cx="530" cy="288" r="16" fill="#FDBA74"/>
+  <path d="M226 186H180" stroke="#F97316" stroke-width="12" stroke-linecap="round"/>
+  <path d="M572 192H618" stroke="#D61C75" stroke-width="12" stroke-linecap="round"/>
+  <text x="400" y="462" text-anchor="middle" fill="#111827" font-size="32" font-family="Arial, sans-serif" font-weight="700">Mind Management</text>
+  <text x="400" y="498" text-anchor="middle" fill="#4B5563" font-size="22" font-family="Arial, sans-serif">Focus, discipline, and calm thinking</text>
+</svg>

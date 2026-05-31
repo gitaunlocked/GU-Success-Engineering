@@ -1,0 +1,17 @@
+<template>
+    <div class="max-w-5xl mx-auto mt-16 pt-10 px-2 sm:px-4 lg:px-6">
+    <img src="/public/Overthinking.png" alt="Article Image" class="article-image" />
+
+    <div class="mt-8 space-y-6 text-gray-800 text-lg leading-relaxed px-2 md:px-4"> <h2 class="text-3xl font-extrabold text-[#FF7A00] uppercase">Overthinking</h2> <p> <strong class="text-gray-900">Overthinking</strong>—a state where the mind becomes trapped in endless loops of <span class="font-semibold text-red-600">worry, indecision, and anxiety</span>—is a common modern challenge. The <strong class="text-purple-700">Bhagavad Gita</strong>, though composed thousands of years ago, offers <span class="text-blue-700 font-medium">profound and practical wisdom</span> for overcoming this mental paralysis. Here’s how the Gita addresses overthinking and provides actionable guidance for clarity and peace. </p> <h3 class="text-2xl font-bold text-[#C700C1] mt-6">Key Teachings from the Gita to Overcome Overthinking</h3> <div class="bg-[#FFF3E0] p-5 rounded-lg border-l-4 border-orange-500 shadow"> <h4 class="text-xl font-bold text-orange-700">1. Focus on Action, Not the Outcome</h4> <p class="mt-2"> The Gita’s most famous teaching, <em class="italic text-gray-700">Karmanye vadhikaraste ma phaleshu kadachana</em> (<span class="font-semibold text-gray-800">Chapter 2, Verse 47</span>), urges us to focus on our <strong class="text-orange-700">duties and actions</strong> without obsessing over the results. Overthinking often stems from excessive worry about what might happen. By concentrating on <span class="text-blue-700 font-medium">sincere effort</span> and letting go of attachment to the outcome, we free our minds from unnecessary anxiety and mental clutter. </p> <p class="mt-2 font-semibold text-[#FF7A00]">👉 Lesson: Live in the present and trust the process.</p> </div> <div class="bg-[#F3F4F6] p-5 rounded-lg border-l-4 border-purple-500 shadow"> <h4 class="text-xl font-bold text-purple-700">2. Embrace Detachment</h4> <p class="mt-2"> Detachment in the Gita doesn’t mean apathy, but rather <strong class="text-purple-600">emotional freedom</strong> from the highs and lows of success and failure. Overthinking arises when we let our <span class="text-red-600 font-medium">desires and fears</span> dominate our thoughts. Practicing detachment, as Krishna advises, helps us maintain <strong class="text-purple-700">balance and mental clarity</strong>. </p> <p class="mt-2 font-semibold text-purple-600">👉 Lesson: Let go of what you cannot control and maintain equanimity.</p> </div> <div class="bg-[#E3F2FD] p-5 rounded-lg border-l-4 border-blue-400 shadow"> <h4 class="text-xl font-bold text-blue-700">3. Cultivate a Stable Mind (Stithaprajna)</h4> <p class="mt-2"> A stable mind, or <em class="italic text-gray-700">stithaprajna</em>, is one that remains calm amid pleasure and pain. The Gita encourages us to train our minds to <strong class="text-blue-700">respond thoughtfully</strong> rather than react impulsively. Overthinking thrives on emotional turbulence, but a steady mind navigates life’s challenges with composure. </p> <p class="mt-2 font-semibold text-blue-600">👉 Lesson: Respond, don’t react. Train your mind to remain centered amidst chaos.</p> </div> </div>
+</div>
+  </template>
+
+<style>
+.article-image {
+  width: 100%;
+  height: auto;          /* ✅ auto height for mobile */
+  max-height: 70vh;      /* ✅ keep images from being too tall */
+  object-fit: cover;     /* crop proportionally */
+  border-radius: 12px;
+}
+</style>
