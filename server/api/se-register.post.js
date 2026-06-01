@@ -60,7 +60,15 @@ export default defineEventHandler(async (event) => {
     })
 
     // Best-effort emails — never block a successful registration.
-    const mail = await sendRegistrationEmails(reg)
+    // Pass the request origin so the poster can be fetched over HTTP on
+    // serverless deploys (where public/ isn't on the function's filesystem).
+    let baseUrl = ''
+    try {
+      baseUrl = getRequestURL(event).origin
+    } catch {
+      /* origin unavailable — loadPoster will fall back to env/filesystem */
+    }
+    const mail = await sendRegistrationEmails(reg, { baseUrl })
 
     return { success: true, emailed: mail.emailed }
   } catch (err) {

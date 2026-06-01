@@ -38,59 +38,114 @@
     </header>
 
     <!-- ===================== HERO ===================== -->
-    <section class="relative flex items-center pt-28 pb-16 lg:min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-white">
-      <div class="pointer-events-none absolute -top-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-[#FF7A00]/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-[#7A10FF]/10 blur-3xl"></div>
+    <section class="relative flex items-center pt-36 pb-24 lg:min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-white">
+      <div class="pointer-events-none absolute -top-32 -right-32 h-[34rem] w-[34rem] rounded-full bg-[#FF7A00]/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-40 h-[32rem] w-[32rem] rounded-full bg-[#7A10FF]/10 blur-3xl"></div>
 
-      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-14 items-center">
         <div v-motion="heroReveal" class="text-center lg:text-left">
-          <span class="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.25em] text-[#D61C75] uppercase font-semibold">
-            <span class="h-px w-8 bg-[#D61C75]"></span>{{ event.presenter }}
-          </span>
-          <h1 class="mt-5 font-bold leading-[0.95] text-5xl sm:text-6xl lg:text-7xl uppercase tracking-wider brand-gradient-text heading-script">
+          <h1 class="font-bold leading-[0.95] text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight brand-gradient-text heading-script">
             <span class="block">Success</span>
             <span class="block">Engineering</span>
           </h1>
-          <p class="mt-5 text-lg sm:text-xl font-semibold text-gray-800 max-w-xl mx-auto lg:mx-0">{{ event.tagline }}</p>
-          <p class="mt-4 text-gray-600 max-w-xl mx-auto lg:mx-0">{{ event.description }}</p>
+
+          <!-- Tagline / heading above the series description -->
+          <h2 class="mt-7 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 max-w-xl mx-auto lg:mx-0">
+            {{ event.tagline }}
+          </h2>
+
+          <!-- Interactive podcast series description -->
+          <p class="mt-4 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg leading-relaxed text-gray-600">
+            <span class="inline-flex items-center gap-2 align-middle rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              Interactive Podcast Series
+            </span>
+            <span class="mt-3 block">
+              A 3-part live, interactive podcast series with
+              <span class="font-semibold text-gray-800">IIT alumni, industry leaders and global technology professionals.</span>
+            </span>
+          </p>
 
           <div class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
             <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand">Register Now</a>
             <a href="#speakers" @click.prevent="scrollTo('speakers')" class="btn-ghost">View Speakers</a>
           </div>
 
-          <div class="mt-10 grid sm:grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0">
-            <div class="rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
-              <p class="text-xs uppercase tracking-wider text-gray-500">Date</p>
-              <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.date }}</p>
+          <div class="mt-10 grid sm:grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
+            <div class="info-card group">
+              <span class="info-ico">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
+              </span>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Date</p>
+                <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.date }}</p>
+              </div>
             </div>
-            <div class="rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
-              <p class="text-xs uppercase tracking-wider text-gray-500">Venue</p>
-              <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.venue }}</p>
-            </div>
-            <div class="rounded-xl border border-[#D61C75]/20 bg-[#D61C75]/5 px-4 py-3 shadow-sm">
-              <p class="text-xs uppercase tracking-wider text-[#D61C75]">Access</p>
-              <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.pricing }}</p>
+            <div class="info-card group">
+              <span class="info-ico">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="13" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m9.5 9 5 3-5 3V9Z"/></svg>
+              </span>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Venue</p>
+                <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.venue }}</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Brand orbit illustration -->
+        <!-- Hero orbit diagram -->
         <div class="relative hidden lg:block" v-motion="heroReveal">
-          <div class="relative mx-auto h-[30rem] w-[30rem]">
-            <div class="absolute inset-0 rounded-full border-2 border-[#FF7A00]/20 animate-spin-slow"></div>
-            <div class="absolute inset-8 rounded-full border-2 border-[#7A10FF]/15 animate-spin-slower"></div>
-            <div class="absolute inset-20 rounded-full border-2 border-[#D61C75]/15"></div>
-            <div class="absolute inset-0 grid place-items-center animate-float">
-              <div class="absolute h-52 w-52 rounded-full bg-[#D61C75]/20 blur-2xl"></div>
-              <div class="relative h-44 w-44 rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] shadow-[0_20px_60px_-15px_rgba(214,28,117,0.5)] grid place-items-center">
-                <svg class="h-20 w-20 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m13.5-6.5-2 2m-7 7-2 2m11 0-2-2m-7-7-2-2" />
-                  <circle cx="12" cy="12" r="3.5" />
-                </svg>
+          <div class="orbit-stage relative mx-auto h-[34rem] w-[34rem]">
+            <!-- ambient glow -->
+            <div class="pointer-events-none absolute inset-12 rounded-full bg-gradient-to-br from-[#FF7A00]/25 via-[#D61C75]/15 to-[#7A10FF]/25 blur-3xl"></div>
+
+            <!-- concentric rings -->
+            <div class="orbit-ring absolute inset-0 animate-spin-slow"></div>
+            <div class="absolute inset-[15%] rounded-full border border-[#7A10FF]/15"></div>
+            <div class="orbit-ring-rev absolute inset-[30%] animate-spin-slower"></div>
+
+            <!-- decorative inner dots -->
+            <div
+              v-for="(d, i) in orbitDots"
+              :key="'dot' + i"
+              class="orbit-layer"
+              :style="{ '--dur': d.dur, '--delay': d.delay }"
+            >
+              <span class="orbit-node block h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#7A10FF] shadow-[0_0_10px_2px_rgba(214,28,117,0.45)]" :style="{ '--r': d.r }"></span>
+            </div>
+
+            <!-- orbiting icon chips -->
+            <div
+              v-for="(n, i) in orbitNodes"
+              :key="'node' + i"
+              class="orbit-layer"
+              :style="{ '--dur': n.dur, '--delay': n.delay }"
+            >
+              <div class="orbit-node" :style="{ '--r': n.r }">
+                <div class="orbit-chip grid h-14 w-14 place-items-center rounded-2xl border border-gray-100 bg-white text-[#D61C75] shadow-lg shadow-[#D61C75]/10">
+                  <svg v-if="n.icon === 'cpu'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
+                  <svg v-else-if="n.icon === 'idea'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 14c.2-1 .7-1.7 1.5-2.5A6 6 0 1 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/></svg>
+                  <svg v-else-if="n.icon === 'mic'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                  <svg v-else-if="n.icon === 'growth'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 17l6-6 4 4 7-7M14 7h7v7"/></svg>
+                  <svg v-else-if="n.icon === 'users'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+                  <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+                </div>
               </div>
             </div>
-            <span v-for="(n, i) in 6" :key="i" class="absolute h-3.5 w-3.5 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#7A10FF] shadow-[0_0_14px_2px_rgba(214,28,117,0.4)]" :style="nodeStyle(i)"></span>
+
+            <!-- glowing core -->
+            <div class="absolute inset-0 grid place-items-center animate-float">
+              <div class="absolute h-56 w-56 rounded-full bg-[#D61C75]/25 blur-3xl"></div>
+              <div class="relative grid h-44 w-44 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] shadow-[0_25px_70px_-15px_rgba(214,28,117,0.55)]">
+                <span class="absolute inset-0 rounded-full bg-white/10"></span>
+                <span class="absolute inset-3 rounded-full border border-white/25"></span>
+                <svg class="relative h-20 w-20 text-white" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5a3.5 3.5 0 0 0-3.5 3.5c0 .4 0 .7.1 1A3.5 3.5 0 0 0 7 16.5a3 3 0 0 0 5 1.7 3 3 0 0 0 5-1.7 3.5 3.5 0 0 0-1.6-7.2c.1-.3.1-.6.1-1A3.5 3.5 0 0 0 12 4.5Z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v13M9.2 8.5c.8.6 1.8.9 2.8.9m0 3c-1 0-2 .3-2.8.9M14.8 8.5c-.8.6-1.8.9-2.8.9" />
+                </svg>
+              </div>
+              <span class="absolute -bottom-2 rounded-full bg-white px-4 py-1.5 text-xs font-bold brand-gradient-text shadow-lg ring-1 ring-black/5">Human × AI</span>
+            </div>
           </div>
         </div>
       </div>
@@ -100,7 +155,17 @@
     <section id="about" class="relative py-20 sm:py-24 bg-white">
       <div class="mx-auto max-w-4xl px-4 sm:px-6 text-center" v-motion="fadeUp">
         <p class="kicker">Who We Are</p>
-        <h2 class="section-title">A youth-led human potential initiative</h2>
+        <h2 class="font-extrabold leading-[1.02] tracking-tight text-gray-900">
+          <span class="block">
+            <span class="text-2xl sm:text-3xl align-middle">A</span>
+            <span class="heading-script brand-gradient-text text-5xl sm:text-7xl align-middle">youth</span><span class="text-4xl sm:text-5xl align-middle">-led</span>
+          </span>
+          <span class="block text-3xl sm:text-5xl">human potential initiative</span>
+          <span class="mt-4 block text-lg sm:text-2xl font-semibold text-gray-500">
+            a <span class="brand-gradient-text font-extrabold">society of intellectual</span> minds
+          </span>
+        </h2>
+        <span class="mx-auto mt-6 block h-1 w-14 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF]"></span>
         <p class="mt-6 text-lg leading-relaxed text-gray-700">
           Gita Unlocked is a youth-led initiative founded by students, alumni of premier institutes and working
           professionals — dedicated to helping young people discover clarity, purpose, meaningful success and
@@ -144,26 +209,63 @@
           <h2 class="section-title">Meet The Speakers</h2>
           <p class="mt-4 text-gray-600">IIT alumni, industry leaders and global technology professionals guiding the series.</p>
         </div>
-        <div class="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div
             v-for="(s, i) in speakers"
             :key="s.name"
-            class="group relative rounded-2xl border border-gray-100 bg-white p-7 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+            class="flip h-[26rem] cursor-pointer select-none"
+            :class="{ 'is-flipped': flipped.has(i) }"
             v-motion="fadeUp"
+            @click="toggleFlip(i)"
           >
-            <!-- subtle gradient top accent -->
-            <span class="absolute inset-x-8 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
-            <div class="mx-auto h-28 w-28 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF]">
-              <div class="h-full w-full rounded-full bg-white p-[3px]">
-                <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
-                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-2xl font-bold brand-gradient-text">
-                  {{ initials(s.name) }}
+            <div class="flip-inner">
+              <!-- ===== FRONT ===== -->
+              <div class="flip-face group flex flex-col items-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm transition duration-300 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20">
+                <span class="absolute inset-x-10 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
+                <div class="mx-auto h-36 w-36 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
+                  <div class="h-full w-full rounded-full bg-white p-[3px]">
+                    <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
+                    <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-3xl font-bold brand-gradient-text">
+                      {{ initials(s.name) }}
+                    </div>
+                  </div>
                 </div>
+                <h3 class="mt-6 text-lg font-semibold text-gray-900">{{ s.name }}</h3>
+                <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
+
+                <!-- Company logo + name on a clean white pill -->
+                <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
+                  <img v-if="s.companyLogo" :src="s.companyLogo" :alt="s.company" class="h-5 w-auto max-w-[84px] object-contain" />
+                  <span class="text-sm font-semibold text-gray-900">{{ s.company }}</span>
+                </div>
+
+                <span class="mt-auto inline-flex items-center gap-1.5 rounded-full border border-[#D61C75]/20 bg-[#D61C75]/5 px-4 py-1.5 text-xs font-semibold text-[#D61C75] transition duration-300 group-hover:bg-gradient-to-r group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white group-hover:border-transparent">
+                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0 1 12-2.5L20 9M19 15a7 7 0 0 1-12 2.5L4 15"/></svg>
+                  Tap to know more
+                </span>
+              </div>
+
+              <!-- ===== BACK ===== -->
+              <div class="flip-face flip-back flex flex-col rounded-3xl border border-[#D61C75]/25 bg-white p-7 text-left shadow-xl">
+                <h3 class="text-lg font-bold text-gray-900">{{ s.name }}</h3>
+                <p class="mt-0.5 text-xs font-semibold text-[#D61C75]">{{ s.designation }} · {{ s.company }}</p>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-gray-600">{{ s.bio }}</p>
+                <div v-if="s.tags" class="mt-3 flex flex-wrap gap-1.5">
+                  <span v-for="t in s.tags" :key="t" class="rounded-md bg-[#D61C75]/8 px-2 py-0.5 text-[11px] font-medium text-[#D61C75]">{{ t }}</span>
+                </div>
+                <a
+                  v-if="s.linkedin"
+                  :href="s.linkedin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#0A66C2] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#004182]"
+                  @click.stop
+                >
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+                  View LinkedIn
+                </a>
               </div>
             </div>
-            <h3 class="mt-5 font-semibold text-gray-900">{{ s.name }}</h3>
-            <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
-            <p class="mt-3 inline-block rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] px-3 py-0.5 text-xs font-semibold text-white">{{ s.company }}</p>
           </div>
         </div>
       </div>
@@ -200,7 +302,7 @@
 
         <div class="relative mt-16">
           <div class="hidden lg:block absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#D61C75]/40 to-transparent"></div>
-          <ol class="grid gap-8 lg:grid-cols-5">
+          <ol class="grid gap-8 lg:grid-cols-4">
             <li v-for="(step, i) in journey" :key="step.title" class="group relative" v-motion="fadeUp">
               <div class="flex lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
                 <span
@@ -211,9 +313,11 @@
                 <div class="lg:mt-6 rounded-2xl border border-gray-100 bg-white p-5 w-full shadow-sm card-hover">
                   <p class="text-xs uppercase tracking-wider text-[#D61C75] font-semibold">{{ step.label }}</p>
                   <h3 class="mt-1 font-semibold text-gray-900 leading-snug">{{ step.title }}</h3>
-                  <div v-if="step.tags.length" class="mt-3 flex flex-wrap gap-1.5">
-                    <span v-for="t in step.tags" :key="t" class="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600">{{ t }}</span>
-                  </div>
+                  <p v-if="step.date" class="mt-2 flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                    <svg class="h-3.5 w-3.5 shrink-0 text-[#D61C75]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
+                    {{ step.date }}
+                  </p>
+                  <p v-if="step.topic" class="mt-2 text-sm leading-snug text-gray-600">{{ step.topic }}</p>
                 </div>
               </div>
             </li>
@@ -228,7 +332,7 @@
         <div class="text-center" v-motion="fadeUp">
           <p class="kicker">Limited Seats</p>
           <h2 class="section-title">Reserve Your Seat</h2>
-          <p class="mt-3 text-gray-600">Free for IIT / NIT students · Apply access code <span class="font-semibold text-[#D61C75]">{{ event.couponCode }}</span> below to unlock</p>
+          <p class="mt-3 text-gray-600">Free for IIT / NIT students · Apply the <span class="font-semibold text-[#D61C75]">access code shared with you</span> below to unlock</p>
         </div>
 
         <div class="mt-10 rounded-3xl border border-gray-100 bg-white p-6 sm:p-9 shadow-xl">
@@ -262,7 +366,7 @@
 
             <div>
               <label class="field-label">College <span class="text-[#D61C75]">*</span></label>
-              <input v-model.trim="form.college" type="text" class="field" :class="errors.college && 'field-error'" placeholder="e.g. IIT Kanpur" />
+              <input v-model.trim="form.college" type="text" class="field" :class="errors.college && 'field-error'" placeholder="e.g. IIT" />
               <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
             </div>
 
@@ -282,7 +386,7 @@
             </div>
 
             <div>
-              <label class="field-label">City <span class="text-[#D61C75]">*</span></label>
+              <label class="field-label">Hometown <span class="text-[#D61C75]">*</span></label>
               <input v-model.trim="form.city" type="text" class="field" :class="errors.city && 'field-error'" placeholder="e.g. Bengaluru" />
               <p v-if="errors.city" class="field-msg">{{ errors.city }}</p>
             </div>
@@ -313,13 +417,14 @@
             <!-- Access code + price summary -->
             <div class="sm:col-span-2 rounded-2xl border border-dashed border-[#D61C75]/30 bg-pink-50/40 p-4 sm:p-5">
               <label class="field-label">Access Code</label>
+              <p class="-mt-1 mb-2 text-xs text-gray-500">Please check the details shared with you for your access code.</p>
               <div class="flex flex-col sm:flex-row gap-2">
                 <input
                   v-model="couponInput"
                   type="text"
                   class="field flex-1 uppercase tracking-widest font-mono"
                   :class="couponStatus.state === 'error' && 'field-error'"
-                  placeholder="e.g. IITK26_SE"
+                  placeholder="Enter your access code"
                   @input="onCouponInput"
                   @keydown.enter.prevent="applyCoupon"
                 />
@@ -385,31 +490,6 @@
       </div>
     </section>
 
-    <!-- ===================== TESTIMONIALS ===================== -->
-    <section id="testimonials" class="relative py-20 sm:py-24 bg-white">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6">
-        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
-          <p class="kicker">Voices</p>
-          <h2 class="section-title">What Students Will Say</h2>
-        </div>
-        <div class="mt-14 grid gap-6 md:grid-cols-3">
-          <figure
-            v-for="(t, i) in testimonials"
-            :key="i"
-            class="card-hover rounded-2xl border border-gray-100 bg-gray-50 p-7 shadow-sm"
-            v-motion="fadeUp"
-          >
-            <svg class="h-8 w-8 text-[#D61C75]/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9 7H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2H5v2h4V7Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2h-2v2h4V7Z"/></svg>
-            <blockquote class="mt-4 text-gray-700 leading-relaxed">{{ t.quote }}</blockquote>
-            <figcaption class="mt-5 text-sm">
-              <span class="font-semibold text-gray-900">{{ t.name }}</span>
-              <span class="text-gray-400"> · {{ t.detail }}</span>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
     <!-- ===================== FAQ ===================== -->
     <section id="faq" class="relative py-20 sm:py-24 bg-gray-50">
       <div class="mx-auto max-w-3xl px-4 sm:px-6">
@@ -452,42 +532,15 @@
               </div>
             </div>
             <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ m.name }}</h3>
-            <p class="mt-0.5 text-sm text-gray-500">{{ m.detail }}</p>
+            <p v-if="m.role" class="mt-1 text-sm font-medium brand-gradient-text">{{ m.role }}</p>
+            <span class="mt-2 inline-block rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ m.detail }}</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===================== CONTACT ===================== -->
-    <section id="contact" class="relative py-20 sm:py-24 bg-white">
-      <div class="mx-auto max-w-5xl px-4 sm:px-6">
-        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
-          <p class="kicker">Reach Out</p>
-          <h2 class="section-title">Get In Touch</h2>
-        </div>
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <a :href="`mailto:${contact.email}`" class="contact-card">
-            <svg class="contact-ico" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path stroke-linecap="round" d="m4 7 8 6 8-6"/></svg>
-            <span class="contact-k">Email</span><span class="contact-v">{{ contact.email }}</span>
-          </a>
-          <a :href="contact.whatsapp" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <svg class="contact-ico" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7a11.3 11.3 0 0 1-4.6-4.1c-.3-.5-1-1.5-1-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .6l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2 1.3 2.3 1.5.2.1.4.1.6-.1l.7-.9c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>
-            <span class="contact-k">WhatsApp</span><span class="contact-v">Join the channel</span>
-          </a>
-          <a :href="contact.instagram" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <svg class="contact-ico" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            <span class="contact-k">Instagram</span><span class="contact-v">@gitaunlocked</span>
-          </a>
-          <a :href="contact.youtube" target="_blank" rel="noopener noreferrer" class="contact-card">
-            <svg class="contact-ico" fill="currentColor" viewBox="0 0 24 24"><path d="M23 12s0-3.5-.45-5.18a2.78 2.78 0 0 0-1.95-1.96C18.88 4.4 12 4.4 12 4.4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.95 1.96C1 8.5 1 12 1 12s0 3.5.45 5.18a2.78 2.78 0 0 0 1.95 1.96C5.12 19.6 12 19.6 12 19.6s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.95-1.96C23 15.5 23 12 23 12ZM9.75 15.5v-7l6 3.5-6 3.5Z"/></svg>
-            <span class="contact-k">YouTube</span><span class="contact-v">Gita Unlocked</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
     <!-- ===================== FOOTER ===================== -->
-    <footer class="relative bg-gray-50 pt-14">
+    <footer id="contact" class="relative bg-gray-50 pt-14">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
         <img src="/logo2.png" alt="Gita Unlocked" class="mx-auto w-36 h-auto" />
         <p class="mt-3 text-[#D61C75] tracking-[0.2em] text-sm uppercase font-semibold">Unveiling The Open Secret</p>
@@ -525,7 +578,6 @@ import {
   gains,
   journey,
   team,
-  testimonials,
   faqs,
   contact,
   yearOptions,
@@ -570,6 +622,14 @@ const scrolled = ref(false);
 const mobileOpen = ref(false);
 const openFaq = ref(0);
 
+// Speaker flip cards — track which cards are flipped to their bio side.
+const flipped = ref(new Set());
+const toggleFlip = (i) => {
+  const next = new Set(flipped.value);
+  next.has(i) ? next.delete(i) : next.add(i);
+  flipped.value = next;
+};
+
 const onScroll = () => {
   scrolled.value = window.scrollY > 24;
 };
@@ -592,14 +652,23 @@ const initials = (name) =>
     .join("")
     .toUpperCase();
 
-// Decorative hero nodes positioned around the orbit.
-const nodeStyle = (i) => {
-  const angle = (i / 6) * Math.PI * 2;
-  const r = 47; // percentage radius
-  const top = 50 + r * Math.sin(angle);
-  const left = 50 + r * Math.cos(angle);
-  return { top: `${top}%`, left: `${left}%`, transform: "translate(-50%, -50%)" };
-};
+// Hero orbit diagram — icon chips evenly spread on the outer ring.
+// Same duration keeps the constellation rigid; staggered negative delays
+// position each node around the circle. Chips counter-rotate to stay upright.
+const orbitNodes = [
+  { icon: "cpu", r: "14rem", dur: "40s", delay: "0s" },
+  { icon: "idea", r: "14rem", dur: "40s", delay: "-6.66s" },
+  { icon: "mic", r: "14rem", dur: "40s", delay: "-13.33s" },
+  { icon: "growth", r: "14rem", dur: "40s", delay: "-20s" },
+  { icon: "users", r: "14rem", dur: "40s", delay: "-26.66s" },
+  { icon: "target", r: "14rem", dur: "40s", delay: "-33.33s" },
+];
+// Smaller glowing dots on an inner ring for depth.
+const orbitDots = [
+  { r: "9rem", dur: "28s", delay: "0s" },
+  { r: "9rem", dur: "28s", delay: "-9.33s" },
+  { r: "9rem", dur: "28s", delay: "-18.66s" },
+];
 
 // ---- Registration form ----
 const form = reactive({
@@ -756,6 +825,49 @@ const submit = async () => {
 .card-hover {
   @apply transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
 }
+
+/* Speaker flip cards */
+.flip {
+  perspective: 1400px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+/* Hero date/venue info cards with hover lift + gradient icon */
+.info-card {
+  @apply flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
+}
+.info-ico {
+  @apply grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition duration-300;
+}
+.info-card:hover .info-ico {
+  @apply bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white;
+}
 .field-label {
   @apply block text-sm font-medium text-gray-700 mb-1.5;
 }
@@ -799,6 +911,60 @@ section[id] {
 }
 .animate-spin-slower {
   animation: spin-slow 42s linear infinite reverse;
+}
+
+/* ---- Hero orbit diagram ---- */
+.orbit-ring {
+  border-radius: 9999px;
+  border: 1.5px dashed rgba(255, 122, 0, 0.28);
+}
+.orbit-ring-rev {
+  border-radius: 9999px;
+  border: 1.5px dashed rgba(122, 16, 255, 0.22);
+}
+/* A full-size layer that rotates around the stage centre. */
+.orbit-layer {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin var(--dur, 36s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+/* The node sits at top-centre, pushed out by its orbit radius. */
+.orbit-node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(calc(var(--r, 12rem) * -1));
+}
+/* Counter-rotate the chip (same duration/delay, opposite direction) so
+   icons stay upright while the layer spins. */
+.orbit-chip {
+  animation: orbit-spin-rev var(--dur, 36s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orbit-spin-rev {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-layer,
+  .orbit-chip {
+    animation: none;
+  }
 }
 
 @keyframes float {

@@ -11,7 +11,7 @@ export const event = {
   tagline: "Building the Human Edge in the Age of AI",
   description:
     "A 3-Part Live Interactive Series with IIT Alumni, Industry Leaders and Global Technology Professionals.",
-  date: "5 June 2026 · Saturday",
+  date: "7–13 June 2026",
   venue: "Live on Zoom",
   venueNote: "Link shared after registration",
   pricing: "Free for IIT / NIT Students",
@@ -29,28 +29,44 @@ export const validCoupons = ["IITK26_SE"];
 // Leave `photo` empty ("") to fall back to a clean gold monogram avatar.
 export const speakers = [
   {
-    name: "Mr. Niranjan Pendarkhar",
-    designation: "Architect",
-    company: "Google",
-    photo: "/speakers/niranjan.jpg",
+    name: "Vaibhav Joshi",
+    designation: "Senior Operations Specialist",
+    company: "GlobalLogic",
+    companyLogo: "/logos/globallogic.svg",
+    photo: "/speakers/vaibhav.png",
+    bio: "Operations leader at GlobalLogic with a global track record — from a Paris stint at Hello Tomorrow to quality leadership at Maruti Suzuki. MBA from IÉSEG School of Management.",
+    tags: ["GlobalLogic", "Ex-Maruti Suzuki", "IÉSEG MBA"],
+    linkedin: "https://www.linkedin.com/in/vaibhavjoshi108/",
   },
   {
-    name: "Mr. Gaurav Rai",
-    designation: "Senior Product Manager",
-    company: "Microsoft Copilot",
-    photo: "/speakers/gaurav.jpg",
+    name: "Gaurav R.",
+    designation: "Senior Security Manager",
+    company: "Microsoft",
+    companyLogo: "/logos/microsoft.svg",
+    photo: "/speakers/gaurav.png",
+    bio: "20+ years in cybersecurity, now leading AI security at Microsoft — Copilot, MCP security, Responsible AI and privacy. Previously at PayPal, Blackstone, Teradata and AT&T. BITS Pilani.",
+    tags: ["Microsoft", "AI Security", "Ex-PayPal", "BITS Pilani"],
+    linkedin: "https://www.linkedin.com/in/gauravsecurity/",
   },
   {
-    name: "Mr. Sandeep",
-    designation: "JEE Advanced AIR 10 · IIT Bombay",
-    company: "Rubrix",
-    photo: "/speakers/sandeep.jpg",
+    name: "Yashas Tadikamalla",
+    designation: "Data Engineer · IIT Hyderabad",
+    company: "Texas Instruments",
+    companyLogo: "/logos/texasinstruments.svg",
+    photo: "/speakers/yashas.png",
+    bio: "Data Engineer at Texas Instruments and an AI graduate from IIT Hyderabad (9.36 CGPA). Research spans forecasting, model explainability and GAN-based video generation.",
+    tags: ["Texas Instruments", "IIT Hyderabad", "AI / ML"],
+    linkedin: "https://www.linkedin.com/in/yashas-tadikamalla-2b3908211/",
   },
   {
-    name: "Mr. Prashant",
-    designation: "AI Scientist · IIT Hyderabad",
-    company: "Bosch Research",
-    photo: "/speakers/prashant.jpg",
+    name: "Samyak Jain",
+    designation: "Incoming CS PhD · UC Berkeley",
+    company: "Microsoft Research",
+    companyLogo: "/logos/microsoft.svg",
+    photo: "/speakers/samyak.png",
+    bio: "Incoming CS PhD at UC Berkeley and Research Fellow at Microsoft Research. Has worked with Cambridge, IISc and Five AI (Oxford) on AI safety. IIT BHU CSE (9.60 CPI).",
+    tags: ["UC Berkeley", "Microsoft Research", "IIT BHU", "AI Safety"],
+    linkedin: "https://www.linkedin.com/in/samyak-jain-276738178/",
   },
 ];
 
@@ -81,14 +97,13 @@ export const whyCards = [
 // SECTION 5 — What you will gain -------------------------------------------
 export const gains = [
   "Internship & Placement Insights",
-  "AI-Era Skills & Opportunities",
   "High Performance Mindset",
   "Networking with Alumni",
   "Human Potential Frameworks",
   "Leadership Development",
   "Certificate of Participation",
   "Prizes & Quizzes",
-  "Sponsored Guided Leadership Camp",
+  "Sponsored Guided Leadership Trip",
 ];
 
 // SECTION 6 — Program journey ----------------------------------------------
@@ -96,42 +111,43 @@ export const journey = [
   {
     kind: "session",
     label: "Session 1",
-    title: "Success Beyond Skills",
-    tags: ["AI", "Careers", "Future Opportunities", "Human Intelligence"],
+    title: "The Success Code",
+    date: "7 June 2026 · Sunday",
+    topic: "AI, Careers & Building Your Future",
   },
   {
     kind: "session",
     label: "Session 2",
-    title: "The Science of Human Potential",
-    tags: ["IQ", "EQ", "SQ", "Consciousness", "Decision Making"],
+    title: "The Missing Dimension",
+    date: "10 June 2026 · Wednesday",
+    topic: "Human Potential Beyond IQ",
   },
   {
     kind: "session",
     label: "Session 3",
     title: "The Human Edge",
-    tags: ["Purpose", "Identity", "Meaning", "Self Discovery"],
+    date: "13 June 2026 · Saturday",
+    topic: "Purpose, Meaning & What Makes Us Human",
   },
   {
     kind: "milestone",
     label: "Outcome",
     title: "Human Potential Assessment Report",
-    tags: [],
-  },
-  {
-    kind: "milestone",
-    label: "Next",
-    title: "Discover Yourself Series",
-    tags: [],
+    date: "",
+    topic: "",
   },
 ];
 
 // Meet Our Team ------------------------------------------------------------
 export const team = [
-  { name: "Kandula Srinivas", detail: "IIT BHU", photo: "/Srinivas_Pr.jpg" },
+  { name: "Shantanu Tiwari", role: "Founder & CEO, Bright Studio", detail: "IIT Guwahati", photo: "/team/shantanu.png" },
+  { name: "Avinash Ranjan", role: "Software Engineer at Microsoft", detail: "IIT BHU", photo: "/team/avinash.png" },
+  { name: "Tushar Maini", role: "ASIC Engineer at Nvidia", detail: "IIT Roorkee 2025", photo: "/team/tushar.png" },
+  { name: "Mourya Sai Sandeep Yanamadala", detail: "IIT Madras", photo: "/team/mourya.png" },
+  { name: "Indraneel Natu", detail: "IIM Bangalore", photo: "/team/indraneel.png" },
   { name: "Chandra Mohan", detail: "IIT Madras", photo: "/Chandra_Mohan_Pr.jpg" },
   { name: "Deepak Kumar", detail: "IIT Dhanbad", photo: "/Deepak.jpg" },
   { name: "Sankalp Dwivedi", detail: "IIT Delhi", photo: "/Sankalp_D_Pr_2.png" },
-  { name: "Aman Tiwari", detail: "IIT BHU", photo: "/Aman_T_Pr.jpg" },
   { name: "Sri Ram", detail: "IIT Kharagpur", photo: "/Lakshman.jpg" },
 ];
 
@@ -164,8 +180,8 @@ export const faqs = [
     a: "Students of IITs, NITs and other premier institutes who want to build a real edge for the AI era. Motivated learners from all backgrounds are welcome.",
   },
   {
-    q: "Is it free?",
-    a: "Yes. The full 3-part series is free for IIT / NIT students (a ₹500 value) when you register with the access code.",
+    q: "Is it only for CS branch students?",
+    a: "No. Success Engineering is open to students from every branch and discipline. The series is built for complete beginners as well as advanced learners — no prior background is required, just the curiosity to grow.",
   },
   {
     q: "Do I need AI knowledge?",

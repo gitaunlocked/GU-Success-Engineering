@@ -13,19 +13,41 @@ const escapeHtml = (v) =>
 
 const clean = (v) => (typeof v === 'string' ? v.trim() : v)
 
-// Locate the event poster (works in dev and in the built/.output server).
-const findPoster = () => {
+const POSTER_FILENAME = 'se-poster.png'
+
+// Load the event poster as a Buffer.
+// Local dev / node preview: read it straight from the filesystem.
+// Serverless deploys (e.g. Vercel): the function can't see public/ on disk,
+// so fall back to fetching it over HTTP from the site's own origin.
+const loadPoster = async (baseUrl) => {
   const candidates = [
-    resolve(process.cwd(), 'public/se-poster.png'),
-    resolve(process.cwd(), '.output/public/se-poster.png'),
+    resolve(process.cwd(), `public/${POSTER_FILENAME}`),
+    resolve(process.cwd(), `.output/public/${POSTER_FILENAME}`),
   ]
-  return candidates.find((p) => existsSync(p)) || null
+  for (const p of candidates) {
+    try {
+      if (existsSync(p)) return readFileSync(p)
+    } catch {
+      /* try next */
+    }
+  }
+
+  if (baseUrl) {
+    try {
+      const res = await fetch(`${baseUrl.replace(/\/$/, '')}/${POSTER_FILENAME}`)
+      if (res.ok) return Buffer.from(await res.arrayBuffer())
+    } catch (err) {
+      console.error('Poster fetch failed:', err?.message || err)
+    }
+  }
+
+  return null
 }
 
 // Sends a confirmation email to the registrant and a notification to the admin.
 // Best-effort: returns { emailed: false, reason } instead of throwing so the
 // caller never fails a registration just because email isn't configured.
-export const sendRegistrationEmails = async (reg) => {
+export const sendRegistrationEmails = async (reg, opts = {}) => {
   const SMTP_HOST = clean(process.env.SMTP_HOST)
   const SMTP_PORT = clean(process.env.SMTP_PORT)
   const SMTP_USER = clean(process.env.SMTP_USER)
@@ -51,13 +73,17 @@ export const sendRegistrationEmails = async (reg) => {
     const firstName = (reg.name || '').split(/\s+/)[0] || 'there'
 
     // Embed the poster inline (cid) and also attach it as a file.
-    const posterPath = findPoster()
-    const attachments = posterPath
-      ? [{ filename: 'Success-Engineering.png', content: readFileSync(posterPath), cid: 'sePoster' }]
+    const baseUrl = clean(opts.baseUrl) || clean(process.env.PUBLIC_BASE_URL)
+    const posterBuffer = await loadPoster(baseUrl)
+    const attachments = posterBuffer
+      ? [{ filename: 'Success-Engineering.png', content: posterBuffer, cid: 'sePoster' }]
       : []
-    const posterImg = posterPath
+    const posterImg = posterBuffer
       ? `<div style="padding:0 24px 8px"><img src="cid:sePoster" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
       : ''
+
+    // WhatsApp channel — prominent CTA so registrants don't miss updates.
+    const whatsappUrl = 'https://chat.whatsapp.com/DDOd3um5IEECRtRPKvHN62?mode=gi_t'
 
     // 1) Warm, personalised confirmation to the registrant
     await transporter.sendMail({
@@ -73,6 +99,7 @@ export const sendRegistrationEmails = async (reg) => {
         `What happens next:\n` +
         `• The Zoom joining link and reminders will be shared on your email and WhatsApp before the sessions.\n` +
         `• Keep an eye on your inbox so you don't miss any updates.\n\n` +
+        `👉 Join our official WhatsApp channel for all session links and updates:\n${whatsappUrl}\n\n` +
         `If you have any questions, simply reply to this email — we'd be happy to help.\n\n` +
         `Warm regards,\nTeam Gita Unlocked\nUnveiling the Open Secret`,
       html: `
@@ -93,6 +120,14 @@ export const sendRegistrationEmails = async (reg) => {
                 <p style="margin:0 0 6px;font-weight:bold;color:#15171c">What happens next</p>
                 <p style="margin:0;color:#555">The Zoom joining link and reminders will be shared on your <strong>email and WhatsApp</strong> before the sessions begin. Just keep an eye on your inbox.</p>
               </div>
+
+              <!-- WhatsApp channel CTA -->
+              <div style="background:#e7f9ee;border:1px solid #25D366;border-radius:12px;padding:18px 16px;margin:18px 0;text-align:center">
+                <p style="margin:0 0 12px;font-weight:bold;color:#15171c;font-size:15px">📢 Important — join our WhatsApp channel</p>
+                <p style="margin:0 0 14px;color:#555;font-size:14px">All session links, reminders and updates are shared here. Please join so you don't miss anything!</p>
+                <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:13px 28px;border-radius:999px">💬 Join WhatsApp Channel</a>
+              </div>
+
               <p style="color:#555">If you have any questions, simply reply to this email — we'd be happy to help.</p>
               <p style="margin-top:22px;color:#15171c">Warm regards,<br/><strong>Team Gita Unlocked</strong><br/><span style="color:#7A10FF;font-size:12px;letter-spacing:1px">UNVEILING THE OPEN SECRET</span></p>
             </div>
