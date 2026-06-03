@@ -135,10 +135,7 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
         collegeLineText +
         `We're truly glad to have you with us. Your seat is now reserved, and you've taken a wonderful step toward ` +
         `building clarity, purpose and a real edge for the age of AI.\n\n` +
-        `What happens next:\n` +
-        `• The Zoom joining link and reminders will be shared on your email and WhatsApp before the sessions.\n` +
-        `• Keep an eye on your inbox so you don't miss any updates.\n\n` +
-        `👉 Join our official WhatsApp channel for all session links and updates:\n${whatsappUrl}\n\n` +
+        `👉 Join our official WhatsApp group for all session links and updates:\n${whatsappUrl}\n\n` +
         `If you have any questions, simply reply to this email — we'd be happy to help.\n\n` +
         `Warm regards,\nTeam Gita Unlocked\nUnveiling the Open Secret`,
       html: `
@@ -156,16 +153,12 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
               <p>Thank you so much for registering for <strong>${eventName}</strong>. We're truly glad to have you with us! 🎉</p>
               ${collegeLineHtml}
               <p>Your seat is now <strong style="color:#D61C75">reserved</strong>, and you've taken a wonderful step toward building clarity, purpose and a real edge for the age of AI.</p>
-              <div style="background:#fdf2f8;border-left:4px solid #D61C75;border-radius:8px;padding:14px 16px;margin:18px 0">
-                <p style="margin:0 0 6px;font-weight:bold;color:#15171c">What happens next</p>
-                <p style="margin:0;color:#555">The Zoom joining link and reminders will be shared on your <strong>email and WhatsApp</strong> before the sessions begin. Just keep an eye on your inbox.</p>
-              </div>
 
               <!-- WhatsApp channel CTA -->
               <div style="background:#e7f9ee;border:1px solid #25D366;border-radius:12px;padding:18px 16px;margin:18px 0;text-align:center">
-                <p style="margin:0 0 12px;font-weight:bold;color:#15171c;font-size:15px">📢 Important — join our WhatsApp channel</p>
+                <p style="margin:0 0 12px;font-weight:bold;color:#15171c;font-size:15px">📢 Important — join our WhatsApp group</p>
                 <p style="margin:0 0 14px;color:#555;font-size:14px">All session links, reminders and updates are shared here. Please join so you don't miss anything!</p>
-                <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:13px 28px;border-radius:999px">💬 Join WhatsApp Channel</a>
+                <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:13px 28px;border-radius:999px">💬 Join WhatsApp Group</a>
               </div>
 
               <p style="color:#555">If you have any questions, simply reply to this email — we'd be happy to help.</p>

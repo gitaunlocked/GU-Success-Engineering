@@ -112,9 +112,9 @@ export const whyCards = [
 
 // SECTION 5 — What you will gain -------------------------------------------
 export const gains = [
-  { icon: "certificate", title: "Certificate of Participation", highlight: true },
   { icon: "trophy", title: "Exciting Prizes & Quizzes", highlight: true },
-  { icon: "trip", title: "Sponsored Guided Leadership Trip", highlight: true },
+  { icon: "trip", title: "Sponsored Trip", highlight: true },
+  { icon: "certificate", title: "Certificate of Participation", highlight: true },
   { icon: "rocket", title: "Internship & Placement Insights" },
   { icon: "users", title: "Networking with IIT Alumni" },
   { icon: "spark", title: "High Performance Mindset" },

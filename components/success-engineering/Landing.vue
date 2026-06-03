@@ -60,9 +60,9 @@
               <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
               Interactive Podcast Series
             </span>
-            <span class="mt-3 block">
+            <span class="mt-3 block font-bold text-gray-800">
               A 3-part live, interactive podcast series with
-              <span class="font-semibold text-gray-800">IIT alumni, industry leaders and global technology professionals.</span>
+              IIT alumni, industry leaders and global technology professionals.
             </span>
           </p>
 
@@ -144,12 +144,6 @@
             </div>
           </div>
 
-          <!-- floating: free for students -->
-          <div class="absolute -top-5 -right-3 z-10 animate-float rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-black/5">
-            <p class="text-xs text-gray-500">Access</p>
-            <p class="text-sm font-bold brand-gradient-text">Free for Students</p>
-          </div>
-
           <!-- floating: speaker stack -->
           <div class="absolute -bottom-6 -left-6 z-10 rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-black/5">
             <div class="flex items-center gap-3">
@@ -178,7 +172,7 @@
         <p class="kicker">Who We Are</p>
         <h2 class="section-title">
           <span class="brand-gradient-text">IIT · IITM · LEAD</span>
-          <span class="mt-2 block text-gray-900">Youth Lead Initiative</span>
+          <span class="mt-2 block text-gray-900">Youth Potential Initiative</span>
         </h2>
         <p class="mt-5 text-lg sm:text-xl text-gray-600 leading-relaxed">
           A society of intellectual minds from premier institutes &amp; industry — guiding students toward clarity, purpose, and meaningful success.
@@ -676,8 +670,8 @@ const initials = (name) =>
 
 // Hero audio equalizer — varied delays/durations give a lively, organic bounce.
 const eqBars = Array.from({ length: 26 }, (_, i) => ({
-  delay: `-${((i * 0.13) % 1.1).toFixed(2)}s`,
-  dur: `${(0.85 + (i % 5) * 0.18).toFixed(2)}s`,
+  delay: `-${((i * 0.26) % 2.2).toFixed(2)}s`,
+  dur: `${(1.9 + (i % 5) * 0.4).toFixed(2)}s`,
 }));
 
 // ---- Registration form ----
