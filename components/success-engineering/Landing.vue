@@ -77,7 +77,7 @@
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
               </span>
               <div>
-                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Date</p>
+                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Start Date</p>
                 <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.date }}</p>
               </div>
             </div>
@@ -93,58 +93,79 @@
           </div>
         </div>
 
-        <!-- Hero orbit diagram -->
+        <!-- Hero live-podcast visual -->
         <div class="relative hidden lg:block" v-motion="heroReveal">
-          <div class="orbit-stage relative mx-auto h-[34rem] w-[34rem]">
-            <!-- ambient glow -->
-            <div class="pointer-events-none absolute inset-12 rounded-full bg-gradient-to-br from-[#FF7A00]/25 via-[#D61C75]/15 to-[#7A10FF]/25 blur-3xl"></div>
+          <!-- ambient gradient glow -->
+          <div class="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-[#FF7A00]/25 via-[#D61C75]/20 to-[#7A10FF]/25 blur-3xl"></div>
 
-            <!-- concentric rings -->
-            <div class="orbit-ring absolute inset-0 animate-spin-slow"></div>
-            <div class="absolute inset-[15%] rounded-full border border-[#7A10FF]/15"></div>
-            <div class="orbit-ring-rev absolute inset-[30%] animate-spin-slower"></div>
-
-            <!-- decorative inner dots -->
-            <div
-              v-for="(d, i) in orbitDots"
-              :key="'dot' + i"
-              class="orbit-layer"
-              :style="{ '--dur': d.dur, '--delay': d.delay }"
-            >
-              <span class="orbit-node block h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#7A10FF] shadow-[0_0_10px_2px_rgba(214,28,117,0.45)]" :style="{ '--r': d.r }"></span>
+          <!-- main now-playing card -->
+          <div class="relative mx-auto max-w-md rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-8 text-white shadow-[0_30px_80px_-20px_rgba(214,28,117,0.55)]">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider backdrop-blur">
+                <span class="relative flex h-2 w-2">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70"></span>
+                  <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                </span>
+                Live Podcast
+              </span>
+              <span class="text-xs font-medium text-white/80">3 Episodes</span>
             </div>
 
-            <!-- orbiting icon chips -->
-            <div
-              v-for="(n, i) in orbitNodes"
-              :key="'node' + i"
-              class="orbit-layer"
-              :style="{ '--dur': n.dur, '--delay': n.delay }"
-            >
-              <div class="orbit-node" :style="{ '--r': n.r }">
-                <div class="orbit-chip grid h-14 w-14 place-items-center rounded-2xl border border-gray-100 bg-white text-[#D61C75] shadow-lg shadow-[#D61C75]/10">
-                  <svg v-if="n.icon === 'cpu'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
-                  <svg v-else-if="n.icon === 'idea'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 14c.2-1 .7-1.7 1.5-2.5A6 6 0 1 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/></svg>
-                  <svg v-else-if="n.icon === 'mic'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-                  <svg v-else-if="n.icon === 'growth'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 17l6-6 4 4 7-7M14 7h7v7"/></svg>
-                  <svg v-else-if="n.icon === 'users'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
-                  <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
-                </div>
+            <!-- mic + title -->
+            <div class="mt-8 flex items-center gap-4">
+              <div class="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              </div>
+              <div>
+                <p class="text-xl font-bold leading-tight">Building the Human Edge</p>
+                <p class="text-sm text-white/80">in the Age of AI</p>
               </div>
             </div>
 
-            <!-- glowing core -->
-            <div class="absolute inset-0 grid place-items-center animate-float">
-              <div class="absolute h-56 w-56 rounded-full bg-[#D61C75]/25 blur-3xl"></div>
-              <div class="relative grid h-44 w-44 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] shadow-[0_25px_70px_-15px_rgba(214,28,117,0.55)]">
-                <span class="absolute inset-0 rounded-full bg-white/10"></span>
-                <span class="absolute inset-3 rounded-full border border-white/25"></span>
-                <svg class="relative h-20 w-20 text-white" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5a3.5 3.5 0 0 0-3.5 3.5c0 .4 0 .7.1 1A3.5 3.5 0 0 0 7 16.5a3 3 0 0 0 5 1.7 3 3 0 0 0 5-1.7 3.5 3.5 0 0 0-1.6-7.2c.1-.3.1-.6.1-1A3.5 3.5 0 0 0 12 4.5Z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v13M9.2 8.5c.8.6 1.8.9 2.8.9m0 3c-1 0-2 .3-2.8.9M14.8 8.5c-.8.6-1.8.9-2.8.9" />
-                </svg>
+            <!-- animated equalizer -->
+            <div class="mt-8 flex h-20 items-end gap-1.5">
+              <span
+                v-for="(b, i) in eqBars"
+                :key="i"
+                class="eq-bar h-full flex-1 rounded-full bg-white/85"
+                :style="{ animationDelay: b.delay, animationDuration: b.dur }"
+              ></span>
+            </div>
+
+            <!-- play + progress -->
+            <div class="mt-6 flex items-center gap-4">
+              <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-[#D61C75] shadow-md">
+                <svg class="h-5 w-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </div>
-              <span class="absolute -bottom-2 rounded-full bg-white px-4 py-1.5 text-xs font-bold brand-gradient-text shadow-lg ring-1 ring-black/5">Human × AI</span>
+              <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-white/25">
+                <div class="h-full w-2/5 rounded-full bg-white"></div>
+              </div>
+              <span class="text-xs font-medium text-white/80">On air</span>
+            </div>
+          </div>
+
+          <!-- floating: free for students -->
+          <div class="absolute -top-5 -right-3 z-10 animate-float rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-black/5">
+            <p class="text-xs text-gray-500">Access</p>
+            <p class="text-sm font-bold brand-gradient-text">Free for Students</p>
+          </div>
+
+          <!-- floating: speaker stack -->
+          <div class="absolute -bottom-6 -left-6 z-10 rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-black/5">
+            <div class="flex items-center gap-3">
+              <div class="flex -space-x-2.5">
+                <img
+                  v-for="s in speakers"
+                  :key="s.name"
+                  :src="s.photo"
+                  :alt="s.name"
+                  class="h-8 w-8 rounded-full border-2 border-white object-cover"
+                />
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-900">Expert Speakers</p>
+                <p class="text-[11px] text-gray-500">IITs &amp; global tech</p>
+              </div>
             </div>
           </div>
         </div>
@@ -153,23 +174,18 @@
 
     <!-- ===================== ABOUT ===================== -->
     <section id="about" class="relative py-20 sm:py-24 bg-white">
-      <div class="mx-auto max-w-4xl px-4 sm:px-6 text-center" v-motion="fadeUp">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 text-center" v-motion="fadeUp">
         <p class="kicker">Who We Are</p>
-        <h2 class="font-extrabold leading-[1.02] tracking-tight text-gray-900">
-          <span class="block">
-            <span class="text-2xl sm:text-3xl align-middle">A</span>
-            <span class="heading-script brand-gradient-text text-5xl sm:text-7xl align-middle">youth</span><span class="text-4xl sm:text-5xl align-middle">-led</span>
-          </span>
-          <span class="block text-3xl sm:text-5xl">human potential initiative</span>
-          <span class="mt-4 block text-lg sm:text-2xl font-semibold text-gray-500">
-            a <span class="brand-gradient-text font-extrabold">society of intellectual</span> minds
-          </span>
+        <h2 class="section-title">
+          <span class="brand-gradient-text">IIT · IITM · LEAD</span>
+          <span class="mt-2 block text-gray-900">Youth Lead Initiative</span>
         </h2>
-        <span class="mx-auto mt-6 block h-1 w-14 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF]"></span>
-        <p class="mt-6 text-lg leading-relaxed text-gray-700">
-          Gita Unlocked is a youth-led initiative founded by students, alumni of premier institutes and working
-          professionals — dedicated to helping young people discover clarity, purpose, meaningful success and
-          personal growth through timeless wisdom and modern approaches.
+        <p class="mt-5 text-lg sm:text-xl text-gray-600 leading-relaxed">
+          A society of intellectual minds from premier institutes &amp; industry — guiding students toward clarity, purpose, and meaningful success.
+        </p>
+
+        <p class="mt-8 text-base sm:text-lg leading-relaxed text-gray-600">
+          Gita Unlocked brings together students, alumni of premier institutes, and working professionals — combining timeless wisdom with modern approaches to personal growth.
         </p>
       </div>
     </section>
@@ -232,6 +248,7 @@
                 </div>
                 <h3 class="mt-6 text-lg font-semibold text-gray-900">{{ s.name }}</h3>
                 <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
+                <p v-if="s.designation2" class="mt-0.5 text-xs font-medium text-[#D61C75]">{{ s.designation2 }}</p>
 
                 <!-- Company logo + name on a clean white pill -->
                 <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
@@ -281,12 +298,29 @@
         <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div
             v-for="(g, i) in gains"
-            :key="g"
-            class="group card-hover flex items-start gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+            :key="g.title"
+            class="group flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition duration-300 hover:-translate-y-1.5"
+            :class="g.highlight
+              ? 'border-transparent bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white shadow-lg shadow-[#D61C75]/30 hover:shadow-xl hover:shadow-[#D61C75]/40'
+              : 'border-gray-100 bg-white hover:border-[#D61C75]/30 hover:shadow-xl hover:shadow-[#D61C75]/10'"
             v-motion="fadeUp"
           >
-            <span class="shrink-0 text-lg font-bold brand-gradient-text">{{ String(i + 1).padStart(2, '0') }}</span>
-            <p class="font-medium text-gray-800">{{ g }}</p>
+            <span
+              class="grid h-12 w-12 shrink-0 place-items-center rounded-xl transition duration-300"
+              :class="g.highlight
+                ? 'bg-white/20 text-white'
+                : 'bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white'"
+            >
+              <svg v-if="g.icon === 'certificate'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-2.5 2.5L5 22l4-2 4 2-1.5-6.5M5 5h-1v14M20 5h-6"/></svg>
+              <svg v-else-if="g.icon === 'trophy'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4M7 4h10v4a5 5 0 0 1-10 0V4Zm10 1h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+              <svg v-else-if="g.icon === 'trip'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.5 20 12 5l8.5 15M12 5v15M7 20l5-6 5 6"/></svg>
+              <svg v-else-if="g.icon === 'rocket'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15c-1 0-3 .5-4 1.5C4 18 4 21 4 21s3 0 4.5-1c1-1 1.5-3 1.5-4M9 15l-3-3c1-4 5-9 9.5-9 1.5 0 2.5.5 2.5.5s.5 1 .5 2.5C18.5 10 13.5 14 9.5 15M14.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
+              <svg v-else-if="g.icon === 'users'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+              <svg v-else-if="g.icon === 'spark'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+              <svg v-else-if="g.icon === 'frameworks'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 22V4m0 0 4-1 6 2 4-1v9l-4 1-6-2-4 1"/></svg>
+            </span>
+            <p class="font-semibold leading-snug" :class="g.highlight ? 'text-white' : 'text-gray-800'">{{ g.title }}</p>
           </div>
         </div>
       </div>
@@ -326,13 +360,43 @@
       </div>
     </section>
 
+    <!-- ===================== TEAM ===================== -->
+    <section id="team" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">The People Behind It</p>
+          <h2 class="section-title">Meet Our Team</h2>
+        </div>
+        <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="(m, i) in team"
+            :key="m.name"
+            class="group flex flex-col items-center text-center"
+            v-motion="fadeUp"
+          >
+            <div class="h-32 w-32 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition group-hover:-translate-y-1 group-hover:shadow-lg">
+              <div class="h-full w-full rounded-full bg-white p-[3px]">
+                <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-2xl font-bold brand-gradient-text">
+                  {{ initials(m.name) }}
+                </div>
+              </div>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ m.name }}</h3>
+            <p v-if="m.role" class="mt-1 text-sm font-medium brand-gradient-text">{{ m.role }}</p>
+            <span class="mt-2 inline-block rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ m.detail }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== REGISTRATION ===================== -->
     <section id="register" class="relative py-20 sm:py-24 bg-gradient-to-b from-pink-50 via-orange-50 to-white">
       <div class="relative mx-auto max-w-3xl px-4 sm:px-6">
         <div class="text-center" v-motion="fadeUp">
           <p class="kicker">Limited Seats</p>
           <h2 class="section-title">Reserve Your Seat</h2>
-          <p class="mt-3 text-gray-600">Free for IIT / NIT students · Apply the <span class="font-semibold text-[#D61C75]">access code shared with you</span> below to unlock</p>
+          <p class="mt-3 text-gray-600">Apply the <span class="font-semibold text-[#D61C75]">access code shared with you</span> below to unlock</p>
         </div>
 
         <div class="mt-10 rounded-3xl border border-gray-100 bg-white p-6 sm:p-9 shadow-xl">
@@ -386,7 +450,7 @@
             </div>
 
             <div>
-              <label class="field-label">Hometown <span class="text-[#D61C75]">*</span></label>
+              <label class="field-label">Home Town <span class="text-[#D61C75]">*</span></label>
               <input v-model.trim="form.city" type="text" class="field" :class="errors.city && 'field-error'" placeholder="e.g. Bengaluru" />
               <p v-if="errors.city" class="field-msg">{{ errors.city }}</p>
             </div>
@@ -411,7 +475,7 @@
 
             <div class="sm:col-span-2">
               <label class="field-label">Why are you interested?</label>
-              <textarea v-model.trim="form.reason" rows="3" class="field resize-none" placeholder="Tell us what you'd love to get out of this series (optional)"></textarea>
+              <textarea v-model.trim="form.reason" rows="3" class="field resize-none" placeholder="Tell us what you'd love to get out of this series"></textarea>
             </div>
 
             <!-- Access code + price summary -->
@@ -509,55 +573,12 @@
       </div>
     </section>
 
-    <!-- ===================== TEAM ===================== -->
-    <section id="team" class="relative py-20 sm:py-24 bg-white">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
-          <p class="kicker">The People Behind It</p>
-          <h2 class="section-title">Meet Our Team</h2>
-        </div>
-        <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div
-            v-for="(m, i) in team"
-            :key="m.name"
-            class="group flex flex-col items-center text-center"
-            v-motion="fadeUp"
-          >
-            <div class="h-32 w-32 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition group-hover:-translate-y-1 group-hover:shadow-lg">
-              <div class="h-full w-full rounded-full bg-white p-[3px]">
-                <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-full w-full rounded-full object-cover" />
-                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-2xl font-bold brand-gradient-text">
-                  {{ initials(m.name) }}
-                </div>
-              </div>
-            </div>
-            <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ m.name }}</h3>
-            <p v-if="m.role" class="mt-1 text-sm font-medium brand-gradient-text">{{ m.role }}</p>
-            <span class="mt-2 inline-block rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ m.detail }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ===================== FOOTER ===================== -->
     <footer id="contact" class="relative bg-gray-50 pt-14">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
         <img src="/logo2.png" alt="Gita Unlocked" class="mx-auto w-36 h-auto" />
         <p class="mt-3 text-[#D61C75] tracking-[0.2em] text-sm uppercase font-semibold">Unveiling The Open Secret</p>
         <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering youth through timeless wisdom, modern insights and meaningful growth.</p>
-
-        <!-- Social media -->
-        <div class="mt-7 flex items-center justify-center gap-4">
-          <a :href="contact.instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-btn">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a :href="contact.whatsapp" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="social-btn">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7a11.3 11.3 0 0 1-4.6-4.1c-.3-.5-1-1.5-1-2.9 0-1.3.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .6l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2 1.3 2.3 1.5.2.1.4.1.6-.1l.7-.9c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>
-          </a>
-          <a :href="contact.youtube" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-btn">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 12s0-3.5-.45-5.18a2.78 2.78 0 0 0-1.95-1.96C18.88 4.4 12 4.4 12 4.4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.95 1.96C1 8.5 1 12 1 12s0 3.5.45 5.18a2.78 2.78 0 0 0 1.95 1.96C5.12 19.6 12 19.6 12 19.6s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.95-1.96C23 15.5 23 12 23 12ZM9.75 15.5v-7l6 3.5-6 3.5Z"/></svg>
-          </a>
-        </div>
 
         <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand mt-8 text-sm">Reserve Your Seat</a>
       </div>
@@ -582,6 +603,7 @@ import {
   contact,
   yearOptions,
   validCoupons,
+  couponColleges,
 } from "~/data/successEngineering";
 
 const year = new Date().getFullYear();
@@ -652,23 +674,11 @@ const initials = (name) =>
     .join("")
     .toUpperCase();
 
-// Hero orbit diagram — icon chips evenly spread on the outer ring.
-// Same duration keeps the constellation rigid; staggered negative delays
-// position each node around the circle. Chips counter-rotate to stay upright.
-const orbitNodes = [
-  { icon: "cpu", r: "14rem", dur: "40s", delay: "0s" },
-  { icon: "idea", r: "14rem", dur: "40s", delay: "-6.66s" },
-  { icon: "mic", r: "14rem", dur: "40s", delay: "-13.33s" },
-  { icon: "growth", r: "14rem", dur: "40s", delay: "-20s" },
-  { icon: "users", r: "14rem", dur: "40s", delay: "-26.66s" },
-  { icon: "target", r: "14rem", dur: "40s", delay: "-33.33s" },
-];
-// Smaller glowing dots on an inner ring for depth.
-const orbitDots = [
-  { r: "9rem", dur: "28s", delay: "0s" },
-  { r: "9rem", dur: "28s", delay: "-9.33s" },
-  { r: "9rem", dur: "28s", delay: "-18.66s" },
-];
+// Hero audio equalizer — varied delays/durations give a lively, organic bounce.
+const eqBars = Array.from({ length: 26 }, (_, i) => ({
+  delay: `-${((i * 0.13) % 1.1).toFixed(2)}s`,
+  dur: `${(0.85 + (i % 5) * 0.18).toFixed(2)}s`,
+}));
 
 // ---- Registration form ----
 const form = reactive({
@@ -701,6 +711,14 @@ const onCouponInput = () => {
   }
 };
 
+// Resolve a code (case-insensitive) to its college, or "" if unknown.
+const collegeForCode = (code) => {
+  const entry = Object.entries(couponColleges).find(
+    ([c]) => c.toUpperCase() === code.toUpperCase(),
+  );
+  return entry ? entry[1] : "";
+};
+
 const applyCoupon = () => {
   const code = couponInput.value.trim().toUpperCase();
   if (!code) {
@@ -708,10 +726,14 @@ const applyCoupon = () => {
     couponStatus.message = "Please enter your access code.";
     return;
   }
-  if (validCoupons.map((c) => c.toUpperCase()).includes(code)) {
+  const college = collegeForCode(code);
+  if (college) {
     appliedCoupon.value = code;
+    // The code is college-specific — auto-fill the college so it matches
+    // the code and the personalised confirmation email.
+    form.college = college;
     couponStatus.state = "success";
-    couponStatus.message = "Code applied — your registration is free!";
+    couponStatus.message = `Code applied for ${college} — your registration is free!`;
   } else {
     appliedCoupon.value = "";
     couponStatus.state = "error";
@@ -913,57 +935,25 @@ section[id] {
   animation: spin-slow 42s linear infinite reverse;
 }
 
-/* ---- Hero orbit diagram ---- */
-.orbit-ring {
-  border-radius: 9999px;
-  border: 1.5px dashed rgba(255, 122, 0, 0.28);
-}
-.orbit-ring-rev {
-  border-radius: 9999px;
-  border: 1.5px dashed rgba(122, 16, 255, 0.22);
-}
-/* A full-size layer that rotates around the stage centre. */
-.orbit-layer {
-  position: absolute;
-  inset: 0;
-  animation: orbit-spin var(--dur, 36s) linear infinite;
-  animation-delay: var(--delay, 0s);
+/* ---- Hero audio equalizer ---- */
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bounce 1s ease-in-out infinite;
   will-change: transform;
 }
-/* The node sits at top-centre, pushed out by its orbit radius. */
-.orbit-node {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translateY(calc(var(--r, 12rem) * -1));
-}
-/* Counter-rotate the chip (same duration/delay, opposite direction) so
-   icons stay upright while the layer spins. */
-.orbit-chip {
-  animation: orbit-spin-rev var(--dur, 36s) linear infinite;
-  animation-delay: var(--delay, 0s);
-  will-change: transform;
-}
-@keyframes orbit-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes eq-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.18);
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes orbit-spin-rev {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
+  50% {
+    transform: scaleY(1);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .orbit-layer,
-  .orbit-chip {
+  .eq-bar {
     animation: none;
+    transform: scaleY(0.5);
   }
 }
 

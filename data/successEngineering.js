@@ -11,7 +11,7 @@ export const event = {
   tagline: "Building the Human Edge in the Age of AI",
   description:
     "A 3-Part Live Interactive Series with IIT Alumni, Industry Leaders and Global Technology Professionals.",
-  date: "7–13 June 2026",
+  date: "7 June 2026 · Sunday",
   venue: "Live on Zoom",
   venueNote: "Link shared after registration",
   pricing: "Free for IIT / NIT Students",
@@ -20,53 +20,69 @@ export const event = {
   couponCode: "IITK26_SE", // featured code displayed on the page
 };
 
-// Access codes that unlock free registration.
-// Add more codes here later (e.g. per-college codes) — any match unlocks FREE.
-export const validCoupons = ["IITK26_SE"];
+// Per-college access codes that unlock free registration.
+// The applied code identifies the student's college, which is used to
+// personalise the confirmation email. Add new colleges/codes here.
+export const couponColleges = {
+  IITK26_SE: "IIT Kanpur",
+  IITBHU26_SE: "IIT BHU",
+  IITPKD26_SE: "IIT Palakkad",
+  IITBH26_SE: "IIT Bhilai",
+  IITJ26_SE: "IIT Jammu",
+  NITC26_SE: "NIT Calicut",
+  NITA26_SE: "NIT Agartala",
+};
+
+// Any of these codes unlocks FREE registration.
+export const validCoupons = Object.keys(couponColleges);
 
 // SECTION 4 — Speakers ------------------------------------------------------
 // `photo` can be a path under /public (e.g. "/speakers/name.jpg") or a full URL.
 // Leave `photo` empty ("") to fall back to a clean gold monogram avatar.
 export const speakers = [
   {
-    name: "Vaibhav Joshi",
-    designation: "Senior Operations Specialist",
-    company: "GlobalLogic",
-    companyLogo: "/logos/globallogic.svg",
-    photo: "/speakers/vaibhav.png",
-    bio: "Operations leader at GlobalLogic with a global track record — from a Paris stint at Hello Tomorrow to quality leadership at Maruti Suzuki. MBA from IÉSEG School of Management.",
-    tags: ["GlobalLogic", "Ex-Maruti Suzuki", "IÉSEG MBA"],
-    linkedin: "https://www.linkedin.com/in/vaibhavjoshi108/",
-  },
-  {
-    name: "Gaurav R.",
-    designation: "Senior Security Manager",
+    name: "Mr. Gaurav Rai",
+    designation: "AI Copilot Security · Microsoft",
+    designation2: "Senior Architect at PayPal",
     company: "Microsoft",
     companyLogo: "/logos/microsoft.svg",
     photo: "/speakers/gaurav.png",
     bio: "20+ years in cybersecurity, now leading AI security at Microsoft — Copilot, MCP security, Responsible AI and privacy. Previously at PayPal, Blackstone, Teradata and AT&T. BITS Pilani.",
-    tags: ["Microsoft", "AI Security", "Ex-PayPal", "BITS Pilani"],
+    tags: ["Microsoft", "AI Copilot", "AI Security", "BITS Pilani"],
     linkedin: "https://www.linkedin.com/in/gauravsecurity/",
   },
   {
-    name: "Yashas Tadikamalla",
-    designation: "Data Engineer · IIT Hyderabad",
+    name: "Samyak Jain",
+    designation: "AI Researcher · Mastercard",
+    designation2: "PhD at UC Berkeley",
+    company: "Mastercard",
+    companyLogo: "/logos/mastercard.svg",
+    photo: "/speakers/samyak.png",
+    bio: "Research Fellow at Microsoft Research and incoming CS PhD at UC Berkeley. AI intern at Mastercard AI Garage; work spans AI safety, mechanistic interpretability, and adversarial robustness. IIT BHU CSE (9.60 CPI).",
+    tags: ["Mastercard", "Microsoft Research", "AI Safety", "UC Berkeley", "IIT BHU"],
+    linkedin: "https://www.linkedin.com/in/samyak-jain-276738178/",
+  },
+  {
+    name: "Yashas",
+    designation: "AI Lead · Texas Instruments",
+    designation2: "AI, IIT Hyderabad",
     company: "Texas Instruments",
     companyLogo: "/logos/texasinstruments.svg",
     photo: "/speakers/yashas.png",
     bio: "Data Engineer at Texas Instruments and an AI graduate from IIT Hyderabad (9.36 CGPA). Research spans forecasting, model explainability and GAN-based video generation.",
-    tags: ["Texas Instruments", "IIT Hyderabad", "AI / ML"],
+    tags: ["Texas Instruments", "AI / ML", "IIT Hyderabad"],
     linkedin: "https://www.linkedin.com/in/yashas-tadikamalla-2b3908211/",
   },
   {
-    name: "Samyak Jain",
-    designation: "Incoming CS PhD · UC Berkeley",
-    company: "Microsoft Research",
-    companyLogo: "/logos/microsoft.svg",
-    photo: "/speakers/samyak.png",
-    bio: "Incoming CS PhD at UC Berkeley and Research Fellow at Microsoft Research. Has worked with Cambridge, IISc and Five AI (Oxford) on AI safety. IIT BHU CSE (9.60 CPI).",
-    tags: ["UC Berkeley", "Microsoft Research", "IIT BHU", "AI Safety"],
-    linkedin: "https://www.linkedin.com/in/samyak-jain-276738178/",
+    name: "Vaibhav",
+    designation: "AI & Business Operations · GlobalLogic",
+    designation2: "MBA, IÉSEG",
+    company: "GlobalLogic",
+    companyLogo: "/logos/globallogic.svg",
+    photo: "/speakers/vaibhav.png",
+    bio: "Project Management Officer and Senior Business Analyst at GlobalLogic, focused on operational excellence and data-driven delivery. Ex–Maruti Suzuki (Supplier Quality Manager), Hello Tomorrow (Paris), and edtech founder. MBA from IÉSEG; Generative AI certified.",
+    tags: ["GlobalLogic", "Generative AI", "Ex-Maruti Suzuki", "IÉSEG MBA"],
+    linkedin: "https://www.linkedin.com/in/vaibhavjoshi108/",
   },
 ];
 
@@ -96,14 +112,14 @@ export const whyCards = [
 
 // SECTION 5 — What you will gain -------------------------------------------
 export const gains = [
-  "Internship & Placement Insights",
-  "High Performance Mindset",
-  "Networking with Alumni",
-  "Human Potential Frameworks",
-  "Leadership Development",
-  "Certificate of Participation",
-  "Prizes & Quizzes",
-  "Sponsored Guided Leadership Trip",
+  { icon: "certificate", title: "Certificate of Participation", highlight: true },
+  { icon: "trophy", title: "Exciting Prizes & Quizzes", highlight: true },
+  { icon: "trip", title: "Sponsored Guided Leadership Trip", highlight: true },
+  { icon: "rocket", title: "Internship & Placement Insights" },
+  { icon: "users", title: "Networking with IIT Alumni" },
+  { icon: "spark", title: "High Performance Mindset" },
+  { icon: "frameworks", title: "Human Potential Frameworks" },
+  { icon: "leader", title: "Leadership Development" },
 ];
 
 // SECTION 6 — Program journey ----------------------------------------------
@@ -127,7 +143,7 @@ export const journey = [
     label: "Session 3",
     title: "The Human Edge",
     date: "13 June 2026 · Saturday",
-    topic: "Purpose, Meaning & What Makes Us Human",
+    topic: "What Makes Us Stand Out?",
   },
   {
     kind: "milestone",

@@ -2,6 +2,33 @@ import nodemailer from 'nodemailer'
 import { readFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
 
+// Per-college access codes. Keep in sync with data/successEngineering.js
+// (duplicated here so the server bundle has no cross-dir import dependency).
+const couponColleges = {
+  IITK26_SE: 'IIT Kanpur',
+  IITBHU26_SE: 'IIT BHU',
+  IITPKD26_SE: 'IIT Palakkad',
+  IITBH26_SE: 'IIT Bhilai',
+  IITJ26_SE: 'IIT Jammu',
+  NITC26_SE: 'NIT Calicut',
+  NITA26_SE: 'NIT Agartala',
+}
+
+const normCode = (reg) => (reg.couponCode || '').trim().toUpperCase()
+
+// Resolve the student's college from their access code (authoritative),
+// falling back to whatever college they entered.
+const collegeFromCode = (reg) => {
+  return couponColleges[normCode(reg)] || (reg.college || '').trim() || ''
+}
+
+// Each valid code has a college-specific poster at /posters/<CODE>.png.
+// Unknown codes fall back to the generic poster.
+const posterFileForCode = (reg) => {
+  const code = normCode(reg)
+  return couponColleges[code] ? `posters/${code}.png` : 'se-poster.png'
+}
+
 // Escape values before embedding in HTML email bodies (prevents HTML/script injection).
 const escapeHtml = (v) =>
   String(v ?? '')
@@ -13,16 +40,15 @@ const escapeHtml = (v) =>
 
 const clean = (v) => (typeof v === 'string' ? v.trim() : v)
 
-const POSTER_FILENAME = 'se-poster.png'
-
-// Load the event poster as a Buffer.
+// Load a poster (relative path under /public) as a Buffer.
 // Local dev / node preview: read it straight from the filesystem.
 // Serverless deploys (e.g. Vercel): the function can't see public/ on disk,
 // so fall back to fetching it over HTTP from the site's own origin.
-const loadPoster = async (baseUrl) => {
+const loadPoster = async (filename, baseUrl) => {
+  const file = (filename || 'se-poster.png').replace(/^\/+/, '')
   const candidates = [
-    resolve(process.cwd(), `public/${POSTER_FILENAME}`),
-    resolve(process.cwd(), `.output/public/${POSTER_FILENAME}`),
+    resolve(process.cwd(), `public/${file}`),
+    resolve(process.cwd(), `.output/public/${file}`),
   ]
   for (const p of candidates) {
     try {
@@ -34,7 +60,7 @@ const loadPoster = async (baseUrl) => {
 
   if (baseUrl) {
     try {
-      const res = await fetch(`${baseUrl.replace(/\/$/, '')}/${POSTER_FILENAME}`)
+      const res = await fetch(`${baseUrl.replace(/\/$/, '')}/${file}`)
       if (res.ok) return Buffer.from(await res.arrayBuffer())
     } catch (err) {
       console.error('Poster fetch failed:', err?.message || err)
@@ -71,10 +97,20 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
     const from = MAIL_FROM || SMTP_USER
     const eventName = 'Success Engineering'
     const firstName = (reg.name || '').split(/\s+/)[0] || 'there'
+    const college = collegeFromCode(reg)
+    // Personalised college line (omitted entirely if college is unknown).
+    const collegeLineText = college
+      ? `We're excited to welcome you from ${college}! This access has been specially reserved for ${college} students.\n\n`
+      : ''
+    const collegeLineHtml = college
+      ? `<div style="background:#f5f0ff;border-left:4px solid #7A10FF;border-radius:8px;padding:14px 16px;margin:18px 0">
+           <p style="margin:0;color:#444">We're excited to welcome you from <strong style="color:#7A10FF">${escapeHtml(college)}</strong>! This access has been specially reserved for <strong>${escapeHtml(college)}</strong> students. 🎓</p>
+         </div>`
+      : ''
 
-    // Embed the poster inline (cid) and also attach it as a file.
+    // Embed the college-specific poster inline (cid) and also attach it.
     const baseUrl = clean(opts.baseUrl) || clean(process.env.PUBLIC_BASE_URL)
-    const posterBuffer = await loadPoster(baseUrl)
+    const posterBuffer = await loadPoster(posterFileForCode(reg), baseUrl)
     const attachments = posterBuffer
       ? [{ filename: 'Success-Engineering.png', content: posterBuffer, cid: 'sePoster' }]
       : []
@@ -89,11 +125,14 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
     await transporter.sendMail({
       from,
       to: reg.email,
-      subject: `🎉 You're registered, ${firstName} — ${eventName}`,
+      subject: college
+        ? `🎉 You're registered, ${firstName} (${college}) — ${eventName}`
+        : `🎉 You're registered, ${firstName} — ${eventName}`,
       attachments,
       text:
         `Dear ${reg.name},\n\n` +
         `Thank you so much for registering for ${eventName} — Building the Human Edge in the Age of AI.\n\n` +
+        collegeLineText +
         `We're truly glad to have you with us. Your seat is now reserved, and you've taken a wonderful step toward ` +
         `building clarity, purpose and a real edge for the age of AI.\n\n` +
         `What happens next:\n` +
@@ -115,6 +154,7 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
             <div style="padding:8px 24px 28px;color:#444;line-height:1.7;font-size:15px">
               <p>Dear <strong>${escapeHtml(reg.name)}</strong>,</p>
               <p>Thank you so much for registering for <strong>${eventName}</strong>. We're truly glad to have you with us! 🎉</p>
+              ${collegeLineHtml}
               <p>Your seat is now <strong style="color:#D61C75">reserved</strong>, and you've taken a wonderful step toward building clarity, purpose and a real edge for the age of AI.</p>
               <div style="background:#fdf2f8;border-left:4px solid #D61C75;border-radius:8px;padding:14px 16px;margin:18px 0">
                 <p style="margin:0 0 6px;font-weight:bold;color:#15171c">What happens next</p>
