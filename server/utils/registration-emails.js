@@ -74,11 +74,11 @@ const loadPoster = async (filename, baseUrl) => {
 }
 
 // Builds the registrant confirmation email (subject + text + html).
-// `posterImgHtml` is the only piece that differs between contexts:
-//   - real send  -> an <img src="cid:sePoster"> (inline attachment)
-//   - web preview -> an <img src="/posters/...png"> (served by the app)
+// `posterImgHtml` and `qrSrc` differ between contexts:
+//   - real send  -> cid: references to inline attachments
+//   - web preview -> /...png URLs served by the app
 // Keeping this in one place guarantees the preview matches the real email.
-export const buildConfirmationEmail = (reg, { posterImgHtml = '' } = {}) => {
+export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } = {}) => {
   const eventName = 'Success Engineering'
   const firstName = (reg.name || '').split(/\s+/)[0] || 'there'
   const college = collegeFromCode(reg)
@@ -93,6 +93,13 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '' } = {}) => {
     : ''
 
   const whatsappUrl = WHATSAPP_CHANNEL_URL
+
+  const qrBlockHtml = qrSrc
+    ? `<div style="margin-top:14px">
+                  <p style="margin:0 0 8px;color:#888;font-size:13px">Or scan to follow the channel:</p>
+                  <img src="${qrSrc}" alt="WhatsApp channel QR" width="170" style="width:170px;max-width:60%;height:auto;border-radius:12px;border:1px solid #e6e8ec" />
+                </div>`
+    : ''
 
   const subject = `Your ${eventName} registration is confirmed, ${firstName}`
 
@@ -126,6 +133,7 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '' } = {}) => {
                 <p style="margin:0 0 6px;font-weight:bold;color:#15171c;font-size:15px">Next step: follow the WhatsApp channel</p>
                 <p style="margin:0 0 14px;color:#555;font-size:14px">All session links and reminders are shared in the channel. Please follow it now so you don't miss any session.</p>
                 <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Follow the WhatsApp channel</a>
+                ${qrBlockHtml}
               </div>
 
               <p style="color:#555">If you have any questions, just reply to this email — we're happy to help.</p>
@@ -179,8 +187,15 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
       ? `<div style="padding:0 24px 8px"><img src="cid:sePoster" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
       : ''
 
+    // WhatsApp channel QR — embed inline (cid) so it renders without remote loads.
+    const qrBuffer = await loadPoster('wa-channel-qr.png', baseUrl)
+    if (qrBuffer) {
+      attachments.push({ filename: 'WhatsApp-Channel-QR.png', content: qrBuffer, cid: 'waQr' })
+    }
+    const qrSrc = qrBuffer ? 'cid:waQr' : ''
+
     // 1) Personalised confirmation to the registrant (shared template).
-    const { subject, text, html } = buildConfirmationEmail(reg, { posterImgHtml })
+    const { subject, text, html } = buildConfirmationEmail(reg, { posterImgHtml, qrSrc })
     await transporter.sendMail({
       from,
       to: reg.email,
