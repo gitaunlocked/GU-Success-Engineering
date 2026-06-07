@@ -32,6 +32,7 @@ export const couponColleges = {
   NITC26_SE: "NIT Calicut",
   NITA26_SE: "NIT Agartala",
   CU26_SE: "Chandigarh University",
+  RGIPT26_SE: "RGIPT",
 };
 
 // Any of these codes unlocks FREE registration.
