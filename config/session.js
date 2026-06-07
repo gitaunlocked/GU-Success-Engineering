@@ -12,7 +12,7 @@
 
 export const session = {
   // 🔴 PASTE THE ZOOM LINK HERE WHEN READY (leave "" until then)
-  joinUrl: "",
+  joinUrl: "https://servicenow.zoom.us/j/92527977934",
 
   eventName: "The Success Code",
   sessionLabel: "Session 1 of 3",
