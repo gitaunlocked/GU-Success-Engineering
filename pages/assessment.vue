@@ -21,11 +21,11 @@
         <p class="mt-3 text-lg text-gray-600 sm:text-xl">{{ meta.subtitle }}</p>
         <p class="mt-2 text-sm font-medium text-gray-500">{{ meta.duration }}</p>
 
-        <div class="mx-auto mt-10 max-w-lg rounded-[2rem] bg-white p-8 shadow-[0_30px_80px_-30px_rgba(214,28,117,0.35)] ring-1 ring-gray-100">
-          <p class="text-left text-sm leading-relaxed text-gray-600">
+        <div class="mx-auto mt-10 max-w-lg rounded-[2rem] bg-white p-8 text-left shadow-[0_30px_80px_-30px_rgba(214,28,117,0.35)] ring-1 ring-gray-100">
+          <p class="text-sm leading-relaxed text-gray-600">
             Answer 8 quick questions and receive your personalized profile with four scores:
           </p>
-          <ul class="mt-5 space-y-3 text-left text-sm font-medium text-gray-800">
+          <ul class="mt-5 space-y-3 text-sm font-medium text-gray-800">
             <li v-for="item in scorePreview" :key="item" class="flex items-center gap-3">
               <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00]/15 via-[#D61C75]/15 to-[#7A10FF]/15 text-[#D61C75]">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" /></svg>
@@ -33,9 +33,29 @@
               {{ item }}
             </li>
           </ul>
-          <button type="button" class="btn-brand mt-8 w-full justify-center py-3.5 text-lg" @click="startQuiz">
-            Start Assessment
-          </button>
+
+          <form class="mt-8 border-t border-gray-100 pt-6" @submit.prevent="startQuiz">
+            <p class="text-sm font-semibold text-gray-900">Your details</p>
+            <p class="mt-1 text-xs text-gray-500">Required before you begin — helps us personalize your report.</p>
+            <div class="mt-4 space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700">Name <span class="text-[#D61C75]">*</span></label>
+                <input id="name" v-model="contact.name" type="text" required class="field-input" placeholder="Your full name" />
+              </div>
+              <div>
+                <label for="phone" class="block text-sm font-semibold text-gray-700">Phone number <span class="text-[#D61C75]">*</span></label>
+                <input id="phone" v-model="contact.phone" type="tel" required class="field-input" placeholder="10-digit mobile number" />
+              </div>
+              <div>
+                <label for="college" class="block text-sm font-semibold text-gray-700">College <span class="text-[#D61C75]">*</span></label>
+                <input id="college" v-model="contact.college" type="text" required class="field-input" placeholder="Your institute" />
+              </div>
+            </div>
+            <p v-if="contactError" class="mt-4 text-sm text-red-600">{{ contactError }}</p>
+            <button type="submit" class="btn-brand mt-6 w-full justify-center py-3.5 text-lg" :disabled="!canStart">
+              Start Assessment
+            </button>
+          </form>
         </div>
       </section>
 
@@ -106,47 +126,14 @@
             <button
               type="button"
               class="btn-brand flex-1 justify-center py-3"
-              :disabled="!canAdvance"
+              :disabled="!canAdvance || submitting"
               @click="nextStep"
             >
-              {{ stepIndex === questions.length - 1 ? 'See My Results' : 'Next' }}
+              {{ submitting ? 'Saving…' : stepIndex === questions.length - 1 ? 'See My Results' : 'Next' }}
             </button>
           </div>
+          <p v-if="submitError" class="mt-4 text-center text-sm text-red-600">{{ submitError }}</p>
         </div>
-      </section>
-
-      <!-- Optional details before submit -->
-      <section v-else-if="phase === 'details'" class="text-center">
-        <h2 class="text-3xl font-extrabold text-gray-900">Almost there!</h2>
-        <p class="mt-3 text-gray-600">Add your details to save your profile (optional), then view your scores.</p>
-
-        <form class="mt-8 rounded-[2rem] bg-white p-7 text-left shadow-[0_30px_80px_-30px_rgba(214,28,117,0.35)] ring-1 ring-gray-100 sm:p-9" @submit.prevent="submitAssessment">
-          <div class="space-y-4">
-            <div>
-              <label for="name" class="block text-sm font-semibold text-gray-700">Name</label>
-              <input id="name" v-model="contact.name" type="text" class="field-input" placeholder="Your name" />
-            </div>
-            <div>
-              <label for="email" class="block text-sm font-semibold text-gray-700">Email</label>
-              <input id="email" v-model="contact.email" type="email" class="field-input" placeholder="you@college.edu" />
-            </div>
-            <div>
-              <label for="college" class="block text-sm font-semibold text-gray-700">College</label>
-              <input id="college" v-model="contact.college" type="text" class="field-input" placeholder="Your institute" />
-            </div>
-          </div>
-
-          <p v-if="submitError" class="mt-4 text-sm text-red-600">{{ submitError }}</p>
-
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button type="button" class="btn-ghost flex-1 justify-center py-3" :disabled="submitting" @click="submitAssessment">
-              Skip &amp; View Results
-            </button>
-            <button type="submit" class="btn-brand flex-1 justify-center py-3" :disabled="submitting">
-              {{ submitting ? 'Calculating…' : 'View My Profile' }}
-            </button>
-          </div>
-        </form>
       </section>
 
       <!-- Results -->
@@ -205,7 +192,6 @@
 import {
   assessmentMeta as meta,
   questions,
-  computeScores,
 } from '~/data/successProfileAssessment'
 
 definePageMeta({ layout: 'landing' })
@@ -231,10 +217,19 @@ const phase = ref('intro')
 const stepIndex = ref(0)
 const answers = ref({})
 const followupText = ref('')
-const contact = ref({ name: '', email: '', college: '' })
+const contact = ref({ name: '', phone: '', college: '' })
+const contactError = ref('')
 const results = ref(null)
 const submitting = ref(false)
 const submitError = ref('')
+
+const phoneDigits = (v) => v.replace(/\D/g, '')
+
+const canStart = computed(() =>
+  contact.value.name.trim().length > 0
+  && contact.value.college.trim().length > 0
+  && phoneDigits(contact.value.phone).length >= 10,
+)
 
 const currentQuestion = computed(() => questions[stepIndex.value])
 const progress = computed(() => ((stepIndex.value + 1) / questions.length) * 100)
@@ -247,6 +242,19 @@ const showFollowup = computed(() => {
 const canAdvance = computed(() => !!answers.value[currentQuestion.value.id]?.optionId)
 
 function startQuiz() {
+  contactError.value = ''
+  if (!contact.value.name.trim()) {
+    contactError.value = 'Please enter your name.'
+    return
+  }
+  if (!contact.value.college.trim()) {
+    contactError.value = 'Please enter your college.'
+    return
+  }
+  if (phoneDigits(contact.value.phone).length < 10) {
+    contactError.value = 'Please enter a valid 10-digit phone number.'
+    return
+  }
   phase.value = 'quiz'
   stepIndex.value = 0
 }
@@ -280,7 +288,7 @@ function nextStep() {
     return
   }
 
-  phase.value = 'details'
+  submitAssessment()
 }
 
 function prevStep() {
@@ -300,9 +308,9 @@ async function submitAssessment() {
   try {
     const payload = {
       answers: answers.value,
-      name: contact.value.name,
-      email: contact.value.email,
-      college: contact.value.college,
+      name: contact.value.name.trim(),
+      phone: contact.value.phone.trim(),
+      college: contact.value.college.trim(),
     }
 
     const res = await $fetch('/api/assessment-submit', {
@@ -313,16 +321,7 @@ async function submitAssessment() {
     results.value = res.scores
     phase.value = 'results'
   } catch (err) {
-    const local = computeScores(answers.value)
-    results.value = {
-      overall: local.overall,
-      overallLabel: local.label,
-      dimensions: local.dimensions,
-    }
-    phase.value = 'results'
-    if (err?.data?.statusMessage) {
-      submitError.value = err.data.statusMessage
-    }
+    submitError.value = err?.data?.statusMessage || 'Could not save your assessment. Please try again.'
   } finally {
     submitting.value = false
   }
@@ -333,7 +332,8 @@ function retake() {
   stepIndex.value = 0
   answers.value = {}
   followupText.value = ''
-  contact.value = { name: '', email: '', college: '' }
+  contact.value = { name: '', phone: '', college: '' }
+  contactError.value = ''
   results.value = null
   submitError.value = ''
 }

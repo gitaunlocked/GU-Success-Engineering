@@ -6,8 +6,6 @@ const str = (v, max = 500) => {
   return s.length > max ? s.slice(0, max) : s
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const answers = body?.answers
@@ -16,18 +14,24 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid assessment answers.' })
   }
 
+  const name = str(body?.name, 120)
+  const phone = str(body?.phone, 20)
+  const college = str(body?.college, 200)
+
+  if (!name) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter your name.' })
+  }
+  if (!college) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter your college.' })
+  }
+  if (phone.replace(/\D/g, '').length < 10) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid phone number.' })
+  }
+
   const required = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
   const missing = required.filter((id) => !answers[id]?.optionId)
   if (missing.length) {
     throw createError({ statusCode: 400, statusMessage: 'Please answer all questions.' })
-  }
-
-  const name = str(body?.name, 120)
-  const email = str(body?.email, 200).toLowerCase()
-  const college = str(body?.college, 200)
-
-  if (email && !EMAIL_RE.test(email)) {
-    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid email address.' })
   }
 
   const scores = computeScores(answers)
@@ -36,9 +40,9 @@ export default defineEventHandler(async (event) => {
   const record = {
     event: 'success-engineering',
     assessment: 'success-profile',
-    name: name || null,
-    email: email || null,
-    college: college || null,
+    name,
+    phone,
+    college,
     answers: serialized,
     scores: {
       overall: scores.overall,
@@ -58,7 +62,10 @@ export default defineEventHandler(async (event) => {
     await collection.insertOne(record)
   } catch (err) {
     console.error('assessment-submit error:', err?.message || err)
-    // Still return scores — storage is best-effort for students.
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Could not save your assessment. Please try again shortly.',
+    })
   }
 
   return {
