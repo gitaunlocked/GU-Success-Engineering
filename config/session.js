@@ -8,6 +8,9 @@
 //   joinUrl = ""              -> button is disabled, shows "Meeting link will
 //                                be updated shortly"
 //   joinUrl = "https://..."   -> button becomes the live "Join Session" link
+//
+// Assessment quiz (stable share link):
+//   https://www.gitaunlocked.com/assessment
 // ---------------------------------------------------------------------------
 
 export const session = {
@@ -37,4 +40,7 @@ export const session = {
 
   // Small note under the join button
   note: "Keep this page handy — the Join button activates here as soon as the meeting link is live.",
+
+  // Success Profile Assessment — share with students anytime
+  assessmentUrl: "/assessment",
 };

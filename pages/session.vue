@@ -62,6 +62,15 @@
             Meeting link will be updated shortly
           </div>
           <p class="mt-4 text-sm text-gray-500">{{ session.note }}</p>
+
+          <a
+            v-if="session.assessmentUrl"
+            :href="session.assessmentUrl"
+            class="btn-ghost mt-4 w-full justify-center py-3.5"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4" /></svg>
+            Take Success Profile Assessment
+          </a>
         </div>
       </div>
 
@@ -130,5 +139,9 @@ const initials = (name) =>
 <style scoped>
 .btn-brand {
   @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] px-6 py-2.5 font-semibold text-white shadow-lg shadow-[#D61C75]/25 transition duration-200 hover:shadow-xl hover:shadow-[#D61C75]/40 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-95;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center gap-2 rounded-full border-2 border-gray-200 bg-white px-6 py-2.5 font-semibold text-gray-700 transition hover:border-[#D61C75]/40 hover:text-[#D61C75];
 }
 </style>
