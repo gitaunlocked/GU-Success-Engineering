@@ -12,6 +12,7 @@ const couponColleges = {
   IITJ26_SE: 'IIT Jammu',
   NITC26_SE: 'NIT Calicut',
   NITA26_SE: 'NIT Agartala',
+  CU26_SE: 'Chandigarh University',
 }
 
 const normCode = (reg) => (reg.couponCode || '').trim().toUpperCase()
