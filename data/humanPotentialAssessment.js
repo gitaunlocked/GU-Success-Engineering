@@ -109,7 +109,7 @@ export const questions = [
     section: "Beyond Achievement",
     text: "If you were to achieve every academic, career, and financial goal you currently have, what would you ultimately hope to gain from that success?",
     type: "text",
-    optional: true,
+    optional: false,
     placeholder: "Take a moment — what are you really after beneath the goals?",
   },
   {
@@ -117,7 +117,7 @@ export const questions = [
     section: "The Modern Challenge",
     text: "In your opinion, what is the single biggest challenge facing young people today?",
     type: "text",
-    optional: true,
+    optional: false,
     placeholder: "Share what you genuinely feel is the biggest challenge…",
   },
   {
@@ -125,7 +125,7 @@ export const questions = [
     section: "The Bigger Question",
     text: "What is one question about life, success, happiness, or human potential that you genuinely wish you understood better?",
     type: "text",
-    optional: true,
+    optional: false,
     placeholder: "The one question you'd love a real answer to…",
   },
 ];

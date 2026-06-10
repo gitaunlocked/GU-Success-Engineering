@@ -3,7 +3,10 @@ import {
   computeScores,
   serializeAnswers,
   scoredQuestionIds,
+  textQuestionIds,
 } from '../utils/humanPotentialScoring'
+
+const MIN_TEXT_LENGTH = 2
 
 const str = (v, max = 1000) => {
   const s = (typeof v === 'string' ? v : v == null ? '' : String(v)).trim()
@@ -37,6 +40,18 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Please answer all questions.' })
   }
 
+  const reflections = {}
+  for (const id of textQuestionIds) {
+    const text = str(answers[id]?.text, 2000)
+    if (text.length < MIN_TEXT_LENGTH) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Please answer all the short-answer questions.',
+      })
+    }
+    reflections[id] = text
+  }
+
   const scores = computeScores(answers)
   const serialized = serializeAnswers(answers)
 
@@ -50,6 +65,7 @@ export default defineEventHandler(async (event) => {
     phone,
     college,
     answers: serialized,
+    reflections,
     scores: {
       overall: scores.overall,
       futureReadiness: dimScore('futureReadiness'),

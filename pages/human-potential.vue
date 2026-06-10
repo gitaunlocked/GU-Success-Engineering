@@ -73,11 +73,7 @@
         </div>
 
         <div class="rounded-[2rem] bg-white p-7 text-left shadow-[0_30px_80px_-30px_rgba(214,28,117,0.35)] ring-1 ring-gray-100 sm:p-9">
-          <p class="text-xs font-semibold uppercase tracking-[0.15em] text-[#D61C75]">
-            {{ currentQuestion.section }}
-          </p>
-
-          <h2 class="mt-3 text-xl font-bold leading-snug text-gray-900 sm:text-2xl">
+          <h2 class="text-xl font-bold leading-snug text-gray-900 sm:text-2xl">
             {{ currentQuestion.text }}
           </h2>
 
@@ -104,7 +100,7 @@
               class="w-full resize-none rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-3 text-sm text-gray-800 outline-none transition focus:border-[#D61C75] focus:ring-2 focus:ring-[#D61C75]/20"
               :placeholder="currentQuestion.placeholder"
             ></textarea>
-            <p class="mt-2 text-xs text-gray-400">Optional, but your honest answer makes your report more meaningful.</p>
+            <p class="mt-2 text-xs text-gray-400">A thoughtful, honest answer makes your report more meaningful.</p>
           </div>
 
           <div class="mt-8 flex gap-3">
@@ -236,10 +232,12 @@ const canStart = computed(() =>
 const currentQuestion = computed(() => questions[stepIndex.value])
 const progress = computed(() => ((stepIndex.value + 1) / questions.length) * 100)
 
+const MIN_TEXT_LENGTH = 2
+
 const canAdvance = computed(() => {
   const q = currentQuestion.value
   if (q.type === 'choice') return !!answers.value[q.id]?.optionId
-  return true // short-answer questions are optional
+  return textValue.value.trim().length >= MIN_TEXT_LENGTH // short-answer now required
 })
 
 function startQuiz() {
