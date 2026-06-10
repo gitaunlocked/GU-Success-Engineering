@@ -16,7 +16,7 @@
 
 export const session = {
   // 🔴 PASTE THE ZOOM LINK HERE WHEN READY (leave "" until then)
-  joinUrl: "",
+  joinUrl: "https://servicenow.zoom.us/j/95741828206",
 
   eventName: "The Hidden Dimension",
   sessionLabel: "Session 2 of 3",
