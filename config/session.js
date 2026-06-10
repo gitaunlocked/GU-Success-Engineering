@@ -10,37 +10,36 @@
 //   joinUrl = "https://..."   -> button becomes the live "Join Session" link
 //
 // Assessment quiz (stable share link):
-//   https://www.gitaunlocked.com/assessment
+//   assessmentUrl = ""        -> shows "Assessment link will be updated shortly"
+//   assessmentUrl = "/assessment" or full URL -> active button
 // ---------------------------------------------------------------------------
 
 export const session = {
   // 🔴 PASTE THE ZOOM LINK HERE WHEN READY (leave "" until then)
-  joinUrl: "https://servicenow.zoom.us/j/92527977934",
+  joinUrl: "",
 
-  eventName: "The Success Code",
-  sessionLabel: "Session 1 of 3",
-  title: "The Success Code",
-  subtitle: "AI, Careers & Building Your Future",
-  // Human-readable schedule shown on the page
-  dateLabel: "7 June 2026 · Sunday",
-  timeLabel: "7:00 – 8:00 PM IST",
+  eventName: "The Hidden Dimension",
+  sessionLabel: "Session 2 of 3",
+  title: "The Hidden Dimension",
+  subtitle: "Some perspectives change everything.",
+  dateLabel: "10 June 2026 · Wednesday",
+  timeLabel: "5:00 – 6:00 PM IST",
   platform: "Live on Zoom",
 
-  // Speaker featured for this session
   speaker: {
-    name: "Mr. Samyak Jain",
-    photo: "/speakers/samyak.png",
+    name: "Yashas Tadikamalla",
+    photo: "/speakers/yashas.png",
     credentials: [
-      "Incoming CS PhD at UC Berkeley",
-      "Research Fellow @ Microsoft",
-      "AI Intern @ Mastercard",
-      "CSE at IIT BHU, Varanasi",
+      "B.Tech in Artificial Intelligence, IIT Hyderabad (2024)",
+      "AIR 215 in JEE Mains · AIR 613 in JEE Advanced · AIR 276 in KVPY SX",
+      "Academic Excellence Award for outstanding CGPA at IIT Hyderabad",
+      "Data Scientist Intern at Blend 360 (6-month semester internship)",
+      "Data Engineer at Texas Instruments, Bengaluru",
     ],
   },
 
-  // Small note under the join button
   note: "Keep this page handy — the Join button activates here as soon as the meeting link is live.",
 
-  // Success Profile Assessment — share with students anytime
-  assessmentUrl: "/assessment",
+  // 🔴 PASTE ASSESSMENT LINK HERE WHEN READY (leave "" until then)
+  assessmentUrl: "",
 };

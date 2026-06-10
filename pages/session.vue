@@ -69,8 +69,15 @@
             class="btn-ghost mt-4 w-full justify-center py-3.5"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4" /></svg>
-            Take Success Profile Assessment
+            Take Human Potential Assessment
           </a>
+          <div
+            v-else
+            class="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-3.5 text-base font-semibold text-gray-500"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4" /></svg>
+            Assessment link will be updated shortly
+          </div>
         </div>
       </div>
 
