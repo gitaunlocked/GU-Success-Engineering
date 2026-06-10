@@ -1,7 +1,11 @@
 import { getMongoDb } from '../utils/mongo'
-import { computeScores, serializeAnswers } from '~~/data/successProfileAssessment.js'
+import {
+  computeScores,
+  serializeAnswers,
+  scoredQuestionIds,
+} from '../utils/humanPotentialScoring'
 
-const str = (v, max = 500) => {
+const str = (v, max = 1000) => {
   const s = (typeof v === 'string' ? v : v == null ? '' : String(v)).trim()
   return s.length > max ? s.slice(0, max) : s
 }
@@ -28,8 +32,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Please enter a valid phone number.' })
   }
 
-  const required = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
-  const missing = required.filter((id) => !answers[id]?.optionId)
+  const missing = scoredQuestionIds.filter((id) => !answers[id]?.optionId)
   if (missing.length) {
     throw createError({ statusCode: 400, statusMessage: 'Please answer all questions.' })
   }
@@ -37,19 +40,22 @@ export default defineEventHandler(async (event) => {
   const scores = computeScores(answers)
   const serialized = serializeAnswers(answers)
 
+  const dimScore = (key) => scores.dimensions.find((d) => d.key === key)?.score
+
   const record = {
     event: 'success-engineering',
-    assessment: 'success-profile',
+    assessment: 'human-potential',
+    session: 'session-2',
     name,
     phone,
     college,
     answers: serialized,
     scores: {
       overall: scores.overall,
-      aiAdaptability: scores.dimensions.find((d) => d.key === 'aiAdaptability')?.score,
-      careerClarity: scores.dimensions.find((d) => d.key === 'careerClarity')?.score,
-      growthPotential: scores.dimensions.find((d) => d.key === 'growthPotential')?.score,
-      selfAwareness: scores.dimensions.find((d) => d.key === 'selfAwareness')?.score,
+      futureReadiness: dimScore('futureReadiness'),
+      resilience: dimScore('resilience'),
+      problemSolving: dimScore('problemSolving'),
+      peopleAndDirection: dimScore('peopleAndDirection'),
     },
     createdAt: new Date(),
   }
@@ -57,11 +63,11 @@ export default defineEventHandler(async (event) => {
   try {
     const db = await getMongoDb()
     const collection = db.collection(
-      (process.env.MONGODB_ASSESSMENT_COLLECTION || 'seAssessmentResponses').trim(),
+      (process.env.MONGODB_HP_ASSESSMENT_COLLECTION || 'seHumanPotentialResponses').trim(),
     )
     await collection.insertOne(record)
   } catch (err) {
-    console.error('assessment-submit error:', err?.message || err)
+    console.error('human-potential-submit error:', err?.message || err)
     throw createError({
       statusCode: 500,
       statusMessage: 'Could not save your assessment. Please try again shortly.',

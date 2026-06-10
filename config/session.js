@@ -41,5 +41,5 @@ export const session = {
   note: "Keep this page handy — the Join button activates here as soon as the meeting link is live.",
 
   // 🔴 PASTE ASSESSMENT LINK HERE WHEN READY (leave "" until then)
-  assessmentUrl: "",
+  assessmentUrl: "/human-potential",
 };
