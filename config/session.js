@@ -16,30 +16,29 @@
 
 export const session = {
   // 🔴 PASTE THE ZOOM LINK HERE WHEN READY (leave "" until then)
-  joinUrl: "https://servicenow.zoom.us/j/95741828206",
+  joinUrl: "",
 
-  eventName: "The Hidden Dimension",
-  sessionLabel: "Session 2 of 3",
-  title: "The Hidden Dimension",
-  subtitle: "Some perspectives change everything.",
-  dateLabel: "10 June 2026 · Wednesday",
-  timeLabel: "5:00 – 6:00 PM IST",
+  eventName: "The Human Edge",
+  sessionLabel: "Session 3 of 3",
+  title: "The Human Edge",
+  subtitle: "Building what AI cannot replace.",
+  dateLabel: "13 June 2026 · Saturday",
+  timeLabel: "4:00 – 5:00 PM IST",
   platform: "Live on Zoom",
 
   speaker: {
-    name: "Yashas Tadikamalla",
-    photo: "/speakers/yashas.png",
+    name: "Mr. Vaibhav Joshi",
+    photo: "/speakers/vaibhav.png",
     credentials: [
-      "B.Tech in Artificial Intelligence, IIT Hyderabad (2024)",
-      "AIR 215 in JEE Mains · AIR 613 in JEE Advanced · AIR 276 in KVPY SX",
-      "Academic Excellence Award for outstanding CGPA at IIT Hyderabad",
-      "Data Scientist Intern at Blend 360 (6-month semester internship)",
-      "Data Engineer at Texas Instruments, Bengaluru",
+      "Senior AI Operations Specialist @ GlobalLogic",
+      "Ex- Operations Specialist @ Hello Tomorrow, Paris",
+      "MBA @ IESEG School of Management, Paris",
+      "Ex- Manager @ Maruti Suzuki",
     ],
   },
 
   note: "Keep this page handy — the Join button activates here as soon as the meeting link is live.",
 
   // 🔴 PASTE ASSESSMENT LINK HERE WHEN READY (leave "" until then)
-  assessmentUrl: "/human-potential",
+  assessmentUrl: "",
 };
