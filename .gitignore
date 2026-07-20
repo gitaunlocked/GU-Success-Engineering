@@ -10,3 +10,6 @@ public/uploads/
 frontend-build/
 *.zip
 .vercel
+
+# Local registration fallback data (contains PII — stored in MongoDB in prod)
+server/data/
