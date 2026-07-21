@@ -20,7 +20,7 @@
 
     <main class="relative z-10">
       <!-- Hero -->
-      <section class="mx-auto max-w-4xl px-4 pt-14 text-center sm:pt-20">
+      <section class="mx-auto max-w-4xl px-4 pt-10 text-center sm:pt-14">
         <span
           v-motion :initial="{ opacity: 0, y: 20 }" :enter="{ opacity: 1, y: 0, transition: { duration: 500 } }"
           class="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#D61C75] shadow-sm ring-1 ring-[#D61C75]/10"
@@ -29,19 +29,18 @@
             <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D61C75] opacity-60"></span>
             <span class="relative inline-flex h-2 w-2 rounded-full bg-[#D61C75]"></span>
           </span>
-          {{ brand.name }} · {{ brand.tagline }}
+          {{ brand.name }} · For IIT Students
         </span>
         <h1
           v-motion :initial="{ opacity: 0, y: 30 }" :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 100 } }"
-          class="mt-7 bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] bg-clip-text pb-2 text-4xl font-extrabold leading-[1.15] text-transparent sm:text-6xl"
+          class="mt-5 bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] bg-clip-text pb-2 text-4xl font-extrabold leading-[1.15] text-transparent sm:text-6xl"
         >
           {{ hero.title }}
         </h1>
-        <p class="mx-auto mt-5 max-w-2xl text-lg font-bold text-gray-900 sm:text-2xl">{{ hero.subtitle }}</p>
-        <p class="mx-auto mt-3 max-w-2xl text-sm font-semibold uppercase tracking-[0.15em] text-[#D61C75] sm:text-base">{{ hero.supporting }}</p>
-        <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-600">{{ hero.description }}</p>
+        <p class="mx-auto mt-4 max-w-2xl text-lg font-bold text-gray-900 sm:text-2xl">{{ hero.subtitle }}</p>
+        <p class="mx-auto mt-2 max-w-2xl text-xs font-semibold uppercase tracking-[0.15em] text-[#D61C75] sm:text-sm">{{ hero.supporting }}</p>
 
-        <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div class="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <button type="button" class="btn-brand w-full justify-center py-3.5 text-lg sm:w-auto" @click="openForm">
             {{ hero.primaryCta }}
             <span aria-hidden="true">→</span>
@@ -52,27 +51,80 @@
         </div>
 
         <!-- Registration quick facts -->
-        <div class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="mx-auto mt-9 grid max-w-2xl grid-cols-3 gap-3 sm:gap-4">
           <div class="stat-card">
             <span class="stat-icon bg-gradient-to-br from-[#D61C75] to-[#7A10FF]">🎟️</span>
-            <p class="mt-3 text-3xl font-extrabold text-[#D61C75]">80</p>
-            <p class="mt-0.5 text-xs font-semibold uppercase tracking-wide text-gray-500">{{ registration.seats }}</p>
+            <p class="mt-3 text-2xl font-extrabold text-[#D61C75] sm:text-3xl">80</p>
+            <p class="mt-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-gray-500 sm:text-xs">{{ registration.seats }}</p>
           </div>
           <div class="stat-card">
-            <span class="stat-icon bg-gradient-to-br from-[#7A10FF] to-[#4C1D95]">📅</span>
-            <p class="mt-3 text-3xl font-extrabold text-[#7A10FF]">30 Jul</p>
-            <p class="mt-0.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Registration Deadline</p>
+            <span class="stat-icon !flex flex-col overflow-hidden !p-0 bg-gradient-to-br from-[#7A10FF] to-[#4C1D95] text-white">
+              <span class="flex w-full items-center justify-center bg-white/20 text-[0.5rem] font-bold uppercase leading-none tracking-wider">Jul</span>
+              <span class="flex flex-1 items-center justify-center text-base font-extrabold leading-none">30</span>
+            </span>
+            <p class="mt-3 text-2xl font-extrabold text-[#7A10FF] sm:text-3xl">30 July</p>
+            <p class="mt-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-gray-500 sm:text-xs">Deadline</p>
           </div>
           <div class="stat-card">
             <span class="stat-icon bg-gradient-to-br from-[#FF7A00] to-[#D61C75]">✨</span>
-            <p class="mt-3 text-3xl font-extrabold text-[#FF7A00]">Free</p>
-            <p class="mt-0.5 text-xs font-semibold uppercase tracking-wide text-gray-500">With Access Code</p>
+            <p class="mt-3 text-2xl font-extrabold text-[#FF7A00] sm:text-3xl">Free</p>
+            <p class="mt-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-gray-500 sm:text-xs">With Access Code</p>
           </div>
         </div>
 
-        <p class="mt-8 text-sm font-medium text-gray-500">
+        <p class="mt-6 text-sm font-medium text-gray-500">
           <span class="font-bold text-gray-900">15,000+</span> students trust Gita Unlocked across India
         </p>
+      </section>
+
+      <!-- Featured guest — Avelo Roy (highlighted up front) -->
+      <section v-motion-fade-visible-once class="mx-auto max-w-5xl px-4 pt-16 sm:pt-20">
+        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#1b1024] via-[#2a0f2e] to-[#120a1f] p-6 text-white shadow-[0_40px_100px_-30px_rgba(122,16,255,0.55)] sm:rounded-[2.5rem] sm:p-10">
+          <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#FF7A00]/20 blur-3xl"></div>
+          <div class="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-[#7A10FF]/20 blur-3xl"></div>
+
+          <p class="relative text-center text-xs font-bold uppercase tracking-[0.25em] text-[#FF9A3C]">{{ launchSession.label }}</p>
+
+          <div class="relative mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-9">
+            <!-- Photo -->
+            <div class="relative shrink-0">
+              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#7A10FF] blur-lg opacity-60"></div>
+              <img :src="launchSession.image" :alt="launchSession.name" class="relative h-36 w-36 rounded-full object-cover ring-4 ring-white/20 sm:h-44 sm:w-44" />
+            </div>
+
+            <!-- Identity + hook -->
+            <div class="flex-1 text-center sm:text-left">
+              <h3 class="text-3xl font-extrabold sm:text-4xl">{{ launchSession.name }}</h3>
+              <p class="mt-1 text-base font-semibold text-[#FF9A3C]">{{ launchSession.role }}</p>
+              <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/85 sm:mx-0">{{ launchSession.hook }}</p>
+
+              <!-- Punchy stats -->
+              <div class="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                <div v-for="s in launchSession.stats" :key="s.label" class="rounded-2xl bg-white/10 px-2 py-2.5 ring-1 ring-white/10">
+                  <p class="text-lg font-extrabold leading-none text-white sm:text-xl">{{ s.value }}</p>
+                  <p class="mt-1 text-[0.6rem] font-semibold uppercase leading-tight tracking-wide text-white/60">{{ s.label }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="relative mt-6 flex flex-wrap justify-center gap-2 sm:justify-start">
+            <span v-for="h in launchSession.highlights" :key="h" class="rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/90 ring-1 ring-white/15 sm:text-sm">
+              {{ h }}
+            </span>
+          </div>
+
+          <!-- Offline meet highlight -->
+          <div class="relative mt-6 flex flex-col items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#D61C75] px-5 py-4 shadow-lg sm:flex-row">
+            <p class="flex items-center gap-2 text-center text-sm font-bold text-white sm:text-left sm:text-base">
+              <span aria-hidden="true" class="text-xl">🤝</span> {{ launchSession.meetNote }}
+            </p>
+            <button type="button" class="shrink-0 rounded-full bg-white px-5 py-2 text-sm font-bold text-[#D61C75] shadow transition hover:-translate-y-0.5 hover:shadow-xl" @click="openForm">
+              Grab Your Seat
+            </button>
+          </div>
+        </div>
       </section>
 
       <!-- About -->
@@ -94,6 +146,9 @@
               <span class="text-4xl">🧘</span>
             </div>
             <h3 class="mt-4 text-2xl font-extrabold text-gray-900">{{ innerTrack.sessions }}</h3>
+            <p v-if="innerTrack.orientation" class="mt-3 rounded-xl bg-[#FF7A00]/10 px-3 py-2 text-sm font-semibold text-[#C2410C]">
+              {{ innerTrack.orientation }}
+            </p>
             <p class="mt-5 text-xs font-bold uppercase tracking-wider text-gray-400">Focus Areas</p>
             <ul class="mt-3 space-y-2.5">
               <li v-for="(item, i) in innerTrack.focus" :key="item" class="flex items-center gap-3 text-sm font-medium text-gray-700">
@@ -126,31 +181,6 @@
               <span v-for="o in technicalTrack.outcomes" :key="o" class="pill pill--purple">{{ o }}</span>
             </div>
           </article>
-        </div>
-      </section>
-
-      <!-- Launch session / guest speaker -->
-      <section v-motion-fade-visible-once class="mx-auto max-w-5xl px-4 pt-28">
-        <div class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1b1024] via-[#2a0f2e] to-[#120a1f] p-8 text-white shadow-[0_40px_100px_-30px_rgba(122,16,255,0.55)] sm:p-12">
-          <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#FF7A00]/20 blur-3xl"></div>
-          <div class="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-[#7A10FF]/20 blur-3xl"></div>
-          <p class="relative text-center text-xs font-bold uppercase tracking-[0.25em] text-[#FF9A3C]">{{ launchSession.label }}</p>
-          <div class="relative mt-8 flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:gap-12">
-            <div class="relative shrink-0">
-              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#FF7A00] to-[#7A10FF] blur-lg opacity-60"></div>
-              <img :src="launchSession.image" :alt="launchSession.name" class="relative h-44 w-44 rounded-full object-cover ring-4 ring-white/20 sm:h-52 sm:w-52" />
-            </div>
-            <div class="text-center sm:text-left">
-              <span class="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white/70 ring-1 ring-white/15">Special Guest</span>
-              <h3 class="mt-3 text-3xl font-extrabold sm:text-4xl">{{ launchSession.name }}</h3>
-              <p class="mt-1 text-lg font-semibold text-[#FF9A3C]">{{ launchSession.role }}</p>
-              <div class="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
-                <span v-for="h in launchSession.highlights" :key="h" class="rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-medium text-white/90 ring-1 ring-white/15 transition hover:bg-white/20">
-                  {{ h }}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -195,22 +225,43 @@
         </div>
       </section>
 
-      <!-- Retreat + Certification -->
-      <section class="mx-auto max-w-5xl px-4 pt-16">
+      <!-- Retreat + Certification (highlighted) -->
+      <section v-motion-fade-visible-once class="mx-auto max-w-5xl px-4 pt-28 text-center">
+        <p class="eyebrow">Why It's Worth It</p>
+        <h2 class="section-title mt-3">Two Reasons You Can't Miss This</h2>
+        <div class="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF]"></div>
+      </section>
+      <section class="mx-auto max-w-5xl px-4 pt-10">
         <div class="grid gap-6 lg:grid-cols-2">
-          <div v-motion-slide-visible-once-left class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-8 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-2xl">
-            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
-            <span class="text-3xl">🏔️</span>
-            <h3 class="mt-4 text-xl font-extrabold">{{ retreat.heading }}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-white/90">{{ retreat.body }}</p>
-          </div>
-          <div v-motion-slide-visible-once-right class="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-gray-100 transition hover:-translate-y-1 hover:shadow-xl">
-            <span class="text-3xl">🎓</span>
-            <h3 class="mt-4 text-xl font-extrabold text-gray-900">{{ certification.heading }}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-gray-600">{{ certification.body }}</p>
-            <span class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#7A10FF]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#7A10FF]">
-              Certificate by VVF, MIT
+          <!-- Retreat -->
+          <div v-motion-slide-visible-once-left class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-8 text-white shadow-[0_30px_80px_-30px_rgba(214,28,117,0.55)] ring-1 ring-white/10 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-10">
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
+            <span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-white ring-1 ring-white/25">Most Exclusive</span>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="text-4xl">🏔️</span>
+              <h3 class="text-2xl font-extrabold sm:text-3xl">{{ retreat.heading }}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-white/95">{{ retreat.body }}</p>
+            <span class="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#D61C75] shadow-lg">
+              <span aria-hidden="true">🤝</span> Meet Mr. Avelo Roy in person
             </span>
+          </div>
+          <!-- Certification -->
+          <div v-motion-slide-visible-once-right class="relative overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_30px_80px_-30px_rgba(122,16,255,0.4)] ring-2 ring-[#7A10FF]/15 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-10">
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#7A10FF]/10 blur-2xl"></div>
+            <span class="inline-flex rounded-full bg-[#7A10FF]/10 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-[#7A10FF]">Certified</span>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="text-4xl">🎓</span>
+              <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ certification.heading }}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-gray-600">{{ certification.body }}</p>
+            <div class="mt-6 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#7A10FF]/10 to-[#D61C75]/10 px-4 py-3 ring-1 ring-[#7A10FF]/15">
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#7A10FF] to-[#4C1D95] text-base font-black tracking-tight text-white shadow-md">MIT</span>
+              <div class="text-left">
+                <p class="text-sm font-extrabold text-gray-900">Completion Certificate</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-[#7A10FF]">Issued by VVF, MIT</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -301,22 +352,42 @@
               <div class="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label class="lbl">Branch <span class="req">*</span></label>
-                  <input v-model="form.branch" type="text" required class="field-input" placeholder="e.g. CSE" />
+                  <div class="select-wrap">
+                    <select v-model="form.branch" required class="field-select" :class="!form.branch && 'text-gray-400'">
+                      <option value="" disabled>Select branch</option>
+                      <option v-for="b in branchOptions" :key="b" :value="b">{{ b }}</option>
+                    </select>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                  <input
+                    v-if="form.branch === 'Other'"
+                    v-model="form.branchOther"
+                    type="text"
+                    class="field-input mt-2"
+                    placeholder="Enter your branch"
+                  />
                 </div>
                 <div>
                   <label class="lbl">Year <span class="req">*</span></label>
-                  <select v-model="form.year" required class="field-input">
-                    <option value="" disabled>Select year</option>
-                    <option>1st Year</option>
-                    <option>2nd Year</option>
-                    <option>3rd Year</option>
-                    <option>4th Year</option>
-                    <option>5th Year</option>
-                  </select>
+                  <div class="select-wrap">
+                    <select v-model="form.year" required class="field-select" :class="!form.year && 'text-gray-400'">
+                      <option value="" disabled>Select year</option>
+                      <option>1st Year</option>
+                      <option>2nd Year</option>
+                      <option>3rd Year</option>
+                      <option>4th Year</option>
+                      <option>5th Year</option>
+                    </select>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div>
-                <label class="lbl">Technical Specialization</label>
+                <label class="lbl">Technical Specialization <span class="text-gray-400">(optional)</span></label>
                 <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
                   <button
                     v-for="s in technicalTrack.specializations"
@@ -427,8 +498,23 @@ const mentorIconBg = (i) => MENTOR_ICON_BG[i % MENTOR_ICON_BG.length]
 
 const form = ref({
   name: '', email: '', phone: '', whatsapp: '',
-  college: '', branch: '', year: '', track: '', reason: '',
+  college: '', branch: '', branchOther: '', year: '', track: '', reason: '',
 })
+
+const branchOptions = [
+  'Computer Science (CSE)',
+  'Electronics (ECE)',
+  'Electrical (EE)',
+  'Mechanical',
+  'Civil',
+  'Chemical',
+  'Aerospace',
+  'Metallurgy & Materials',
+  'Mathematics & Computing',
+  'Engineering Physics',
+  'Biotechnology',
+  'Other',
+]
 
 // ---- Access code / coupon ----
 const couponInput = ref('')
@@ -483,7 +569,7 @@ function closeForm() {
   if (import.meta.client) document.body.style.overflow = ''
   if (submitted.value) {
     submitted.value = false
-    form.value = { name: '', email: '', phone: '', whatsapp: '', college: '', branch: '', year: '', track: '', reason: '' }
+    form.value = { name: '', email: '', phone: '', whatsapp: '', college: '', branch: '', branchOther: '', year: '', track: '', reason: '' }
     resetCoupon()
   }
 }
@@ -502,6 +588,10 @@ async function submit() {
     error.value = 'Please fill all required fields.'
     return
   }
+  if (f.branch === 'Other' && !f.branchOther.trim()) {
+    error.value = 'Please enter your branch.'
+    return
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) {
     error.value = 'Please enter a valid email address.'
     return
@@ -517,9 +607,10 @@ async function submit() {
 
   submitting.value = true
   try {
+    const branch = f.branch === 'Other' ? f.branchOther.trim() : f.branch
     const res = await $fetch('/api/inner-programming-register', {
       method: 'POST',
-      body: { ...f, couponCode: appliedCoupon.value },
+      body: { ...f, branch, couponCode: appliedCoupon.value },
     })
     if (res?.duplicate) {
       error.value = 'This email is already registered. See you at the workshop!'
@@ -583,6 +674,15 @@ h1 { letter-spacing: -0.035em; }
 }
 .field-input {
   @apply mt-1.5 w-full rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-3 text-sm text-gray-800 outline-none transition focus:border-[#D61C75] focus:ring-2 focus:ring-[#D61C75]/20;
+}
+.select-wrap {
+  @apply relative mt-1.5;
+}
+.field-select {
+  @apply w-full appearance-none rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-3 pr-11 text-sm text-gray-800 outline-none transition focus:border-[#D61C75] focus:ring-2 focus:ring-[#D61C75]/20;
+}
+.select-chevron {
+  @apply pointer-events-none absolute right-3.5 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-lg text-[#D61C75];
 }
 .lbl { @apply block text-sm font-semibold text-gray-700; }
 .req { @apply text-[#D61C75]; }

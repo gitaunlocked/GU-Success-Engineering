@@ -13,7 +13,7 @@ export const brand = {
 export const hero = {
   title: "Inner Programming Workshop",
   subtitle: "Beyond Grades. Beyond Placements. Beyond Success.",
-  supporting: "Ancient Wisdom. Modern Technology. Extraordinary Lives.",
+  supporting: "Ancient Wisdom · Modern Technology · Extraordinary Lives",
   description:
     "A transformational journey designed for IIT students to develop self-mastery, purpose, leadership, and technical excellence. This workshop integrates timeless wisdom with practical modern skills to help participants succeed in academics, career, and life.",
   primaryCta: "Register Now",
@@ -60,13 +60,14 @@ export const about = {
 export const innerTrack = {
   label: "Track 1 — Inner Track",
   sessions: "6 Transformative Sessions",
+  orientation: "Orientation: Quotients of Extraordinary Success",
   focus: [
-    "Decode Yourself",
-    "Master Your Mind",
-    "Discover Your Purpose",
-    "Build Strong Character",
-    "Practical Bhagavad Gita Wisdom",
-    "Applying Timeless Principles in Daily Life",
+    "Discover Your Real Self",
+    "Mastermind Behind Universe",
+    "The User Manual for Life",
+    "Science Meets Ancient Wisdom",
+    "Solving Life's Biggest Questions",
+    "The Science of Mantra Meditation",
   ],
   outcomes: [
     "Better Focus",
@@ -92,16 +93,29 @@ export const technicalTrack = {
 }
 
 export const launchSession = {
-  label: "Launch Session · Special Guest Speaker",
+  label: "Launch Session · Special Guest",
   name: "Mr. Avelo Roy",
-  role: "Founder, Kolkata Ventures",
+  role: "Managing Director, Kolkata Ventures",
   image: "/speakers/avelo-roy.png",
-  highlights: [
-    "Startup Mentor",
-    "4× TEDx Speaker",
-    "Mentored 550+ Startups",
-    "Guest Lecturer at IITs, IIMs & US Universities",
+  hook:
+    "Serial tech entrepreneur, investor & educator whose graphical password technology is used by 1.3 billion+ mobile users worldwide.",
+  // Punchy numbers for low-attention-span scanning.
+  stats: [
+    { value: "1.3B+", label: "Users of his tech" },
+    { value: "9", label: "Businesses founded" },
+    { value: "550+", label: "Startups mentored" },
+    { value: "3×", label: "TEDx speaker" },
+    { value: "500+", label: "Talks delivered" },
   ],
+  highlights: [
+    "Guest lecturer at Harvard, IITs & IIMs",
+    "Spoke at the White House & Rashtrapati Bhavan",
+    "Built his 1st company at 19 — multi-million by 22",
+    "MD of East India's largest startup incubator (5,200+ jobs created)",
+    "Great-great-grandson of Sarojini Naidu",
+    "Blends Bhagavad Gita wisdom with modern business",
+  ],
+  meetNote: "Attending students get an exclusive offline meet with Mr. Avelo Roy.",
 }
 
 export const mentors = [
@@ -178,44 +192,44 @@ export const journey = [
   {
     track: "Inner Track",
     number: 1,
-    title: "Decode Yourself",
+    title: "Discover Your Real Self",
     summary:
-      "Understand the mind, ego, and the layers of your personality. Build honest self-awareness as the foundation for every change that follows.",
+      "Go beyond your roles and labels to understand who you truly are. Build honest self-awareness as the foundation for every change that follows.",
   },
   {
     track: "Inner Track",
     number: 2,
-    title: "Master Your Mind",
+    title: "Mastermind Behind Universe",
     summary:
-      "Practical techniques to steady attention, manage emotions, and stop the mental noise that drains focus and energy.",
+      "Explore the intelligence and order behind creation, and your place within it — a bigger-picture view that reshapes how you see life.",
   },
   {
     track: "Inner Track",
     number: 3,
-    title: "Discover Your Purpose",
+    title: "The User Manual for Life",
     summary:
-      "Move beyond chasing grades and placements. Clarify what genuinely drives you and how to align daily action with it.",
+      "Timeless principles for making better decisions, handling relationships, and navigating challenges with clarity and calm.",
   },
   {
     track: "Inner Track",
     number: 4,
-    title: "Build Strong Character",
+    title: "Science Meets Ancient Wisdom",
     summary:
-      "Develop integrity, discipline, and resilience — the traits that make leaders trusted and effective under pressure.",
+      "Where modern science and timeless wisdom agree — practical insights that bridge the lab and the Gita for a modern student.",
   },
   {
     track: "Inner Track",
     number: 5,
-    title: "Practical Bhagavad Gita Wisdom",
+    title: "Solving Life's Biggest Questions",
     summary:
-      "Timeless principles from the Gita translated into a modern student's decisions, relationships, and ambitions.",
+      "Confront the questions of purpose, meaning, and success — and build a personal framework to answer them for yourself.",
   },
   {
     track: "Inner Track",
     number: 6,
-    title: "Applying Timeless Principles in Daily Life",
+    title: "The Science of Mantra Meditation",
     summary:
-      "Turn insight into habit — a simple system to keep practising self-mastery long after the workshop ends.",
+      "Learn a simple, proven meditation practice to steady the mind, sharpen focus, and carry inner calm into daily life.",
   },
   {
     track: "Technical Master Track",
