@@ -127,6 +127,43 @@
         </div>
       </section>
 
+      <!-- Certification + Retreat (right below the guest intro) -->
+      <section class="mx-auto max-w-5xl px-4 pt-6 sm:pt-8">
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
+          <!-- Certification with MIT logo -->
+          <div v-motion-slide-visible-once-left class="relative overflow-hidden rounded-[2rem] bg-white p-7 shadow-[0_30px_80px_-30px_rgba(122,16,255,0.4)] ring-2 ring-[#7A10FF]/15 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-9">
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#7A10FF]/10 blur-2xl"></div>
+            <span class="inline-flex rounded-full bg-[#7A10FF]/10 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-[#7A10FF]">Certified</span>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="text-4xl">🎓</span>
+              <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ certification.heading }}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-gray-600">{{ certification.body }}</p>
+            <div class="mt-6 flex items-center gap-4 rounded-2xl border border-[#A31F34]/15 bg-gray-50/80 px-4 py-3.5">
+              <img src="/logos/mit.svg" alt="MIT logo" class="h-9 w-auto sm:h-10" />
+              <div class="h-9 w-px bg-gray-200"></div>
+              <div class="text-left">
+                <p class="text-sm font-extrabold text-gray-900">Completion Certificate</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-[#A31F34]">Issued by VVF, MIT</p>
+              </div>
+            </div>
+          </div>
+          <!-- Retreat / offline meet -->
+          <div v-motion-slide-visible-once-right class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-7 text-white shadow-[0_30px_80px_-30px_rgba(214,28,117,0.55)] ring-1 ring-white/10 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-9">
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
+            <span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-white ring-1 ring-white/25">Most Exclusive</span>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="text-4xl">🏔️</span>
+              <h3 class="text-2xl font-extrabold sm:text-3xl">{{ retreat.heading }}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-white/95">{{ retreat.body }}</p>
+            <span class="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#D61C75] shadow-lg">
+              <span aria-hidden="true">🤝</span> Get a chance to meet Mr. Avelo Roy — offline, in person
+            </span>
+          </div>
+        </div>
+      </section>
+
       <!-- About -->
       <section v-motion-fade-visible-once class="mx-auto max-w-4xl px-4 pt-28 text-center">
         <p class="eyebrow">The Big Picture</p>
@@ -222,47 +259,6 @@
               <span class="check">✓</span>{{ o }}
             </li>
           </ul>
-        </div>
-      </section>
-
-      <!-- Retreat + Certification (highlighted) -->
-      <section v-motion-fade-visible-once class="mx-auto max-w-5xl px-4 pt-28 text-center">
-        <p class="eyebrow">Why It's Worth It</p>
-        <h2 class="section-title mt-3">Two Reasons You Can't Miss This</h2>
-        <div class="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF]"></div>
-      </section>
-      <section class="mx-auto max-w-5xl px-4 pt-10">
-        <div class="grid gap-6 lg:grid-cols-2">
-          <!-- Retreat -->
-          <div v-motion-slide-visible-once-left class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-8 text-white shadow-[0_30px_80px_-30px_rgba(214,28,117,0.55)] ring-1 ring-white/10 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-10">
-            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
-            <span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-white ring-1 ring-white/25">Most Exclusive</span>
-            <div class="mt-4 flex items-center gap-3">
-              <span class="text-4xl">🏔️</span>
-              <h3 class="text-2xl font-extrabold sm:text-3xl">{{ retreat.heading }}</h3>
-            </div>
-            <p class="mt-4 text-base leading-relaxed text-white/95">{{ retreat.body }}</p>
-            <span class="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#D61C75] shadow-lg">
-              <span aria-hidden="true">🤝</span> Meet Mr. Avelo Roy in person
-            </span>
-          </div>
-          <!-- Certification -->
-          <div v-motion-slide-visible-once-right class="relative overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_30px_80px_-30px_rgba(122,16,255,0.4)] ring-2 ring-[#7A10FF]/15 transition hover:-translate-y-1.5 hover:shadow-2xl sm:p-10">
-            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[#7A10FF]/10 blur-2xl"></div>
-            <span class="inline-flex rounded-full bg-[#7A10FF]/10 px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-[#7A10FF]">Certified</span>
-            <div class="mt-4 flex items-center gap-3">
-              <span class="text-4xl">🎓</span>
-              <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ certification.heading }}</h3>
-            </div>
-            <p class="mt-4 text-base leading-relaxed text-gray-600">{{ certification.body }}</p>
-            <div class="mt-6 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#7A10FF]/10 to-[#D61C75]/10 px-4 py-3 ring-1 ring-[#7A10FF]/15">
-              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#7A10FF] to-[#4C1D95] text-base font-black tracking-tight text-white shadow-md">MIT</span>
-              <div class="text-left">
-                <p class="text-sm font-extrabold text-gray-900">Completion Certificate</p>
-                <p class="text-xs font-semibold uppercase tracking-wider text-[#7A10FF]">Issued by VVF, MIT</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -417,7 +413,7 @@
                   type="text"
                   class="field-input mt-0 flex-1 uppercase"
                   :class="couponStatus.state === 'error' && '!border-red-400'"
-                  placeholder="e.g. GUWAHATI2026"
+                  placeholder="Enter your coupon code"
                   :disabled="!!appliedCoupon"
                   @input="onCouponInput"
                   @keydown.enter.prevent="applyCoupon"

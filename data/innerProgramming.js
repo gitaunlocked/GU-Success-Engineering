@@ -31,8 +31,8 @@ export const registration = {
 // The applied code also identifies the student's college.
 export const pricing = {
   currency: "₹",
-  basePrice: 999, // struck-off once a valid code is applied
-  featuredCoupon: "GUWAHATI2026", // primary code shown to students
+  basePrice: 5000, // struck-off once a valid code is applied
+  featuredCoupon: "GUWAHATI2026", // primary code (not shown publicly)
 }
 
 // Access code -> college. Add campus codes here.
