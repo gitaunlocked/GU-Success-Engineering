@@ -21,7 +21,7 @@ export const hero = {
 }
 
 export const registration = {
-  seats: "Only 80 Seats",
+  seats: "Limited Seats",
   deadline: "30 July",
   deadlineLabel: "Registration Deadline: 30 July",
 }
