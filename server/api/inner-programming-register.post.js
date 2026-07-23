@@ -88,11 +88,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Please choose a valid technical specialization.' })
   }
 
-  // Access code is mandatory and must be valid — it unlocks free registration.
-  const couponCollege = COUPON_COLLEGES[reg.couponCode]
-  if (!couponCollege) {
-    throw createError({ statusCode: 400, statusMessage: 'A valid access code is required to register.' })
-  }
+  // Registration is free for everyone during the limited-time offer.
+  // A campus code is optional; when supplied it just tags the college.
+  const couponCollege = COUPON_COLLEGES[reg.couponCode] || ''
 
   const record = {
     ...reg,

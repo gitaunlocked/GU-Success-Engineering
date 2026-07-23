@@ -312,7 +312,7 @@
             <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-2xl text-white">✓</div>
             <h3 class="mt-6 text-2xl font-extrabold text-gray-900">You're registered!</h3>
             <p class="mt-3 text-sm text-gray-600">
-              Thank you for registering for the Inner Programming Workshop. We'll reach out on your WhatsApp with joining details before 30 July.
+              Thank you for registering for the Inner Programming Workshop. We'll reach out on your WhatsApp with the joining details soon.
             </p>
             <button type="button" class="btn-brand mx-auto mt-7 justify-center px-8 py-3" @click="closeForm">Done</button>
           </div>
@@ -320,7 +320,7 @@
           <!-- Form -->
           <form v-else @submit.prevent="submit">
             <h3 class="text-2xl font-extrabold text-gray-900">Register — Inner Programming Workshop</h3>
-            <p class="mt-1 text-sm text-gray-500">Only 80 seats · Deadline 30 July · Free with a valid access code</p>
+            <p class="mt-1 text-sm text-gray-500">Only 80 seats · <span class="font-semibold text-[#D61C75]">Free registration until 31 July</span></p>
 
             <div class="mt-6 space-y-4">
               <div>
@@ -403,45 +403,33 @@
               </div>
             </div>
 
-            <!-- Access code / coupon -->
-            <div class="mt-6 rounded-2xl border border-dashed border-[#D61C75]/30 bg-[#D61C75]/5 p-4">
-              <label class="lbl">Access Code <span class="req">*</span></label>
-              <p class="mt-0.5 text-xs text-gray-500">Enter your campus code to unlock free registration.</p>
-              <div class="mt-2 flex gap-2">
-                <input
-                  v-model="couponInput"
-                  type="text"
-                  class="field-input mt-0 flex-1 uppercase"
-                  :class="couponStatus.state === 'error' && '!border-red-400'"
-                  placeholder="Enter your coupon code"
-                  :disabled="!!appliedCoupon"
-                  @input="onCouponInput"
-                  @keydown.enter.prevent="applyCoupon"
-                />
-                <button
-                  type="button"
-                  class="shrink-0 rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50"
-                  :disabled="!!appliedCoupon"
-                  @click="applyCoupon"
-                >
-                  {{ appliedCoupon ? 'Applied' : 'Apply' }}
-                </button>
+            <!-- Limited-time free offer -->
+            <div class="mt-6 overflow-hidden rounded-2xl border border-[#D61C75]/20 bg-gradient-to-br from-[#FF7A00]/8 to-[#7A10FF]/8 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="flex items-center gap-2 text-sm font-extrabold text-[#D61C75]">
+                    <span class="relative flex h-2 w-2">
+                      <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D61C75] opacity-60"></span>
+                      <span class="relative inline-flex h-2 w-2 rounded-full bg-[#D61C75]"></span>
+                    </span>
+                    Limited-Time Offer
+                  </p>
+                  <p class="mt-0.5 text-xs text-gray-500">Register free until <span class="font-semibold text-gray-700">31 July</span> — no code needed.</p>
+                </div>
+                <div v-if="countdown" class="shrink-0 rounded-xl bg-gray-900 px-3 py-1.5 text-center">
+                  <p class="text-xs font-bold tabular-nums text-white">{{ countdown }}</p>
+                  <p class="text-[0.55rem] font-semibold uppercase tracking-wider text-white/60">Offer ends</p>
+                </div>
               </div>
-              <p v-if="couponStatus.message" class="mt-2 text-xs font-medium" :class="couponStatus.state === 'success' ? 'text-green-600' : 'text-red-500'">
-                {{ couponStatus.message }}
-              </p>
 
               <!-- Price line -->
               <div class="mt-4 flex items-center justify-between border-t border-[#D61C75]/15 pt-3">
                 <span class="text-sm font-semibold text-gray-600">Workshop Fee</span>
                 <span class="flex items-baseline gap-2">
-                  <span
-                    class="text-lg font-extrabold"
-                    :class="appliedCoupon ? 'text-gray-400 line-through decoration-[#D61C75] decoration-2' : 'text-gray-900'"
-                  >
+                  <span class="text-lg font-extrabold text-gray-400 line-through decoration-[#D61C75] decoration-2">
                     {{ pricing.currency }}{{ pricing.basePrice }}
                   </span>
-                  <span v-if="appliedCoupon" class="text-lg font-extrabold text-green-600">FREE</span>
+                  <span class="text-lg font-extrabold text-green-600">FREE</span>
                 </span>
               </div>
             </div>
@@ -450,10 +438,9 @@
             <button
               type="submit"
               class="btn-brand mt-6 w-full justify-center py-3.5 text-lg"
-              :class="!appliedCoupon ? 'opacity-50' : ''"
-              :disabled="submitting || !appliedCoupon"
+              :disabled="submitting"
             >
-              {{ submitting ? 'Registering…' : appliedCoupon ? 'Confirm Free Registration' : 'Apply Access Code to Continue' }}
+              {{ submitting ? 'Registering…' : 'Confirm Free Registration' }}
             </button>
             <p class="mt-3 text-center text-xs text-gray-400">Your details are stored securely and used only for this workshop.</p>
           </form>
@@ -465,7 +452,7 @@
 
 <script setup>
 import {
-  brand, hero, registration, pricing, couponColleges, about, innerTrack, technicalTrack,
+  brand, hero, registration, pricing, about, innerTrack, technicalTrack,
   launchSession, mentors, differentiators, outcomes, retreat,
   certification, faqs, finalCta, seo,
 } from '~/data/innerProgramming'
@@ -512,48 +499,30 @@ const branchOptions = [
   'Other',
 ]
 
-// ---- Access code / coupon ----
-const couponInput = ref('')
-const appliedCoupon = ref('')
-const couponStatus = reactive({ state: '', message: '' }) // '' | 'success' | 'error'
-
-function onCouponInput() {
-  couponInput.value = couponInput.value.toUpperCase()
-  // Reset an applied code if the text changes.
-  if (appliedCoupon.value && couponInput.value.trim() !== appliedCoupon.value) {
-    appliedCoupon.value = ''
-    couponStatus.state = ''
-    couponStatus.message = ''
-  }
-}
-
-function applyCoupon() {
-  const code = couponInput.value.trim().toUpperCase()
-  if (!code) {
-    couponStatus.state = 'error'
-    couponStatus.message = 'Please enter your access code.'
+// ---- Limited-time free offer countdown (ends 31 July) ----
+const countdown = ref('')
+let countdownTimer = null
+function updateCountdown() {
+  const deadline = new Date('2026-07-31T23:59:59+05:30').getTime()
+  const diff = deadline - Date.now()
+  if (diff <= 0) {
+    countdown.value = ''
+    if (countdownTimer) clearInterval(countdownTimer)
     return
   }
-  const college = couponColleges[code]
-  if (college) {
-    appliedCoupon.value = code
-    couponStatus.state = 'success'
-    couponStatus.message = `Code applied for ${college} — your registration is free!`
-    // Prefill college if empty.
-    if (!form.value.college.trim()) form.value.college = college
-  } else {
-    appliedCoupon.value = ''
-    couponStatus.state = 'error'
-    couponStatus.message = 'Invalid or expired code. Please check and try again.'
-  }
+  const d = Math.floor(diff / 86400000)
+  const h = Math.floor((diff % 86400000) / 3600000)
+  const m = Math.floor((diff % 3600000) / 60000)
+  const s = Math.floor((diff % 60000) / 1000)
+  countdown.value = d > 0 ? `${d}d ${h}h ${m}m` : `${h}h ${m}m ${s}s`
 }
-
-function resetCoupon() {
-  couponInput.value = ''
-  appliedCoupon.value = ''
-  couponStatus.state = ''
-  couponStatus.message = ''
-}
+onMounted(() => {
+  updateCountdown()
+  countdownTimer = setInterval(updateCountdown, 1000)
+})
+onBeforeUnmount(() => {
+  if (countdownTimer) clearInterval(countdownTimer)
+})
 
 function openForm() {
   showForm.value = true
@@ -566,7 +535,6 @@ function closeForm() {
   if (submitted.value) {
     submitted.value = false
     form.value = { name: '', email: '', phone: '', whatsapp: '', college: '', branch: '', branchOther: '', year: '', track: '', reason: '' }
-    resetCoupon()
   }
 }
 
@@ -575,11 +543,6 @@ const digits = (v) => (v || '').replace(/\D/g, '')
 async function submit() {
   error.value = ''
   const f = form.value
-  if (!appliedCoupon.value) {
-    couponStatus.state = 'error'
-    couponStatus.message = 'Please apply a valid access code to unlock registration.'
-    return
-  }
   if (!f.name.trim() || !f.college.trim() || !f.branch.trim() || !f.year) {
     error.value = 'Please fill all required fields.'
     return
@@ -606,7 +569,7 @@ async function submit() {
     const branch = f.branch === 'Other' ? f.branchOther.trim() : f.branch
     const res = await $fetch('/api/inner-programming-register', {
       method: 'POST',
-      body: { ...f, branch, couponCode: appliedCoupon.value },
+      body: { ...f, branch },
     })
     if (res?.duplicate) {
       error.value = 'This email is already registered. See you at the workshop!'
