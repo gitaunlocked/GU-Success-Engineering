@@ -294,6 +294,23 @@
             Register Now
             <span aria-hidden="true">→</span>
           </button>
+
+          <!-- WhatsApp group — visible below the final CTA so anyone can join -->
+          <div class="relative mx-auto mt-8 max-w-xl rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur">
+            <p class="text-sm font-bold text-white">Mastering the Mind (IPW) — WhatsApp Group</p>
+            <p class="mt-1 text-xs leading-relaxed text-white/70">
+              Join our student community — get session links, updates and connect with fellow participants.
+            </p>
+            <a
+              :href="whatsappGroupUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
+            >
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607z"/></svg>
+              Join WhatsApp Group
+            </a>
+          </div>
         </div>
       </section>
 
@@ -307,14 +324,60 @@
         <div class="relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-[2rem] bg-white p-7 shadow-2xl sm:p-9">
           <button type="button" class="absolute right-5 top-5 text-gray-400 transition hover:text-gray-700" @click="closeForm" aria-label="Close">✕</button>
 
+          <!-- Duplicate state — email already registered -->
+          <div v-if="duplicate" class="py-8 text-center">
+            <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100 text-3xl text-amber-600">!</div>
+            <h3 class="mt-6 text-2xl font-extrabold text-gray-900">Already registered</h3>
+            <p class="mt-3 text-sm text-gray-600">
+              This email is already on the list. See you at the workshop!
+            </p>
+
+            <!-- Make sure they've joined the WhatsApp group too -->
+            <div class="mx-auto mt-6 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5 text-left">
+              <p class="text-sm font-extrabold text-gray-900">Make sure you've joined the WhatsApp group</p>
+              <p class="mt-1 text-sm text-gray-600">All session links and reminders are shared in the <strong>Mastering the Mind (IPW)</strong> group.</p>
+              <a
+                :href="whatsappGroupUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Join WhatsApp Group
+              </a>
+            </div>
+
+            <button type="button" class="btn-ghost mx-auto mt-6 justify-center px-8 py-3" @click="closeForm">Close</button>
+          </div>
+
           <!-- Success state -->
-          <div v-if="submitted" class="py-8 text-center">
+          <div v-else-if="submitted" class="py-8 text-center">
             <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-2xl text-white">✓</div>
             <h3 class="mt-6 text-2xl font-extrabold text-gray-900">You're registered!</h3>
             <p class="mt-3 text-sm text-gray-600">
               Thank you for registering for the Inner Programming Workshop. We'll reach out on your WhatsApp with the joining details soon.
             </p>
-            <button type="button" class="btn-brand mx-auto mt-7 justify-center px-8 py-3" @click="closeForm">Done</button>
+
+            <!-- WhatsApp group — must-do step (all session links are shared here) -->
+            <div class="mx-auto mt-6 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5 text-left">
+              <p class="flex items-center gap-2 text-sm font-extrabold text-gray-900">
+                <span aria-hidden="true">⚠️</span> Important — final step
+              </p>
+              <p class="mt-1 text-sm text-gray-600">
+                Join the <strong>Mastering the Mind (IPW)</strong> WhatsApp group now so you don't miss session links, reminders and updates.
+              </p>
+              <a
+                :href="whatsappGroupUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Join WhatsApp Group
+              </a>
+            </div>
+
+            <button type="button" class="btn-ghost mx-auto mt-6 justify-center px-8 py-3" @click="closeForm">Done</button>
           </div>
 
           <!-- Form -->
@@ -323,9 +386,23 @@
             <p class="mt-1 text-sm text-gray-500">Only 80 seats · <span class="font-semibold text-[#D61C75]">Free registration until 31 July</span></p>
 
             <div class="mt-6 space-y-4">
-              <div>
-                <label class="lbl">Full Name <span class="req">*</span></label>
-                <input v-model="form.name" type="text" required class="field-input" placeholder="Your full name" />
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="lbl">Full Name <span class="req">*</span></label>
+                  <input v-model="form.name" type="text" required class="field-input" placeholder="Your full name" />
+                </div>
+                <div>
+                  <label class="lbl">Gender <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select v-model="form.gender" required class="field-select" :class="!form.gender && 'text-gray-400'">
+                      <option value="" disabled>Select gender</option>
+                      <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
+                    </select>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                </div>
               </div>
               <div class="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -341,9 +418,23 @@
                 <label class="lbl">WhatsApp Number <span class="req">*</span></label>
                 <input v-model="form.whatsapp" type="tel" required class="field-input" placeholder="Where we'll send joining details" />
               </div>
-              <div>
-                <label class="lbl">College <span class="req">*</span></label>
-                <input v-model="form.college" type="text" required class="field-input" placeholder="Your IIT / institute" />
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="lbl">College <span class="req">*</span></label>
+                  <input v-model="form.college" type="text" required class="field-input" placeholder="Your IIT / institute" />
+                </div>
+                <div>
+                  <label class="lbl">Course <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select v-model="form.course" required class="field-select" :class="!form.course && 'text-gray-400'">
+                      <option value="" disabled>Select course</option>
+                      <option v-for="c in courseOptions" :key="c" :value="c">{{ c }}</option>
+                    </select>
+                    <span class="select-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                </div>
               </div>
               <div class="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -455,6 +546,7 @@ import {
   brand, hero, registration, pricing, about, innerTrack, technicalTrack,
   launchSession, mentors, differentiators, outcomes, retreat,
   certification, faqs, finalCta, seo,
+  courseOptions, genderOptions, WHATSAPP_GROUP_URL,
 } from '~/data/innerProgramming'
 
 definePageMeta({ layout: 'landing' })
@@ -466,6 +558,7 @@ useHead({
 const showForm = ref(false)
 const submitting = ref(false)
 const submitted = ref(false)
+const duplicate = ref(false)
 const error = ref('')
 
 // Decorative icons for mentor cards (cycled).
@@ -480,9 +573,13 @@ const mentorIcon = (i) => MENTOR_ICONS[i % MENTOR_ICONS.length]
 const mentorIconBg = (i) => MENTOR_ICON_BG[i % MENTOR_ICON_BG.length]
 
 const form = ref({
-  name: '', email: '', phone: '', whatsapp: '',
-  college: '', branch: '', branchOther: '', year: '', track: '', reason: '',
+  name: '', gender: '', email: '', phone: '', whatsapp: '',
+  college: '', course: '', branch: '', branchOther: '', year: '', track: '', reason: '',
 })
+
+// Same URL as data/innerProgramming.js#WHATSAPP_GROUP_URL — kept as a local
+// alias so the template stays readable.
+const whatsappGroupUrl = WHATSAPP_GROUP_URL
 
 const branchOptions = [
   'Computer Science (CSE)',
@@ -531,10 +628,11 @@ function openForm() {
 function closeForm() {
   showForm.value = false
   error.value = ''
+  duplicate.value = false
   if (import.meta.client) document.body.style.overflow = ''
   if (submitted.value) {
     submitted.value = false
-    form.value = { name: '', email: '', phone: '', whatsapp: '', college: '', branch: '', branchOther: '', year: '', track: '', reason: '' }
+    form.value = { name: '', gender: '', email: '', phone: '', whatsapp: '', college: '', course: '', branch: '', branchOther: '', year: '', track: '', reason: '' }
   }
 }
 
@@ -543,7 +641,7 @@ const digits = (v) => (v || '').replace(/\D/g, '')
 async function submit() {
   error.value = ''
   const f = form.value
-  if (!f.name.trim() || !f.college.trim() || !f.branch.trim() || !f.year) {
+  if (!f.name.trim() || !f.gender || !f.college.trim() || !f.course || !f.branch.trim() || !f.year) {
     error.value = 'Please fill all required fields.'
     return
   }
@@ -572,7 +670,7 @@ async function submit() {
       body: { ...f, branch },
     })
     if (res?.duplicate) {
-      error.value = 'This email is already registered. See you at the workshop!'
+      duplicate.value = true
       return
     }
     submitted.value = true

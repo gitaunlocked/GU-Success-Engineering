@@ -234,3 +234,25 @@ export const yearOptions = [
   "Postgraduate",
   "Other",
 ];
+
+// Registration form — course / degree the student is currently pursuing.
+// Kept separate from `branch` (which captures the discipline, e.g. "Computer Science").
+export const courseOptions = [
+  "B.Tech",
+  "M.Tech",
+  "Dual Degree (B.Tech + M.Tech)",
+  "B.Sc",
+  "M.Sc",
+  "MBA",
+  "PhD",
+  "Other",
+];
+
+// Registration form — gender options.
+export const genderOptions = ["Male", "Female", "Prefer not to say"];
+
+// Official WhatsApp group invite for registered students.
+// Shown on the post-registration success/duplicate screens and in the
+// confirmation email, in addition to the broadcast-only WhatsApp channel.
+export const WHATSAPP_GROUP_URL =
+  "https://chat.whatsapp.com/J8GXxYlD1oEIN9dwOB2twf?s=sh&p=a&ilr=1&amv=3";

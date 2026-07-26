@@ -420,6 +420,21 @@
               <p class="mt-3 text-xs text-gray-500">Tip: if your confirmation email isn't in your inbox, check Spam/Promotions and mark it "Not spam".</p>
             </div>
 
+            <!-- WhatsApp group — two-way discussion space for registered students -->
+            <div class="mx-auto mt-6 max-w-md rounded-2xl border-2 border-[#128C7E] bg-[#128C7E]/5 p-5">
+              <p class="text-sm font-bold text-gray-900">Join the student WhatsApp group</p>
+              <p class="mt-1 text-sm text-gray-600">Meet fellow registered students, ask questions and chat with the team in real time.</p>
+              <a
+                :href="whatsappGroupUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#128C7E] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#0e6f65]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Join WhatsApp Group
+              </a>
+            </div>
+
             <button class="btn-ghost mt-8" @click="resetForm">Register another student</button>
           </div>
 
@@ -448,21 +463,54 @@
               <img src="/wa-channel-qr.png" alt="WhatsApp channel QR code" class="mx-auto mt-2 w-40 rounded-xl" />
             </div>
 
+            <!-- WhatsApp group — two-way discussion space for registered students -->
+            <div class="mx-auto mt-6 max-w-md rounded-2xl border-2 border-[#128C7E] bg-[#128C7E]/5 p-5">
+              <p class="text-sm font-bold text-gray-900">Join the student WhatsApp group</p>
+              <p class="mt-1 text-sm text-gray-600">Meet fellow registered students and chat with the team in real time.</p>
+              <a
+                :href="whatsappGroupUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#128C7E] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#0e6f65]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Join WhatsApp Group
+              </a>
+            </div>
+
             <button class="btn-ghost mt-8" @click="resetForm">Use a different email</button>
           </div>
 
           <!-- Form -->
           <form v-else class="grid sm:grid-cols-2 gap-5" novalidate @submit.prevent="submit">
-            <div class="sm:col-span-2">
+            <div>
               <label class="field-label">Full Name <span class="text-[#D61C75]">*</span></label>
               <input v-model.trim="form.name" type="text" class="field" :class="errors.name && 'field-error'" placeholder="e.g. Aarav Sharma" />
               <p v-if="errors.name" class="field-msg">{{ errors.name }}</p>
             </div>
 
             <div>
+              <label class="field-label">Gender <span class="text-[#D61C75]">*</span></label>
+              <select v-model="form.gender" class="field" :class="errors.gender && 'field-error'">
+                <option value="" disabled>Select gender</option>
+                <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
+              </select>
+              <p v-if="errors.gender" class="field-msg">{{ errors.gender }}</p>
+            </div>
+
+            <div>
               <label class="field-label">College <span class="text-[#D61C75]">*</span></label>
               <input v-model.trim="form.college" type="text" class="field" :class="errors.college && 'field-error'" placeholder="e.g. IIT" />
               <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Course <span class="text-[#D61C75]">*</span></label>
+              <select v-model="form.course" class="field" :class="errors.course && 'field-error'">
+                <option value="" disabled>Select course</option>
+                <option v-for="c in courseOptions" :key="c" :value="c">{{ c }}</option>
+              </select>
+              <p v-if="errors.course" class="field-msg">{{ errors.course }}</p>
             </div>
 
             <div>
@@ -633,8 +681,11 @@ import {
   faqs,
   contact,
   yearOptions,
+  courseOptions,
+  genderOptions,
   validCoupons,
   couponColleges,
+  WHATSAPP_GROUP_URL,
 } from "~/data/successEngineering";
 
 const year = new Date().getFullYear();
@@ -705,8 +756,11 @@ const initials = (name) =>
     .join("")
     .toUpperCase();
 
-// WhatsApp channel — shown on the success screen so it never depends on email delivery.
+// WhatsApp channel (broadcast) — shown on the success screen so it never depends on email delivery.
 const whatsappUrl = "https://whatsapp.com/channel/0029Vb8MUfJ9MF90HqIr2f2G";
+// WhatsApp group (two-way discussion) — imported from the shared data module so the
+// same link is used across the site and the confirmation email.
+const whatsappGroupUrl = WHATSAPP_GROUP_URL;
 
 // Hero audio equalizer — varied delays/durations give a lively, organic bounce.
 const eqBars = Array.from({ length: 26 }, (_, i) => ({
@@ -717,7 +771,9 @@ const eqBars = Array.from({ length: 26 }, (_, i) => ({
 // ---- Registration form ----
 const form = reactive({
   name: "",
+  gender: "",
   college: "",
+  course: "",
   branch: "",
   year: "",
   email: "",
@@ -792,7 +848,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const validate = () => {
   Object.keys(errors).forEach((k) => delete errors[k]);
   if (!form.name) errors.name = "Please enter your full name.";
+  if (!form.gender) errors.gender = "Please select your gender.";
   if (!form.college) errors.college = "Please enter your college.";
+  if (!form.course) errors.course = "Please select your course.";
   if (!form.branch) errors.branch = "Please enter your branch.";
   if (!form.year) errors.year = "Please select your year.";
   if (!form.city) errors.city = "Please enter your city.";
@@ -826,7 +884,9 @@ const submit = async () => {
 
   const payload = {
     name: form.name,
+    gender: form.gender,
     college: form.college,
+    course: form.course,
     branch: form.branch,
     year: form.year,
     email: form.email.toLowerCase(),

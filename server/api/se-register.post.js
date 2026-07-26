@@ -12,7 +12,9 @@ export default defineEventHandler(async (event) => {
 
   const reg = {
     name: str(body?.name),
+    gender: str(body?.gender),
     college: str(body?.college),
+    course: str(body?.course),
     branch: str(body?.branch),
     year: str(body?.year),
     email: str(body?.email).toLowerCase(),
@@ -24,7 +26,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // ---- Server-side validation (never trust the client) ----
-  const missing = ['name', 'college', 'branch', 'year', 'city'].filter((k) => !reg[k])
+  const missing = ['name', 'gender', 'college', 'course', 'branch', 'year', 'city'].filter((k) => !reg[k])
   if (missing.length) {
     throw createError({ statusCode: 400, statusMessage: 'Please fill all required fields.' })
   }

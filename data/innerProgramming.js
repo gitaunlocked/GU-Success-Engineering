@@ -259,3 +259,25 @@ export const seo = {
   description:
     "A transformational 9-session journey for IIT students — inner mastery plus a technical track (DSA, Data Analysis, or Machine Learning). Free. Only 80 seats.",
 }
+
+// Registration form — course / degree the student is currently pursuing.
+// Kept separate from `branch` (which captures the discipline, e.g. "CSE").
+export const courseOptions = [
+  "B.Tech",
+  "M.Tech",
+  "Dual Degree (B.Tech + M.Tech)",
+  "B.Sc",
+  "M.Sc",
+  "MBA",
+  "PhD",
+  "Other",
+]
+
+// Registration form — gender options.
+export const genderOptions = ["Male", "Female", "Prefer not to say"]
+
+// Official WhatsApp group invite for registered IPW students ("Mastering the
+// Mind _ (IPW)"). Shown on the post-registration success screen so it never
+// depends on email/WhatsApp delivery.
+export const WHATSAPP_GROUP_URL =
+  "https://chat.whatsapp.com/J8GXxYlD1oEIN9dwOB2twf?s=sh&p=a&ilr=1&amv=3"
