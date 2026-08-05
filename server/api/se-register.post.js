@@ -42,7 +42,16 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getMongoDb()
-    const collectionName = (process.env.MONGODB_COLLECTION || 'seRegistrations').trim()
+    // Academic Session 2026 registrations are kept in their own collection so
+    // the Summer edition's `seRegistrations` stays intact as a historical
+    // record, and so a returning student isn't blocked by the unique email
+    // index from the earlier edition.
+    //
+    // Deliberately read from a NEW env var rather than the old generic
+    // MONGODB_COLLECTION: that one is still set to `seRegistrations` in the
+    // deployed environment and would otherwise keep overriding this default,
+    // silently sending 2026 signups to the old collection.
+    const collectionName = (process.env.MONGODB_SE_2026_COLLECTION || 'successEngineering2026').trim()
     const collection = db.collection(collectionName)
 
     // Ensure a unique index on email so duplicates are impossible at the DB level.
@@ -57,6 +66,9 @@ export default defineEventHandler(async (event) => {
     await collection.insertOne({
       ...reg,
       event: 'success-engineering',
+      // Tags the edition on the document itself, so records stay
+      // self-describing even if collections are ever merged.
+      edition: 'academic-session-2026',
       source: 'landing',
       createdAt: new Date(),
     })
