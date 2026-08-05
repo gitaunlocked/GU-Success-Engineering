@@ -57,13 +57,24 @@ export const seFarStats = [
 // The applied code identifies the student's college, which is used to
 // personalise the confirmation email. Add new colleges/codes here.
 export const couponColleges = {
+  // IITs
+  IITB26_SE: "IIT Bombay",
+  IITD26_SE: "IIT Delhi",
   IITK26_SE: "IIT Kanpur",
-  IITBHU26_SE: "IIT BHU",
+  IITG26_SE: "IIT Guwahati",
   IITPKD26_SE: "IIT Palakkad",
+  IITBHU26_SE: "IIT BHU",
   IITBH26_SE: "IIT Bhilai",
+  IITJMU26_SE: "IIT Jammu",
+  // Superseded by IITJMU26_SE but kept valid: it was advertised in the earlier
+  // outreach email, so students working from that copy aren't turned away.
   IITJ26_SE: "IIT Jammu",
+  // NITs
+  NITT26_SE: "NIT Trichy",
   NITC26_SE: "NIT Calicut",
   NITA26_SE: "NIT Agartala",
+  NITS26_SE: "NIT Silchar",
+  // Other institutions
   CU26_SE: "Chandigarh University",
   RGIPT26_SE: "RGIPT",
 };

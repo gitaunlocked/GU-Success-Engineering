@@ -5,13 +5,23 @@ import { resolve } from 'path'
 // Per-college access codes. Keep in sync with data/successEngineering.js
 // (duplicated here so the server bundle has no cross-dir import dependency).
 const couponColleges = {
+  // IITs
+  IITB26_SE: 'IIT Bombay',
+  IITD26_SE: 'IIT Delhi',
   IITK26_SE: 'IIT Kanpur',
-  IITBHU26_SE: 'IIT BHU',
+  IITG26_SE: 'IIT Guwahati',
   IITPKD26_SE: 'IIT Palakkad',
+  IITBHU26_SE: 'IIT BHU',
   IITBH26_SE: 'IIT Bhilai',
+  IITJMU26_SE: 'IIT Jammu',
+  // Superseded by IITJMU26_SE but kept valid — see data/successEngineering.js.
   IITJ26_SE: 'IIT Jammu',
+  // NITs
+  NITT26_SE: 'NIT Trichy',
   NITC26_SE: 'NIT Calicut',
   NITA26_SE: 'NIT Agartala',
+  NITS26_SE: 'NIT Silchar',
+  // Other institutions
   CU26_SE: 'Chandigarh University',
   RGIPT26_SE: 'RGIPT',
 }
@@ -196,7 +206,11 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
 
     // Embed the college-specific poster inline (cid) and also attach it.
     const baseUrl = clean(opts.baseUrl) || clean(process.env.PUBLIC_BASE_URL)
-    const posterBuffer = await loadPoster(posterFileForCode(reg), baseUrl)
+    // Not every valid access code has bespoke poster artwork yet, so fall back
+    // to the generic poster rather than sending an email with no image at all.
+    const posterBuffer =
+      (await loadPoster(posterFileForCode(reg), baseUrl)) ||
+      (await loadPoster('se-poster.png', baseUrl))
     const attachments = posterBuffer
       ? [{ filename: 'Success-Engineering.png', content: posterBuffer, cid: 'sePoster' }]
       : []
