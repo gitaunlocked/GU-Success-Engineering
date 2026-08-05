@@ -985,6 +985,23 @@ const applyCoupon = () => {
   }
 };
 
+// Pre-fill and apply an access code passed in the URL, e.g.
+//   https://gitaunlocked.com/?code=IITK26_SE#register
+// so each college's outreach email can link students straight to a form with
+// their own code already applied.
+//
+// Runs on mount (client only) rather than during setup, so the pre-applied
+// state can't cause an SSR hydration mismatch. An unrecognised code is left in
+// the field without validating, so a mistyped link doesn't greet a student with
+// a red error before they've touched anything.
+onMounted(() => {
+  const fromUrl = new URLSearchParams(window.location.search).get("code");
+  if (!fromUrl) return;
+  const code = fromUrl.trim().toUpperCase();
+  couponInput.value = code;
+  if (collegeForCode(code)) applyCoupon();
+});
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const validate = () => {
