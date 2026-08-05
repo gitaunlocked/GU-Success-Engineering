@@ -9,7 +9,9 @@
     >
       <nav class="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between">
         <a href="#top" @click.prevent="scrollTo('top')" class="flex items-center">
-          <img src="/logo2.png" alt="Gita Unlocked" class="w-28 sm:w-36 h-12 sm:h-14" />
+          <!-- Co-brand lockup is ~3.3:1, so height is pinned to keep the nav
+               rhythm and width is left auto — pinning both would squash it. -->
+          <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="h-12 sm:h-14 w-auto" />
         </a>
 
         <ul class="hidden md:flex items-center gap-9 lg:gap-12 text-lg font-medium text-gray-700">
@@ -56,9 +58,19 @@
 
           <!-- Interactive podcast series description -->
           <p class="mt-4 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg leading-relaxed text-gray-600">
-            <span class="inline-flex items-center gap-2 align-middle rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-              Interactive Podcast Series
+            <!-- Pill row: original "Interactive Podcast Series" tag + the
+                 Academic Session edition badge. Wrapped in an inline-flex
+                 container so the two pills sit side by side with a small
+                 gap and wrap gracefully on narrow screens. -->
+            <span class="inline-flex flex-wrap items-center gap-2 align-middle">
+              <span class="inline-flex items-center gap-2 rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                Interactive Podcast Series
+              </span>
+              <span class="edition-badge">
+                <span class="edition-badge-dot"></span>
+                <span class="brand-gradient-text">{{ sessionEdition.badgeText }}</span>
+              </span>
             </span>
             <span class="mt-3 block font-bold text-gray-800">
               A 3-part live, interactive podcast series with
@@ -166,6 +178,38 @@
       </div>
     </section>
 
+    <!-- ============ WHAT'S NEW ============ -->
+    <!-- Combines the "we're back, evolved" narrative (intro paragraph) with
+         the five feature cards. Replaces the earlier standalone Returning
+         banner so the whole story lives in one focused block. -->
+    <section id="whats-new" class="relative py-20 sm:py-24 bg-gray-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-3xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">Evolving Every Edition</p>
+          <h2 class="section-title">What's New</h2>
+          <p class="mt-6 text-base sm:text-lg leading-relaxed text-gray-600">{{ whatsNewIntro }}</p>
+        </div>
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="c in whatsNewCards"
+            :key="c.title"
+            class="group card-hover flex h-full items-start gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+            v-motion="fadeUp"
+          >
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition duration-300 group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white">
+              <svg v-if="c.icon === 'ai'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 10h4v4h-4zM9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
+              <svg v-else-if="c.icon === 'briefcase'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+              <svg v-else-if="c.icon === 'mic'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg>
+              <svg v-else-if="c.icon === 'clipboard'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 4V3.5A1.5 1.5 0 0 1 10.5 2h3A1.5 1.5 0 0 1 15 3.5V4M9.5 12l1.75 1.75L15 10"/></svg>
+              <svg v-else-if="c.icon === 'users'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+              <svg v-else class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="flex-1 font-semibold text-gray-900 leading-snug">{{ c.title }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== ABOUT ===================== -->
     <section id="about" class="relative py-20 sm:py-24 bg-white">
       <div class="mx-auto max-w-3xl px-4 sm:px-6 text-center" v-motion="fadeUp">
@@ -176,10 +220,6 @@
         </h2>
         <p class="mt-5 text-lg sm:text-xl text-gray-600 leading-relaxed">
           A society of intellectual minds from premier institutes &amp; industry — guiding students toward clarity, purpose, and meaningful success.
-        </p>
-
-        <p class="mt-8 text-base sm:text-lg leading-relaxed text-gray-600">
-          Gita Unlocked brings together students, alumni of premier institutes, and working professionals — combining timeless wisdom with modern approaches to personal growth.
         </p>
       </div>
     </section>
@@ -219,64 +259,80 @@
           <h2 class="section-title">Meet The Speakers</h2>
           <p class="mt-4 text-gray-600">IIT alumni, industry leaders and global technology professionals guiding the series.</p>
         </div>
-        <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Front-only cards (the flip-to-bio back face was removed). Five
+             speakers land as 3 + 2 on desktop; `items-stretch` + `h-full`
+             keeps both rows' cards equal height despite differing title
+             lengths. -->
+        <div class="mt-14 grid items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div
-            v-for="(s, i) in speakers"
+            v-for="s in speakers"
             :key="s.name"
-            class="flip h-[26rem] cursor-pointer select-none"
-            :class="{ 'is-flipped': flipped.has(i) }"
+            class="group relative flex h-full flex-col items-center overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20"
             v-motion="fadeUp"
-            @click="toggleFlip(i)"
           >
-            <div class="flip-inner">
-              <!-- ===== FRONT ===== -->
-              <div class="flip-face group flex flex-col items-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm transition duration-300 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20">
-                <span class="absolute inset-x-10 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
-                <div class="mx-auto h-36 w-36 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
-                  <div class="h-full w-full rounded-full bg-white p-[3px]">
-                    <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
-                    <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-3xl font-bold brand-gradient-text">
-                      {{ initials(s.name) }}
-                    </div>
-                  </div>
+            <span class="absolute inset-x-10 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
+            <div class="mx-auto h-36 w-36 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
+              <div class="h-full w-full rounded-full bg-white p-[3px]">
+                <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-3xl font-bold brand-gradient-text">
+                  {{ initials(s.name) }}
                 </div>
-                <h3 class="mt-6 text-lg font-semibold text-gray-900">{{ s.name }}</h3>
-                <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
-                <p v-if="s.designation2" class="mt-0.5 text-xs font-medium text-[#D61C75]">{{ s.designation2 }}</p>
-
-                <!-- Company logo + name on a clean white pill -->
-                <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
-                  <img v-if="s.companyLogo" :src="s.companyLogo" :alt="s.company" class="h-5 w-auto max-w-[84px] object-contain" />
-                  <span class="text-sm font-semibold text-gray-900">{{ s.company }}</span>
-                </div>
-
-                <span class="mt-auto inline-flex items-center gap-1.5 rounded-full border border-[#D61C75]/20 bg-[#D61C75]/5 px-4 py-1.5 text-xs font-semibold text-[#D61C75] transition duration-300 group-hover:bg-gradient-to-r group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white group-hover:border-transparent">
-                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0 1 12-2.5L20 9M19 15a7 7 0 0 1-12 2.5L4 15"/></svg>
-                  Tap to know more
-                </span>
-              </div>
-
-              <!-- ===== BACK ===== -->
-              <div class="flip-face flip-back flex flex-col rounded-3xl border border-[#D61C75]/25 bg-white p-7 text-left shadow-xl">
-                <h3 class="text-lg font-bold text-gray-900">{{ s.name }}</h3>
-                <p class="mt-0.5 text-xs font-semibold text-[#D61C75]">{{ s.designation }} · {{ s.company }}</p>
-                <p class="mt-3 flex-1 text-sm leading-relaxed text-gray-600">{{ s.bio }}</p>
-                <div v-if="s.tags" class="mt-3 flex flex-wrap gap-1.5">
-                  <span v-for="t in s.tags" :key="t" class="rounded-md bg-[#D61C75]/8 px-2 py-0.5 text-[11px] font-medium text-[#D61C75]">{{ t }}</span>
-                </div>
-                <a
-                  v-if="s.linkedin"
-                  :href="s.linkedin"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#0A66C2] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#004182]"
-                  @click.stop
-                >
-                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
-                  View LinkedIn
-                </a>
               </div>
             </div>
+            <h3 class="mt-6 text-lg font-semibold text-gray-900">{{ s.name }}</h3>
+            <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
+            <p v-if="s.designation2" class="mt-0.5 text-xs font-medium text-[#D61C75]">{{ s.designation2 }}</p>
+
+            <!-- Company logo + name on a clean white pill. The wrapper carries
+                 `mt-auto` so the pills align along the card bottom regardless
+                 of how many lines the name/title take. -->
+            <div class="mt-auto pt-5">
+              <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
+                <!-- Marks vary in aspect (Cisco's bars are ~3.6:1, Adobe's "A"
+                     near square), so height is fixed and width left to
+                     object-contain. max-w only guards against clamping. -->
+                <img v-if="s.companyLogo" :src="s.companyLogo" :alt="s.company" class="h-6 w-auto max-w-[96px] object-contain" />
+                <span class="text-sm font-semibold text-gray-900">{{ s.company }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SUCCESS ENGINEERING SO FAR (STATS) ============ -->
+    <!-- Animated statistics strip. Numeric values count up from 0 to their
+         target when the grid scrolls into view; each card's value also
+         slides up in a staggered sequence. String-valued items ("Hundreds",
+         "Growing") carry the same visual weight and ride the same reveal.
+         Soft brand-tinted background gives the numbers their own "moment"
+         without breaking the section rhythm. -->
+    <section id="impact" class="relative py-20 sm:py-24 bg-gradient-to-b from-white via-orange-50/40 to-white">
+      <div class="pointer-events-none absolute -top-24 -left-32 h-96 w-96 rounded-full bg-[#FF7A00]/8 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 -right-32 h-96 w-96 rounded-full bg-[#7A10FF]/8 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">Momentum &amp; Reach</p>
+          <h2 class="section-title">Success Engineering So Far</h2>
+        </div>
+
+        <div ref="statsSectionEl" class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div
+            v-for="(stat, i) in seFarStats"
+            :key="stat.label"
+            class="stat-card"
+            v-motion="fadeUp"
+          >
+            <!-- The reveal transform lives on this wrapper, never on the
+                 gradient text itself. `.stat-num` uses background-clip:text,
+                 which stops painting into descendants that create their own
+                 clipping/containing context — so the value is rendered as a
+                 single plain text node inside it. -->
+            <div class="stat-reveal" :class="{ 'is-in': statsInView }" :style="{ transitionDelay: `${i * 90}ms` }">
+              <p class="stat-num">{{ statDisplay(stat, i) }}</p>
+            </div>
+            <p class="stat-label">{{ stat.label }}</p>
           </div>
         </div>
       </div>
@@ -535,21 +591,18 @@
             </div>
 
             <div>
-              <label class="field-label">Email <span class="text-[#D61C75]">*</span></label>
-              <input v-model.trim="form.email" type="email" class="field" :class="errors.email && 'field-error'" placeholder="you@example.com" />
-              <p v-if="errors.email" class="field-msg">{{ errors.email }}</p>
-            </div>
-
-            <div>
-              <label class="field-label">Phone Number <span class="text-[#D61C75]">*</span></label>
-              <input v-model.trim="form.phone" type="tel" inputmode="tel" class="field" :class="errors.phone && 'field-error'" placeholder="10-digit mobile" />
+              <label class="field-label">Phone Number (preferably WhatsApp) <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.phone" type="tel" inputmode="tel" class="field" :class="errors.phone && 'field-error'" placeholder="10-digit WhatsApp number" />
               <p v-if="errors.phone" class="field-msg">{{ errors.phone }}</p>
             </div>
 
-            <div>
-              <label class="field-label">WhatsApp Number <span class="text-[#D61C75]">*</span></label>
-              <input v-model.trim="form.whatsapp" type="tel" inputmode="tel" class="field" :class="errors.whatsapp && 'field-error'" placeholder="For Zoom link & reminders" />
-              <p v-if="errors.whatsapp" class="field-msg">{{ errors.whatsapp }}</p>
+            <!-- Full width so the 2-column grid stays even (eight single-column
+                 fields sit above this) and the longer label + email values get
+                 room to breathe. -->
+            <div class="sm:col-span-2">
+              <label class="field-label">Institute (college) Email <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.email" type="email" class="field" :class="errors.email && 'field-error'" placeholder="you@collegedomain" />
+              <p v-if="errors.email" class="field-msg">{{ errors.email }}</p>
             </div>
 
             <div class="sm:col-span-2">
@@ -589,8 +642,13 @@
               </p>
 
               <!-- Price summary -->
-              <div class="mt-4 flex items-center justify-between border-t border-[#D61C75]/15 pt-3">
-                <span class="text-sm text-gray-600">Registration fee</span>
+              <!-- flex-wrap so the longer label can wrap on narrow screens
+                   without squeezing the price out of alignment. -->
+              <div class="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-[#D61C75]/15 pt-3">
+                <span class="text-sm text-gray-600">
+                  Registration fee
+                  <span class="text-gray-400">(Free with valid access code)</span>
+                </span>
                 <span class="flex items-baseline gap-2">
                   <span
                     class="text-lg font-semibold"
@@ -655,7 +713,7 @@
     <!-- ===================== FOOTER ===================== -->
     <footer id="contact" class="relative bg-gray-50 pt-14">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
-        <img src="/logo2.png" alt="Gita Unlocked" class="mx-auto w-36 h-auto" />
+        <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="mx-auto w-56 sm:w-64 h-auto" />
         <p class="mt-3 text-[#D61C75] tracking-[0.2em] text-sm uppercase font-semibold">Unveiling The Open Secret</p>
         <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering youth through timeless wisdom, modern insights and meaningful growth.</p>
 
@@ -686,6 +744,10 @@ import {
   validCoupons,
   couponColleges,
   WHATSAPP_GROUP_URL,
+  sessionEdition,
+  whatsNewIntro,
+  whatsNewCards,
+  seFarStats,
 } from "~/data/successEngineering";
 
 const year = new Date().getFullYear();
@@ -726,14 +788,6 @@ const scrolled = ref(false);
 const mobileOpen = ref(false);
 const openFaq = ref(0);
 
-// Speaker flip cards — track which cards are flipped to their bio side.
-const flipped = ref(new Set());
-const toggleFlip = (i) => {
-  const next = new Set(flipped.value);
-  next.has(i) ? next.delete(i) : next.add(i);
-  flipped.value = next;
-};
-
 const onScroll = () => {
   scrolled.value = window.scrollY > 24;
 };
@@ -768,6 +822,93 @@ const eqBars = Array.from({ length: 26 }, (_, i) => ({
   dur: `${(1.9 + (i % 5) * 0.4).toFixed(2)}s`,
 }));
 
+// -----------------------------------------------------------------------------
+// "Success Engineering So Far" — scroll-triggered count-up
+// -----------------------------------------------------------------------------
+// Numeric stats tick 0 → target with an easeOutCubic ramp the first time the
+// grid scrolls into view; text stats ("Hundreds", "Growing") just ride the
+// accompanying slide-up reveal. The value is rendered as a single text node
+// so the brand gradient (background-clip: text) paints reliably.
+const statsSectionEl = ref(null);
+const statsInView = ref(false);
+const animatedStats = ref(seFarStats.map(() => 0));
+
+let statsFrame = null;
+let statsObserver = null;
+
+// 1800 → "1,800". Non-numeric stats fall through to their literal text.
+const statDisplay = (stat, i) => {
+  if (typeof stat.value !== "number") return stat.text;
+  return `${animatedStats.value[i].toLocaleString("en-US")}${stat.suffix || ""}`;
+};
+
+const settleStatsInstantly = () => {
+  animatedStats.value = seFarStats.map((s) =>
+    typeof s.value === "number" ? s.value : 0,
+  );
+  statsInView.value = true;
+};
+
+const runStatsCountUp = () => {
+  statsInView.value = true;
+
+  const duration = 1600;
+  const start = performance.now();
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+  const tick = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = easeOut(p);
+    animatedStats.value = seFarStats.map((s) =>
+      typeof s.value === "number" ? Math.round(eased * s.value) : 0,
+    );
+    statsFrame = p < 1 ? requestAnimationFrame(tick) : null;
+  };
+  statsFrame = requestAnimationFrame(tick);
+};
+
+onMounted(() => {
+  const el = statsSectionEl.value;
+
+  // No element or no observer support → show final values, no animation.
+  if (!el || typeof IntersectionObserver === "undefined") {
+    settleStatsInstantly();
+    return;
+  }
+
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    settleStatsInstantly();
+    return;
+  }
+
+  // If the grid is already on screen at mount (short viewport, reload
+  // mid-page, or an anchor deep-link), start immediately — an observer
+  // wouldn't fire again on its own without a scroll.
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    runStatsCountUp();
+    return;
+  }
+
+  statsObserver = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      statsObserver?.disconnect();
+      statsObserver = null;
+      runStatsCountUp();
+    },
+    // Fire a little before the grid is fully visible so the roll-up is
+    // already underway by the time it's centred.
+    { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+  );
+  statsObserver.observe(el);
+});
+
+onBeforeUnmount(() => {
+  statsObserver?.disconnect();
+  if (statsFrame !== null) cancelAnimationFrame(statsFrame);
+});
+
 // ---- Registration form ----
 const form = reactive({
   name: "",
@@ -778,7 +919,6 @@ const form = reactive({
   year: "",
   email: "",
   phone: "",
-  whatsapp: "",
   city: "",
   reason: "",
 });
@@ -856,7 +996,6 @@ const validate = () => {
   if (!form.city) errors.city = "Please enter your city.";
   if (!EMAIL_RE.test(form.email)) errors.email = "Enter a valid email address.";
   if (form.phone.replace(/\D/g, "").length < 10) errors.phone = "Enter a valid phone number.";
-  if (form.whatsapp.replace(/\D/g, "").length < 10) errors.whatsapp = "Enter a valid WhatsApp number.";
   return Object.keys(errors).length === 0;
 };
 
@@ -891,7 +1030,11 @@ const submit = async () => {
     year: form.year,
     email: form.email.toLowerCase(),
     phone: form.phone,
-    whatsapp: form.whatsapp,
+    // The form now collects a single number, asked for as the student's
+    // WhatsApp. Send it as `whatsapp` too so the stored document keeps the
+    // same shape as earlier registrations and the admin notification email
+    // still surfaces a reachable WhatsApp number.
+    whatsapp: form.phone,
     city: form.city,
     reason: form.reason,
     couponCode: appliedCoupon.value || "",
@@ -954,35 +1097,67 @@ const submit = async () => {
   @apply transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
 }
 
-/* Speaker flip cards */
-.flip {
-  perspective: 1400px;
+/* Academic Session edition badge — glass pill that sits beside the
+   "Interactive Podcast Series" tag in the hero. Sizing is matched to that
+   pill (px-3 py-1, text-xs sm:text-sm, font-semibold, tracking-wider) so
+   the two pills feel like a set. */
+.edition-badge {
+  @apply inline-flex items-center gap-2 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-[#D61C75]/25 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider shadow-sm;
+  animation: badge-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: 220ms;
 }
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-  transform-style: preserve-3d;
+.edition-badge-dot {
+  @apply h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF];
 }
-.flip.is-flipped .flip-inner {
-  transform: rotateY(180deg);
-}
-.flip-face {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  width: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  overflow: hidden;
-}
-.flip-back {
-  transform: rotateY(180deg);
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .flip-inner {
+  .edition-badge {
+    animation: none;
+  }
+}
+
+/* "Success Engineering So Far" statistic cards */
+.stat-card {
+  @apply relative flex flex-col items-center rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm p-6 sm:p-7 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
+}
+.stat-num {
+  @apply text-4xl sm:text-5xl font-extrabold leading-none brand-gradient-text tracking-tight;
+  /* Fixed-width digits stop the card from twitching as the value ticks up. */
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  @apply mt-3 text-sm font-medium text-gray-600 leading-snug;
+}
+
+/* Slide-up reveal wrapper for each stat value. Kept separate from
+   `.stat-num` so the transform never sits on the background-clip:text
+   element itself (that combination is unreliable in older Safari). */
+.stat-reveal {
+  transform: translateY(30%);
+  opacity: 0;
+  transition:
+    transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.stat-reveal.is-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-reveal {
     transition: none;
+    transform: none;
+    opacity: 1;
   }
 }
 

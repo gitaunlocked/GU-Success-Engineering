@@ -11,7 +11,7 @@ export const event = {
   tagline: "Building the Human Edge in the Age of AI",
   description:
     "A 3-Part Live Interactive Series with IIT Alumni, Industry Leaders and Global Technology Professionals.",
-  date: "7 June 2026 · Sunday",
+  date: "9 August 2026 · Sunday",
   venue: "Live on Zoom",
   venueNote: "Link shared after registration",
   pricing: "Free for IIT / NIT Students",
@@ -19,6 +19,39 @@ export const event = {
   basePrice: 500, // shown as the struck-off total once a valid code is applied
   couponCode: "IITK26_SE", // featured code displayed on the page
 };
+
+// Hero edition badge — shown as a small pill above the H1.
+// Edit `badgeText` when the session/edition changes.
+export const sessionEdition = {
+  badgeText: "Academic Session 2026 Edition",
+};
+
+// "What's New" — short intro paragraph shown under the section title.
+// Preserves the "we're back, evolved" narrative from the earlier Returning
+// banner in a single, focused block.
+export const whatsNewIntro =
+  "Following the overwhelming response received from students across premier engineering institutions during our Summer edition, Success Engineering returns with updated discussions, new speakers and enhanced learning experiences.";
+
+// "What's New" — icon cards under the intro.
+// `icon` maps to an inline SVG defined in Landing.vue.
+export const whatsNewCards = [
+  { icon: "ai", title: "Updated Discussions on AI, Careers & the Future" },
+  { icon: "briefcase", title: "Startup, Research & Industry Exposure Opportunities" },
+  { icon: "mic", title: "New Industry Leaders & IIT Alumni Speakers" },
+  { icon: "clipboard", title: "Refined Interactive Assessments" },
+  { icon: "users", title: "Enhanced Networking & Student Community" },
+];
+
+// "Success Engineering So Far" — animated statistics rendered under Speakers.
+// Numeric `value` items count up from 0 when the section enters the viewport;
+// text-only items (e.g. "Hundreds", "Growing") render as-is with a fade-up.
+export const seFarStats = [
+  { value: 20, suffix: "+", label: "Premier Institutions Reached" },
+  { value: 1800, suffix: "+", label: "Students Engaged" },
+  { value: 40, suffix: "+", label: "Industry Leaders & IIT Alumni" },
+  { text: "Hundreds", label: "Human Potential Assessments Completed" },
+  { text: "Growing", label: "Student Community Across India" },
+];
 
 // Per-college access codes that unlock free registration.
 // The applied code identifies the student's college, which is used to
@@ -40,51 +73,64 @@ export const validCoupons = Object.keys(couponColleges);
 
 // SECTION 4 — Speakers ------------------------------------------------------
 // `photo` can be a path under /public (e.g. "/speakers/name.jpg") or a full URL.
-// Leave `photo` empty ("") to fall back to a clean gold monogram avatar.
+// Leave `photo` empty ("") to fall back to a clean monogram avatar.
+// `companyLogo` is optional — the company pill renders the name alone without it.
+// `designation2` is an optional secondary credential shown under the role.
+//
+// NOTE: `bio`, `tags` and `linkedin` are currently unused — the speaker cards
+// are front-only (the flip-to-bio back face was removed). They're retained so
+// the back face can be reinstated without re-sourcing the copy.
 export const speakers = [
   {
+    name: "Mr. Sriraj Chellapan",
+    designation: "Senior Manager, AI Chip Design",
+    company: "Texas Instruments",
+    companyLogo: "/logos/texasinstruments.svg",
+    photo: "/speakers/sriraj.png",
+    bio: "",
+    tags: [],
+    linkedin: "",
+  },
+  {
     name: "Mr. Gaurav Rai",
-    designation: "AI Copilot Security · Microsoft",
-    designation2: "Senior Architect at PayPal",
+    designation: "Senior Manager, AI Copilot Security",
     company: "Microsoft",
     companyLogo: "/logos/microsoft.svg",
     photo: "/speakers/gaurav.png",
-    bio: "20+ years in cybersecurity, now leading AI security at Microsoft — Copilot, MCP security, Responsible AI and privacy. Previously at PayPal, Blackstone, Teradata and AT&T. BITS Pilani.",
+    bio: "20+ years in cybersecurity, now leading AI security at Microsoft — Copilot, MCP security, Responsible AI and privacy. BITS Pilani.",
     tags: ["Microsoft", "AI Copilot", "AI Security", "BITS Pilani"],
     linkedin: "https://www.linkedin.com/in/gauravsecurity/",
   },
   {
-    name: "Samyak Jain",
-    designation: "AI Researcher · Mastercard",
-    designation2: "PhD at UC Berkeley",
-    company: "Mastercard",
-    companyLogo: "/logos/mastercard.svg",
+    name: "Mr. Samyak Jain",
+    designation: "AI Research PhD at UC Berkeley",
+    company: "UC Berkeley",
+    companyLogo: "/logos/ucberkeley.png",
     photo: "/speakers/samyak.png",
-    bio: "Research Fellow at Microsoft Research and incoming CS PhD at UC Berkeley. AI intern at Mastercard AI Garage; work spans AI safety, mechanistic interpretability, and adversarial robustness. IIT BHU CSE (9.60 CPI).",
-    tags: ["Mastercard", "Microsoft Research", "AI Safety", "UC Berkeley", "IIT BHU"],
+    bio: "Research Fellow at Microsoft Research and incoming CS PhD at UC Berkeley. Work spans AI safety, mechanistic interpretability, and adversarial robustness. IIT BHU CSE (9.60 CPI).",
+    tags: ["Microsoft Research", "AI Safety", "UC Berkeley", "IIT BHU"],
     linkedin: "https://www.linkedin.com/in/samyak-jain-276738178/",
   },
   {
-    name: "Yashas",
-    designation: "AI Lead · Texas Instruments",
-    designation2: "AI, IIT Hyderabad",
-    company: "Texas Instruments",
-    companyLogo: "/logos/texasinstruments.svg",
-    photo: "/speakers/yashas.png",
-    bio: "Data Engineer at Texas Instruments and an AI graduate from IIT Hyderabad (9.36 CGPA). Research spans forecasting, model explainability and GAN-based video generation.",
-    tags: ["Texas Instruments", "AI / ML", "IIT Hyderabad"],
-    linkedin: "https://www.linkedin.com/in/yashas-tadikamalla-2b3908211/",
+    name: "Mr. Anurag Pindiproli",
+    designation: "AI Defense Engineer, Cisco",
+    designation2: "Amazon AI — ML School",
+    company: "Cisco",
+    companyLogo: "/logos/cisco.png",
+    photo: "/speakers/anurag.png",
+    bio: "",
+    tags: [],
+    linkedin: "",
   },
   {
-    name: "Vaibhav",
-    designation: "AI & Business Operations · GlobalLogic",
-    designation2: "MBA, IÉSEG",
-    company: "GlobalLogic",
-    companyLogo: "/logos/globallogic.svg",
-    photo: "/speakers/vaibhav.png",
-    bio: "Project Management Officer and Senior Business Analyst at GlobalLogic, focused on operational excellence and data-driven delivery. Ex–Maruti Suzuki (Supplier Quality Manager), Hello Tomorrow (Paris), and edtech founder. MBA from IÉSEG; Generative AI certified.",
-    tags: ["GlobalLogic", "Generative AI", "Ex-Maruti Suzuki", "IÉSEG MBA"],
-    linkedin: "https://www.linkedin.com/in/vaibhavjoshi108/",
+    name: "Mr. Akhilender Bongirwar",
+    designation: "AI Engineer, Adobe",
+    company: "Adobe",
+    companyLogo: "/logos/adobe.png",
+    photo: "/speakers/akhilender.png",
+    bio: "",
+    tags: [],
+    linkedin: "",
   },
 ];
 
@@ -115,7 +161,7 @@ export const whyCards = [
 // SECTION 5 — What you will gain -------------------------------------------
 export const gains = [
   { icon: "trophy", title: "Exciting Prizes & Quizzes", highlight: true },
-  { icon: "trip", title: "Sponsored Trip", highlight: true },
+  { icon: "trip", title: "Sponsored Trip Opportunities", highlight: true },
   { icon: "certificate", title: "Certificate of Participation", highlight: true },
   { icon: "rocket", title: "Internship & Placement Insights" },
   { icon: "users", title: "Networking with IIT Alumni" },
@@ -130,21 +176,21 @@ export const journey = [
     kind: "session",
     label: "Session 1",
     title: "The Success Code",
-    date: "7 June 2026 · Sunday",
+    date: "9 August 2026 · Sunday",
     topic: "AI, Careers & Building Your Future",
   },
   {
     kind: "session",
     label: "Session 2",
     title: "The Missing Dimension",
-    date: "10 June 2026 · Wednesday",
-    topic: "Human Potential Beyond IQ",
+    date: "14 August 2026 · Saturday",
+    topic: "Exploring the Dimensions of Human Potential",
   },
   {
     kind: "session",
     label: "Session 3",
     title: "The Human Edge",
-    date: "13 June 2026 · Saturday",
+    date: "15 August 2026 · Sunday",
     topic: "What Makes Us Stand Out?",
   },
   {
@@ -157,16 +203,16 @@ export const journey = [
 ];
 
 // Meet Our Team ------------------------------------------------------------
+// Six members render as a clean 3 × 2 grid on desktop (lg:grid-cols-3).
+// `role` is optional and currently unused — every member shows just their
+// name and institute badge, which keeps the row heights uniform.
 export const team = [
-  { name: "Shantanu Tiwari", role: "Founder & CEO, Bright Studio", detail: "IIT Guwahati", photo: "/team/shantanu.png" },
-  { name: "Avinash Ranjan", role: "Software Engineer at Microsoft", detail: "IIT BHU", photo: "/team/avinash.png" },
-  { name: "Tushar Maini", role: "ASIC Engineer at Nvidia", detail: "IIT Roorkee 2025", photo: "/team/tushar.png" },
+  { name: "Shantanu Tiwari", detail: "IIT Guwahati", photo: "/team/shantanu.png" },
+  { name: "Tushar Maini", detail: "IIT Roorkee 2025", photo: "/team/tushar.png" },
   { name: "Mourya Sai Sandeep Yanamadala", detail: "IIT Madras", photo: "/team/mourya.png" },
-  { name: "Indraneel Natu", detail: "IIM Bangalore", photo: "/team/indraneel.png" },
-  { name: "Chandra Mohan", detail: "IIT Madras", photo: "/Chandra_Mohan_Pr.jpg" },
-  { name: "Deepak Kumar", detail: "IIT Dhanbad", photo: "/Deepak.jpg" },
-  { name: "Sankalp Dwivedi", detail: "IIT Delhi", photo: "/Sankalp_D_Pr_2.png" },
-  { name: "Sri Ram", detail: "IIT Kharagpur", photo: "/Lakshman.jpg" },
+  { name: "Shashanka Mouli", detail: "IIT Delhi", photo: "/team/shashanka.png" },
+  { name: "Koduri Chaitanya", detail: "IIT BHU", photo: "/team/chaitanya.png" },
+  { name: "Adarsh C", detail: "IIM Bengaluru", photo: "/team/adarsh.png" },
 ];
 
 // SECTION 8 — Testimonials (placeholders, future-ready) ---------------------

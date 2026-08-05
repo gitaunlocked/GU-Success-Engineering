@@ -19,7 +19,10 @@ export default defineEventHandler(async (event) => {
     year: str(body?.year),
     email: str(body?.email).toLowerCase(),
     phone: str(body?.phone),
-    whatsapp: str(body?.whatsapp),
+    // The form collects a single contact number (asked for as WhatsApp), so
+    // fall back to `phone` when `whatsapp` isn't sent. Keeps the stored
+    // document shape consistent with earlier registrations.
+    whatsapp: str(body?.whatsapp) || str(body?.phone),
     city: str(body?.city),
     reason: str(body?.reason),
     couponCode: str(body?.couponCode),
@@ -35,9 +38,6 @@ export default defineEventHandler(async (event) => {
   }
   if (reg.phone.replace(/\D/g, '').length < 10) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter a valid phone number.' })
-  }
-  if (reg.whatsapp.replace(/\D/g, '').length < 10) {
-    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid WhatsApp number.' })
   }
 
   try {
