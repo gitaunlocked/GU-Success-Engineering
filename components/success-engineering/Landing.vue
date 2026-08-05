@@ -714,8 +714,10 @@
     <footer id="contact" class="relative bg-gray-50 pt-14">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
         <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="mx-auto w-56 sm:w-64 h-auto" />
-        <p class="mt-3 text-[#D61C75] tracking-[0.2em] text-sm uppercase font-semibold">Unveiling The Open Secret</p>
-        <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering youth through timeless wisdom, modern insights and meaningful growth.</p>
+        <!-- Tagline is longer than the previous one, so tracking is eased
+             slightly to stop the uppercase line breaking mid-phrase. -->
+        <p class="mt-3 text-[#D61C75] tracking-[0.12em] sm:tracking-[0.2em] text-sm uppercase font-semibold">Building the Human Edge for the Age of AI</p>
+        <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering students to thrive through future-ready thinking, human potential, and timeless wisdom.</p>
 
         <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand mt-8 text-sm">Reserve Your Seat</a>
       </div>

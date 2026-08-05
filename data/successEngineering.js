@@ -208,7 +208,7 @@ export const journey = [
 // name and institute badge, which keeps the row heights uniform.
 export const team = [
   { name: "Shantanu Tiwari", detail: "IIT Guwahati", photo: "/team/shantanu.png" },
-  { name: "Tushar Maini", detail: "IIT Roorkee 2025", photo: "/team/tushar.png" },
+  { name: "Tushar Maini", detail: "IIT Roorkee", photo: "/team/tushar.png" },
   { name: "Mourya Sai Sandeep Yanamadala", detail: "IIT Madras", photo: "/team/mourya.png" },
   { name: "Shashanka Mouli", detail: "IIT Delhi", photo: "/team/shashanka.png" },
   { name: "Koduri Chaitanya", detail: "IIT BHU", photo: "/team/chaitanya.png" },
