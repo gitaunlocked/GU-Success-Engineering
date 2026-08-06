@@ -194,14 +194,14 @@ export const journey = [
     kind: "session",
     label: "Session 2",
     title: "The Missing Dimension",
-    date: "14 August 2026 · Saturday",
+    date: "15 August 2026 · Saturday",
     topic: "Exploring the Dimensions of Human Potential",
   },
   {
     kind: "session",
     label: "Session 3",
     title: "The Human Edge",
-    date: "15 August 2026 · Sunday",
+    date: "16 August 2026 · Sunday",
     topic: "What Makes Us Stand Out?",
   },
   {

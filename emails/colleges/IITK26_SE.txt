@@ -31,24 +31,18 @@ This program is being conducted across premier engineering institutions in
 India.
 
 INSTITUTIONAL ACCESS CODES
-IIT Bombay
-IITB26_SE IIT Delhi
-IITD26_SE
-IIT Kanpur
-IITK26_SE IIT Guwahati
-IITG26_SE
-IIT Palakkad
-IITPKD26_SE IIT BHU
-IITBHU26_SE
-IIT Jammu
-IITJMU26_SE IIT Bhilai
-IITBH26_SE
-NIT Trichy
-NITT26_SE NIT Calicut
-NITC26_SE
-NIT Agartala
-NITA26_SE NIT Silchar
-NITS26_SE
+IIT Bombay      IITB26_SE
+IIT Delhi       IITD26_SE
+IIT Kanpur      IITK26_SE
+IIT Guwahati    IITG26_SE
+IIT Palakkad    IITPKD26_SE
+IIT BHU         IITBHU26_SE
+IIT Jammu       IITJMU26_SE
+IIT Bhilai      IITBH26_SE
+NIT Trichy      NITT26_SE
+NIT Calicut     NITC26_SE
+NIT Agartala    NITA26_SE
+NIT Silchar     NITS26_SE
 
 Use the code corresponding to your institution during registration.
 Register FREE  → <https://gitaunlocked.com/?code=IITK26_SE#register>
@@ -56,15 +50,18 @@ Register FREE  → <https://gitaunlocked.com/?code=IITK26_SE#register>
 Live on Zoom · Starts 9 August 2026 · Sunday
 
 THREE POWERFUL SESSIONS
-01The Success Code — AI, Careers & Future Readiness · 9 August 2026
-02The Missing Dimension — Exploring the Dimensions of Human Potential · 14
-August 2026
-03The Human Edge — What Makes Us Stand Out? · 15 August 2026
+01  The Success Code — AI, Careers & Future Readiness
+    9 August 2026
+02  The Missing Dimension — Exploring the Dimensions of Human Potential
+    15 August 2026
+03  The Human Edge — What Makes Us Stand Out?
+    16 August 2026
 
 WHAT YOU WILL GAIN
 ✓ Career & Internship insights
 ✓ Networking with IIT alumni
-✓ Certificate of Participation ✓ Exciting prizes & quizzes
+✓ Certificate of Participation
+✓ Exciting prizes & quizzes
 ✓ Sponsored trip opportunities
 ✓ Human Potential Assessment Report
 Reserve Your Free Seat Now  → <https://gitaunlocked.com/?code=IITK26_SE#register>

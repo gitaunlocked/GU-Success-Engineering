@@ -167,7 +167,10 @@ if (ccList.length && recipients.length > 1) {
 
 if (!live) {
   const out = resolve(process.cwd(), `.outreach-preview-${code}.html`)
-  writeFileSync(out, html.replace(/src="cid:sePoster"/g, `src="/posters/se-2026-iitk.png"`))
+  // The preview is opened straight off disk, so the poster needs an absolute URL
+  // rather than the cid: reference the real message uses.
+  const previewSrc = `https://www.gitaunlocked.com/${posterFileFor(code)}`
+  writeFileSync(out, html.replace(/src="cid:sePoster"/g, `src="${previewSrc}"`))
   console.log(`
   Wrote ${out} for a final look.
   Nothing was sent. Re-run with --send to deliver.
