@@ -28,7 +28,7 @@ dotenv.config({ path: resolve(process.cwd(), '.env') })
 const clean = (v) => String(v ?? '').trim()
 
 const DEFAULT_SUBJECT =
-  'Success Engineering 2026 — Building the Human Edge in the Age of AI (Free for {{college}})'
+  'Success Engineering | AI, Careers & the Human Edge | Led by IIT, IIM Alumni & Industry Leaders'
 
 const args = process.argv.slice(2)
 const flag = (name, fallback = null) => {
