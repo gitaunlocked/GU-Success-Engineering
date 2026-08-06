@@ -27,7 +27,21 @@ export const activeCodes = () =>
 // access code in a "USE CODE" badge, so they are not interchangeable.
 export const posterSlug = (code) => code.replace(/26_SE$/, '').toLowerCase()
 
-export const posterFileFor = (code) => `posters/se-2026-${posterSlug(code)}.png`
+// Posters arrive in whatever format the designer exported, so any of these is
+// accepted. PNG is listed first and is what a missing poster is reported as.
+const POSTER_EXTS = ['png', 'jpg', 'jpeg', 'webp']
+
+// Matches a poster reference inside the template regardless of its extension.
+// Built fresh on each call because it is global and therefore stateful.
+export const posterRef = () => /posters\/se-2026-[a-z]+\.(?:png|jpe?g|webp)/g
+
+export const posterFileFor = (code) => {
+  const slug = posterSlug(code)
+  const found = POSTER_EXTS.map((ext) => `posters/se-2026-${slug}.${ext}`).find((rel) =>
+    existsSync(resolve(process.cwd(), 'public', rel)),
+  )
+  return found || `posters/se-2026-${slug}.${POSTER_EXTS[0]}`
+}
 
 export const posterPathFor = (code) =>
   resolve(process.cwd(), 'public', posterFileFor(code))
@@ -53,13 +67,15 @@ export const renderForCode = (code) => {
     throw new Error(`${MASTER_HTML} no longer contains ${TEMPLATE_CODE}`)
   }
 
-  const fromPoster = posterFileFor(TEMPLATE_CODE)
-  if (!html.includes(fromPoster)) {
-    throw new Error(`${MASTER_HTML} no longer references ${fromPoster}`)
+  if (!posterRef().test(html)) {
+    throw new Error(`${MASTER_HTML} no longer references a posters/se-2026-*.* image`)
   }
 
+  // Always rewritten, even for the template's own college: the poster may have
+  // been re-exported in a different format since the master was written.
+  html = html.replace(posterRef(), posterFileFor(code))
+
   if (code !== TEMPLATE_CODE) {
-    html = html.replaceAll(fromPoster, posterFileFor(code))
     html = html.replaceAll(TEMPLATE_CODE, code)
     text = text.replaceAll(TEMPLATE_CODE, code)
   }

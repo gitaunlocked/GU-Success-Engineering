@@ -62,6 +62,7 @@ if (skipped.length) {
   console.log(`\n  skipped ${skipped.length} — no poster yet:`)
   for (const s of skipped) console.log(`    ${s.code.padEnd(12)} ${s.college.padEnd(22)} needs public/${s.need}`)
   console.log(`\n  Each poster shows its own access code, so these can't reuse another college's.`)
+  console.log(`  .jpg, .jpeg and .webp work too — only the name has to match.`)
 }
 
 console.log()

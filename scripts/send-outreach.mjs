@@ -9,7 +9,7 @@
 // recipients here are real students, so an accidental blast can't be undone.
 //
 import { readFileSync, existsSync, writeFileSync } from 'fs'
-import { resolve } from 'path'
+import { resolve, extname } from 'path'
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 
@@ -133,12 +133,12 @@ if (!hasPoster(code)) {
 // referencing it by cid makes it render on first open instead.
 const attachments = [
   {
-    filename: 'Success-Engineering-2026.png',
+    filename: `Success-Engineering-2026${extname(posterFileFor(code))}`,
     content: readFileSync(posterPathFor(code)),
     cid: 'sePoster',
   },
 ]
-html = html.replace(/src="https?:\/\/[^"]*se-2026-[a-z]+\.png"/g, 'src="cid:sePoster"')
+html = html.replace(/src="https?:\/\/[^"]*se-2026-[a-z]+\.(?:png|jpe?g|webp)"/g, 'src="cid:sePoster"')
 
 const subject = (subjectArg || DEFAULT_SUBJECT).replaceAll('{{college}}', college)
 
