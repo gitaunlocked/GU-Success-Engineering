@@ -13,16 +13,20 @@ import { resolve } from 'path'
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 
-// The site's canonical list, so a code this script accepts is always a code the
-// registration form will honour.
-import { couponColleges } from '../data/successEngineering.js'
+import {
+  couponColleges,
+  renderForCode,
+  posterFileFor,
+  posterPathFor,
+  hasPoster,
+  GENERATED_DIR,
+  TEMPLATE_CODE,
+} from './lib/outreach.mjs'
 
 dotenv.config({ path: resolve(process.cwd(), '.env') })
 
 const clean = (v) => String(v ?? '').trim()
 
-// The template ships with IITK's code baked into its links; --code rewrites it.
-const TEMPLATE_CODE = 'IITK26_SE'
 const DEFAULT_SUBJECT =
   'Success Engineering 2026 — Building the Human Edge in the Age of AI (Free for {{college}})'
 
@@ -96,35 +100,45 @@ if (!recipients.length) {
 
 // ------------------------------------------------------------------ template
 
-const load = (file) => {
-  const path = resolve(process.cwd(), file)
-  if (!existsSync(path)) die(`missing template: ${path}`)
-  return readFileSync(path, 'utf-8')
+// Prefer the reviewed copy in emails/colleges/ so what goes out is exactly what
+// was checked; fall back to rewriting the master template on the fly.
+const savedHtml = resolve(process.cwd(), GENERATED_DIR, `${code}.html`)
+const savedText = resolve(process.cwd(), GENERATED_DIR, `${code}.txt`)
+const usingSaved = existsSync(savedHtml) && existsSync(savedText)
+
+let html
+let text
+if (usingSaved) {
+  html = readFileSync(savedHtml, 'utf-8')
+  text = readFileSync(savedText, 'utf-8')
+} else {
+  try {
+    ;({ html, text } = renderForCode(code))
+  } catch (err) {
+    die(err.message)
+  }
 }
 
-let html = load('emails/college-outreach.html')
-let text = load('emails/college-outreach.txt')
-
-if (code !== TEMPLATE_CODE) {
-  const before = html.split(TEMPLATE_CODE).length - 1
-  if (!before) die(`template no longer contains ${TEMPLATE_CODE}; links can't be retargeted`)
-  html = html.replaceAll(TEMPLATE_CODE, code)
-  text = text.replaceAll(TEMPLATE_CODE, code)
+// Each college's poster prints its own access code, so sending one college the
+// artwork of another would show the reader a code that isn't theirs.
+if (!hasPoster(code)) {
+  die(
+    `no poster for ${college} at public/${posterFileFor(code)}.\n` +
+      `  Every poster carries its own access code, so another college's can't be reused.`
+  )
 }
 
 // Gmail and Outlook hide remote images from unrecognised senders, which would
 // drop the poster — the most persuasive part of the email. Attaching it and
 // referencing it by cid makes it render on first open instead.
-const attachments = []
-const posterPath = resolve(process.cwd(), 'public/posters/se-2026-iitk.png')
-if (existsSync(posterPath)) {
-  attachments.push({
+const attachments = [
+  {
     filename: 'Success-Engineering-2026.png',
-    content: readFileSync(posterPath),
+    content: readFileSync(posterPathFor(code)),
     cid: 'sePoster',
-  })
-  html = html.replace(/src="https?:\/\/[^"]*se-2026-iitk\.png"/g, 'src="cid:sePoster"')
-}
+  },
+]
+html = html.replace(/src="https?:\/\/[^"]*se-2026-[a-z]+\.png"/g, 'src="cid:sePoster"')
 
 const subject = (subjectArg || DEFAULT_SUBJECT).replaceAll('{{college}}', college)
 
