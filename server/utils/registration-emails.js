@@ -2,6 +2,10 @@ import nodemailer from 'nodemailer'
 import { readFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
 
+// Nuxt alias, not a relative path: Nitro rewrites this module's location in the
+// dev build, which makes '../../data/...' resolve outside the project.
+import { WHATSAPP_CHANNEL_URL } from '~/data/successEngineering.js'
+
 // Per-college access codes. Keep in sync with data/successEngineering.js
 // (duplicated here so the server bundle has no cross-dir import dependency).
 const couponColleges = {
@@ -41,13 +45,10 @@ export const posterFileForCode = (reg) => {
   return couponColleges[code] ? `posters/${code}.png` : 'se-poster.png'
 }
 
-// Official WhatsApp channel (shared in the email and on the success screen).
-export const WHATSAPP_CHANNEL_URL = 'https://whatsapp.com/channel/0029Vb8MUfJ9MF90HqIr2f2G'
-
-// Official WhatsApp group invite — two-way discussion space for registered
-// students. Kept in sync with data/successEngineering.js#WHATSAPP_GROUP_URL.
-export const WHATSAPP_GROUP_URL =
-  'https://chat.whatsapp.com/J8GXxYlD1oEIN9dwOB2twf?s=sh&p=a&ilr=1&amv=3'
+// Owned by data/successEngineering.js — that file is import-safe from client
+// components, whereas this module pulls in nodemailer. Re-exported here so
+// existing server-side importers keep working off a single source of truth.
+export { WHATSAPP_CHANNEL_URL }
 
 // Escape values before embedding in HTML email bodies (prevents HTML/script injection).
 const escapeHtml = (v) =>
@@ -110,7 +111,6 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
     : ''
 
   const whatsappUrl = WHATSAPP_CHANNEL_URL
-  const whatsappGroupUrl = WHATSAPP_GROUP_URL
 
   const qrBlockHtml = qrSrc
     ? `<div style="margin-top:14px">
@@ -127,8 +127,6 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
     collegeLineText +
     `Next step — follow the WhatsApp channel:\n` +
     `All session links and reminders are shared in our WhatsApp channel, so please follow it now to make sure you don't miss any session:\n${whatsappUrl}\n\n` +
-    `Join the student WhatsApp group:\n` +
-    `Meet fellow registered students and chat with the team in real time:\n${whatsappGroupUrl}\n\n` +
     `If you have any questions, just reply to this email and we'll help.\n\n` +
     `Warm regards,\nTeam Gita Unlocked\n\n` +
     `—\n` +
@@ -154,13 +152,6 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
                 <p style="margin:0 0 14px;color:#555;font-size:14px">All session links and reminders are shared in the channel. Please follow it now so you don't miss any session.</p>
                 <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Follow the WhatsApp channel</a>
                 ${qrBlockHtml}
-              </div>
-
-              <!-- WhatsApp group — two-way discussion space for registered students -->
-              <div style="border:1px solid #cfe4e0;border-radius:12px;padding:18px 16px;margin:20px 0;background:#f2fbf9">
-                <p style="margin:0 0 6px;font-weight:bold;color:#15171c;font-size:15px">Join the student WhatsApp group</p>
-                <p style="margin:0 0 14px;color:#555;font-size:14px">Meet fellow registered students, ask questions and chat with the team in real time.</p>
-                <a href="${whatsappGroupUrl}" target="_blank" style="display:inline-block;background:#128C7E;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Join WhatsApp group</a>
               </div>
 
               <p style="color:#555">If you have any questions, just reply to this email — we're happy to help.</p>

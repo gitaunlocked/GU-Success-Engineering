@@ -272,11 +272,20 @@ export const faqs = [
   },
 ];
 
+// The single destination for registrants — shown on the post-registration
+// success/duplicate screens and in the confirmation email. The student group and
+// the earlier channel were retired, so this is the only forum we publish.
+//
+// Declared here rather than in the server's email util because this file is safe
+// to import from client components; the email util pulls in nodemailer.
+export const WHATSAPP_CHANNEL_URL =
+  "https://whatsapp.com/channel/0029Vb8UA7b7Noa3HdhnHu2f";
+
 // SECTION 10 — Contact ------------------------------------------------------
 export const contact = {
   email: "gitaunlocked@gmail.com",
   phone: "+91 81256 30802",
-  whatsapp: "https://whatsapp.com/channel/0029Vb9c7bB7IUYSUbEyJx3X",
+  whatsapp: WHATSAPP_CHANNEL_URL,
   instagram: "https://www.instagram.com/gitaunlocked",
   youtube: "https://www.youtube.com/@GitaUnlocked-w8n",
 };
@@ -307,9 +316,3 @@ export const courseOptions = [
 
 // Registration form — gender options.
 export const genderOptions = ["Male", "Female", "Prefer not to say"];
-
-// Official WhatsApp group invite for registered students.
-// Shown on the post-registration success/duplicate screens and in the
-// confirmation email, in addition to the broadcast-only WhatsApp channel.
-export const WHATSAPP_GROUP_URL =
-  "https://chat.whatsapp.com/J8GXxYlD1oEIN9dwOB2twf?s=sh&p=a&ilr=1&amv=3";
