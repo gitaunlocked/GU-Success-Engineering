@@ -83,6 +83,45 @@
             <a href="#speakers" @click.prevent="scrollTo('speakers')" class="btn-ghost">View Speakers</a>
           </div>
 
+          <!-- Countdown to the first session. Client-only because the values
+               tick; the fallback holds the same footprint so the hero doesn't
+               jump once hydration swaps the real numbers in. -->
+          <div class="mt-9 max-w-md mx-auto lg:mx-0">
+            <ClientOnly>
+              <template v-if="hasStarted">
+                <p class="countdown-label">
+                  <span class="countdown-pulse"></span>{{ countdown.liveLabel }}
+                </p>
+                <p class="mt-2 text-sm text-gray-600">{{ countdown.liveNote }}</p>
+              </template>
+              <template v-else>
+                <p class="countdown-label">
+                  <span class="countdown-pulse"></span>{{ countdown.label }}
+                </p>
+                <!-- A value that changes every second is unreadable to a screen
+                     reader, so the clock is hidden from it and the plain date
+                     below carries the same information. -->
+                <div class="mt-3 grid grid-cols-4 gap-2.5 sm:gap-3" aria-hidden="true">
+                  <div v-for="part in countdownParts" :key="part.label" class="countdown-cell">
+                    <span class="countdown-num">{{ padCount(part.value) }}</span>
+                    <span class="countdown-unit">{{ part.label }}</span>
+                  </div>
+                </div>
+                <p class="sr-only">The series begins on {{ event.date }}.</p>
+              </template>
+
+              <template #fallback>
+                <p class="countdown-label"><span class="countdown-pulse"></span>{{ countdown.label }}</p>
+                <div class="mt-3 grid grid-cols-4 gap-2.5 sm:gap-3" aria-hidden="true">
+                  <div v-for="unit in ['Days', 'Hours', 'Mins', 'Secs']" :key="unit" class="countdown-cell">
+                    <span class="countdown-num">--</span>
+                    <span class="countdown-unit">{{ unit }}</span>
+                  </div>
+                </div>
+              </template>
+            </ClientOnly>
+          </div>
+
           <div class="mt-10 grid sm:grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
             <div class="info-card group">
               <span class="info-ico">
@@ -700,7 +739,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from "vue";
 import {
   event,
   speakers,
@@ -720,9 +759,47 @@ import {
   whatsNewIntro,
   whatsNewCards,
   seFarStats,
+  countdown,
 } from "~/data/successEngineering";
 
 const year = new Date().getFullYear();
+
+// ---------------------------------------------------------------------------
+// Hero countdown
+// ---------------------------------------------------------------------------
+// The ticking values are rendered inside <ClientOnly>: the server's clock and
+// the browser's never agree to the second, and rendering them on both sides
+// would be a guaranteed hydration mismatch.
+const startsAt = new Date(countdown.startsAt).getTime();
+const now = ref(startsAt);
+let countdownTicker = null;
+
+const hasStarted = computed(() => now.value >= startsAt);
+
+const countdownParts = computed(() => {
+  const seconds = Math.max(0, Math.floor((startsAt - now.value) / 1000));
+  return [
+    { label: "Days", value: Math.floor(seconds / 86400) },
+    { label: "Hours", value: Math.floor(seconds / 3600) % 24 },
+    { label: "Mins", value: Math.floor(seconds / 60) % 60 },
+    { label: "Secs", value: seconds % 60 },
+  ];
+});
+
+const padCount = (n) => String(n).padStart(2, "0");
+
+onMounted(() => {
+  now.value = Date.now();
+  countdownTicker = setInterval(() => {
+    now.value = Date.now();
+    // Nothing left to count, so stop waking the page up every second.
+    if (hasStarted.value) clearInterval(countdownTicker);
+  }, 1000);
+});
+
+onBeforeUnmount(() => {
+  if (countdownTicker) clearInterval(countdownTicker);
+});
 
 useHead({
   title: "Success Engineering — Building the Human Edge in the Age of AI | Gita Unlocked",
@@ -1149,6 +1226,43 @@ const submit = async () => {
 }
 
 /* Hero date/venue info cards with hover lift + gradient icon */
+/* Hero countdown — built from the same parts as .info-card and .stat-num so
+   it reads as part of the hero rather than a widget dropped into it. */
+.countdown-label {
+  @apply inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-semibold text-[#D61C75];
+}
+.countdown-pulse {
+  @apply h-1.5 w-1.5 rounded-full bg-[#D61C75];
+  animation: countdown-pulse 2s ease-in-out infinite;
+}
+.countdown-cell {
+  @apply flex flex-col items-center rounded-xl border border-gray-100 bg-white px-2 py-2.5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#D61C75]/30 hover:shadow-lg hover:shadow-[#D61C75]/10;
+}
+.countdown-num {
+  @apply text-2xl sm:text-3xl font-extrabold leading-none brand-gradient-text;
+  /* Without tabular figures the boxes twitch as the seconds tick. */
+  font-variant-numeric: tabular-nums;
+}
+.countdown-unit {
+  @apply mt-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-gray-500;
+}
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .countdown-pulse {
+    animation: none;
+  }
+}
+
 .info-card {
   @apply flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
 }

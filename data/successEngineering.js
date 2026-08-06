@@ -26,6 +26,18 @@ export const sessionEdition = {
   badgeText: "Academic Session 2026 Edition",
 };
 
+// Hero countdown, ticking down to the first session.
+//
+// `startsAt` needs a time and an offset, not just a date: without them the
+// browser assumes UTC and the counter reads five and a half hours out for
+// everyone in India. Set the real start time here when it is confirmed.
+export const countdown = {
+  startsAt: "2026-08-09T21:00:00+05:30",
+  label: "Series begins in",
+  liveLabel: "The series has begun",
+  liveNote: "Session 01 is under way — register to join the next one.",
+};
+
 // "What's New" — short intro paragraph shown under the section title.
 // Preserves the "we're back, evolved" narrative from the earlier Returning
 // banner in a single, focused block.
