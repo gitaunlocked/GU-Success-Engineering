@@ -1,4 +1,4 @@
-import { buildConfirmationEmail, posterFileForCode } from '../utils/registration-emails'
+import { buildConfirmationEmail, CONFIRMATION_POSTER_FILE } from '../utils/registration-emails'
 
 // Dev-only preview of the registration confirmation email.
 // Open: /api/email-preview            (defaults: IIT Kanpur sample)
@@ -19,8 +19,7 @@ export default defineEventHandler((event) => {
     college: typeof q.college === 'string' ? q.college : '',
   }
 
-  const posterUrl = `/${posterFileForCode(reg)}`
-  const posterImgHtml = `<div style="padding:0 24px 8px"><img src="${posterUrl}" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
+  const posterImgHtml = `<div style="padding:0 24px 8px"><img src="/${CONFIRMATION_POSTER_FILE}" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
 
   const { html } = buildConfirmationEmail(reg, { posterImgHtml, qrSrc: '/wa-channel-qr.png' })
 

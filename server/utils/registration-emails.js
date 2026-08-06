@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 // Nuxt alias, not a relative path: Nitro rewrites this module's location in the
 // dev build, which makes '../../data/...' resolve outside the project.
-import { WHATSAPP_CHANNEL_URL } from '~/data/successEngineering.js'
+import { WHATSAPP_CHANNEL_URL, journey } from '~/data/successEngineering.js'
 
 // Per-college access codes. Keep in sync with data/successEngineering.js
 // (duplicated here so the server bundle has no cross-dir import dependency).
@@ -38,12 +38,11 @@ const collegeFromCode = (reg) => {
   return couponColleges[normCode(reg)] || (reg.college || '').trim() || ''
 }
 
-// Each valid code has a college-specific poster at /posters/<CODE>.png.
-// Unknown codes fall back to the generic poster.
-export const posterFileForCode = (reg) => {
-  const code = normCode(reg)
-  return couponColleges[code] ? `posters/${code}.png` : 'se-poster.png'
-}
+// One poster for every confirmation, whatever college the registrant is from.
+// Replaces the old per-college artwork, which had grown incomplete: codes added
+// for the Academic Session had no poster of their own and silently fell through
+// to the previous edition's generic image.
+export const CONFIRMATION_POSTER_FILE = 'posters/se-2026-confirmation.jpg'
 
 // Owned by data/successEngineering.js — that file is import-safe from client
 // components, whereas this module pulls in nodemailer. Re-exported here so
@@ -121,16 +120,55 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
 
   const subject = `Your ${eventName} registration is confirmed, ${firstName}`
 
+  // Session line-up, read from the same data the site's roadmap uses so the two
+  // can't drift. The weekday is dropped: it's useful on the roadmap, but here it
+  // makes each line long enough to wrap on a phone.
+  const sessions = journey
+    .filter((s) => s.kind === 'session')
+    .map((s, i) => ({
+      no: String(i + 1).padStart(2, '0'),
+      title: s.title,
+      topic: s.topic,
+      date: (s.date || '').split('·')[0].trim(),
+    }))
+
+  const sessionsText =
+    `Event reminders:\n` +
+    sessions.map((s) => `${s.no}  ${s.title} — ${s.topic} · ${s.date}`).join('\n') +
+    `\n\n`
+
+  const sessionsHtml = `
+              <div style="border:1px solid #ececf2;border-radius:12px;padding:18px 16px;margin:20px 0">
+                <p style="margin:0 0 4px;font-weight:bold;color:#15171c;font-size:15px">Event reminders</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">
+                  ${sessions
+                    .map(
+                      (s, i) => `<tr>
+                    <td valign="top" width="34" style="padding:12px 10px 12px 0;font-size:16px;font-weight:bold;color:#D61C75;${
+                      i ? 'border-top:1px solid #f0f0f5;' : ''
+                    }">${s.no}</td>
+                    <td valign="top" style="padding:12px 0;font-size:14px;color:#444;line-height:1.5;${
+                      i ? 'border-top:1px solid #f0f0f5;' : ''
+                    }">
+                      <strong style="color:#15171c">${escapeHtml(s.title)}</strong> — ${escapeHtml(s.topic)}<br/>
+                      <span style="color:#7d8290;font-size:13px">${escapeHtml(s.date)}</span>
+                    </td>
+                  </tr>`
+                    )
+                    .join('')}
+                </table>
+              </div>`
+
   const text =
     `Hi ${reg.name},\n\n` +
     `Your registration for ${eventName} (Building the Human Edge in the Age of AI) is confirmed. Your seat is reserved.\n\n` +
     collegeLineText +
     `Next step — follow the WhatsApp channel:\n` +
     `All session links and reminders are shared in our WhatsApp channel, so please follow it now to make sure you don't miss any session:\n${whatsappUrl}\n\n` +
-    `If you have any questions, just reply to this email and we'll help.\n\n` +
-    `Warm regards,\nTeam Gita Unlocked\n\n` +
+    sessionsText +
+    `Warm regards,\nTeam ${eventName}\n\n` +
     `—\n` +
-    `You're receiving this email because you registered for ${eventName} at gitaunlocked.com.`
+    `You're receiving this email because you registered for ${eventName}.`
 
   const html = `
         <div style="margin:0;background:#f4f5f8;padding:24px 0;font-family:Arial,Helvetica,sans-serif">
@@ -153,14 +191,12 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
                 <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Follow the WhatsApp channel</a>
                 ${qrBlockHtml}
               </div>
+              ${sessionsHtml}
 
-              <p style="color:#555">If you have any questions, just reply to this email — we're happy to help.</p>
-              <p style="margin-top:22px;color:#15171c">Warm regards,<br/><strong>Team Gita Unlocked</strong></p>
+              <p style="margin-top:22px;color:#15171c">Warm regards,<br/><strong>Team ${eventName}</strong></p>
             </div>
             <div style="padding:18px 24px;background:#f4f5f8;color:#8a8f98;text-align:center;font-size:12px;line-height:1.6">
-              You're receiving this email because you registered for ${eventName} at
-              <a href="https://gitaunlocked.com" style="color:#8a8f98">gitaunlocked.com</a>.<br/>
-              © ${new Date().getFullYear()} Gita Unlocked
+              You're receiving this email because you registered for ${eventName}.
             </div>
           </div>
         </div>`
@@ -195,15 +231,11 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
     const from = MAIL_FROM || SMTP_USER
     const eventName = 'Success Engineering'
 
-    // Embed the college-specific poster inline (cid) and also attach it.
+    // Embed the poster inline (cid) and also attach it.
     const baseUrl = clean(opts.baseUrl) || clean(process.env.PUBLIC_BASE_URL)
-    // Not every valid access code has bespoke poster artwork yet, so fall back
-    // to the generic poster rather than sending an email with no image at all.
-    const posterBuffer =
-      (await loadPoster(posterFileForCode(reg), baseUrl)) ||
-      (await loadPoster('se-poster.png', baseUrl))
+    const posterBuffer = await loadPoster(CONFIRMATION_POSTER_FILE, baseUrl)
     const attachments = posterBuffer
-      ? [{ filename: 'Success-Engineering.png', content: posterBuffer, cid: 'sePoster' }]
+      ? [{ filename: 'Success-Engineering-2026.jpg', content: posterBuffer, cid: 'sePoster' }]
       : []
     const posterImgHtml = posterBuffer
       ? `<div style="padding:0 24px 8px"><img src="cid:sePoster" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`

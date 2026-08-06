@@ -188,7 +188,7 @@ export const journey = [
     label: "Session 1",
     title: "The Success Code",
     date: "9 August 2026 · Sunday",
-    topic: "AI, Careers & Building Your Future",
+    topic: "AI, Careers & Future Readiness",
   },
   {
     kind: "session",
