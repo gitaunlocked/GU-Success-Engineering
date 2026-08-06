@@ -63,8 +63,13 @@ export const renderForCode = (code) => {
   let html = read(MASTER_HTML)
   let text = read(MASTER_TEXT)
 
-  if (!html.includes(TEMPLATE_CODE)) {
-    throw new Error(`${MASTER_HTML} no longer contains ${TEMPLATE_CODE}`)
+  // Only the code inside a registration link is the reader's own. The template
+  // also prints IITK26_SE in the table of every institution's code, and that
+  // row belongs to Kanpur no matter who is reading, so it is left alone.
+  const linkToken = `code=${TEMPLATE_CODE}`
+
+  if (!html.includes(linkToken)) {
+    throw new Error(`${MASTER_HTML} no longer contains ${linkToken} links`)
   }
 
   if (!posterRef().test(html)) {
@@ -76,12 +81,12 @@ export const renderForCode = (code) => {
   html = html.replace(posterRef(), posterFileFor(code))
 
   if (code !== TEMPLATE_CODE) {
-    html = html.replaceAll(TEMPLATE_CODE, code)
-    text = text.replaceAll(TEMPLATE_CODE, code)
+    html = html.replaceAll(linkToken, `code=${code}`)
+    text = text.replaceAll(linkToken, `code=${code}`)
   }
 
-  const leftovers = code === TEMPLATE_CODE ? 0 : html.split(TEMPLATE_CODE).length - 1
-  if (leftovers) throw new Error(`${leftovers} ${TEMPLATE_CODE} references survived the rewrite`)
+  const leftovers = code === TEMPLATE_CODE ? 0 : html.split(linkToken).length - 1
+  if (leftovers) throw new Error(`${leftovers} ${linkToken} links survived the rewrite`)
 
   return { html, text, college: couponColleges[code] }
 }
