@@ -6,6 +6,13 @@
 //   npm run emails:build              # every college that has a poster
 //   npm run emails:build -- IITK26_SE # just one
 //
+// Each college gets two files. <CODE>.html goes straight to students;
+// <CODE>-forward.html is the same email behind a short note asking an office
+// bearer to forward it on, for when we only have the secretary's address.
+// Override who that note addresses with --role:
+//
+//   npm run emails:build -- IITK26_SE --role "Vice President"
+//
 // Colleges whose poster is missing are skipped: each poster carries its own
 // access code in a "USE CODE" badge, so sending another college's artwork would
 // print the wrong code for the reader.
@@ -21,9 +28,22 @@ import {
   renderForCode,
   GENERATED_DIR,
   TEMPLATE_CODE,
+  FORWARD_ROLE,
 } from './lib/outreach.mjs'
 
-const args = process.argv.slice(2).map((a) => a.trim().toUpperCase()).filter(Boolean)
+const argv = process.argv.slice(2)
+
+const roleFlag = argv.indexOf('--role')
+const role = roleFlag === -1 ? FORWARD_ROLE : argv[roleFlag + 1]
+if (roleFlag !== -1 && !role) {
+  console.error('\n  --role needs a value, e.g. --role "Vice President"\n')
+  process.exit(1)
+}
+
+const args = argv
+  .filter((a, i) => i !== roleFlag && i !== roleFlag + 1)
+  .map((a) => a.trim().toUpperCase())
+  .filter(Boolean)
 
 const requested = args.length ? args : activeCodes()
 const unknown = requested.filter((c) => !couponColleges[c])
@@ -47,6 +67,11 @@ for (const code of requested) {
   const { html, text, college } = renderForCode(code)
   writeFileSync(resolve(outDir, `${code}.html`), html, 'utf-8')
   writeFileSync(resolve(outDir, `${code}.txt`), text, 'utf-8')
+
+  const fwd = renderForCode(code, { forward: true, role })
+  writeFileSync(resolve(outDir, `${code}-forward.html`), fwd.html, 'utf-8')
+  writeFileSync(resolve(outDir, `${code}-forward.txt`), fwd.text, 'utf-8')
+
   written.push({ code, college })
 }
 
@@ -54,7 +79,7 @@ console.log(`\n  master template: emails/college-outreach.html (written for ${TE
 console.log(`  output:          ${GENERATED_DIR}/\n`)
 
 if (written.length) {
-  console.log(`  built ${written.length}:`)
+  console.log(`  built ${written.length} (plus a -forward copy addressed to the ${role}):`)
   for (const w of written) console.log(`    ${w.code.padEnd(12)} ${w.college}`)
 }
 

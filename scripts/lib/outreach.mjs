@@ -54,10 +54,42 @@ const read = (file) => {
   return readFileSync(path, 'utf-8')
 }
 
+// Colleges are often reached through a student office bearer who forwards the
+// mail to the batch lists. That covering note sits above the email proper,
+// divided by a rule, and is deliberately plain: it should read as a line typed
+// by a person rather than part of the designed campaign below it.
+export const FORWARD_ROLE = 'General Secretary'
+
+const forwardNoteHtml = (role) => {
+  const p = 'margin:0 0 14px;font-size:15px;line-height:1.65;color:#33405e'
+  return (
+    '<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:24px 12px 0">' +
+    `<p style="${p}">Dear ${role},</p>` +
+    `<p style="${p}">Please forward this mail to the students list.</p>` +
+    `<p style="${p}">Regards,<br>Team Success Engineering</p>` +
+    '<hr style="border:none;border-top:1px solid #c9cfdd;margin:24px 0 0">' +
+    '</div>'
+  )
+}
+
+const forwardNoteText = (role) =>
+  [
+    `Dear ${role},`,
+    '',
+    'Please forward this mail to the students list.',
+    '',
+    'Regards,',
+    'Team Success Engineering',
+    '',
+    '-'.repeat(56),
+    '',
+    '',
+  ].join('\n')
+
 // Rewrites the master template for one college: the six links that carry the
 // access code, and the poster URL. Throws rather than returning a half-rewritten
 // email, since a wrong code on the poster is worse than no email at all.
-export const renderForCode = (code) => {
+export const renderForCode = (code, { forward = false, role = FORWARD_ROLE } = {}) => {
   if (!couponColleges[code]) throw new Error(`unknown access code: ${code}`)
 
   let html = read(MASTER_HTML)
@@ -87,6 +119,17 @@ export const renderForCode = (code) => {
 
   const leftovers = code === TEMPLATE_CODE ? 0 : html.split(linkToken).length - 1
   if (leftovers) throw new Error(`${leftovers} ${linkToken} links survived the rewrite`)
+
+  if (forward) {
+    // The note goes inside the template's outer wrapper so that pasting the
+    // result into Gmail keeps note and email as one body.
+    const openWrapper = '<div dir="ltr">'
+    if (!html.startsWith(openWrapper)) {
+      throw new Error(`${MASTER_HTML} no longer starts with ${openWrapper}; cannot place the forwarding note`)
+    }
+    html = openWrapper + forwardNoteHtml(role) + html.slice(openWrapper.length)
+    text = forwardNoteText(role) + text
+  }
 
   return { html, text, college: couponColleges[code] }
 }
