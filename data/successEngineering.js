@@ -302,6 +302,46 @@ export const contact = {
   youtube: "https://www.youtube.com/@GitaUnlocked-w8n",
 };
 
+// People a student can reach directly, shown in the Contact section.
+// `phone` is displayed as written; the tel: link strips the spaces.
+export const contactPeople = [
+  {
+    name: "Mr. Srinivas Kandula",
+    role: "PD Engineer, Texas Instruments",
+    detail: "Alumnus, IIT BHU",
+    phone: "+91 81256 30802",
+    email: "s-kandula@ti.com",
+  },
+  {
+    name: "Mr. Shantanu Tiwari",
+    role: "Founder, Brightstudio.io",
+    detail: "Alumnus, IIT Guwahati",
+    phone: "+91 93891 72531",
+    email: "shantanu.tiwari@iitg.ac.in",
+  },
+  {
+    name: "Mr. Anurag Pindiproli",
+    role: "AI Engineer, Cisco",
+    detail: "Alumnus, IIIT Lucknow",
+    phone: "+91 93475 09554",
+    email: "anuanura@cisco.com",
+  },
+  {
+    name: "Mr. Animesh Dhara",
+    role: "Embedded SW Engineer, Texas Instruments",
+    detail: "Alumnus, Jadavpur University",
+    phone: "+91 62978 62916",
+    email: "a-dhara@ti.com",
+  },
+  {
+    name: "Mr. Chaitanya Koduri",
+    role: "Digital Design Engineer, Texas Instruments",
+    detail: "Alumnus, IIT BHU",
+    phone: "+91 94938 46111",
+    email: "k-chaitanya@ti.com",
+  },
+];
+
 // Registration form — college year options
 export const yearOptions = [
   "1st Year",

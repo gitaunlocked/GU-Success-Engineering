@@ -720,7 +720,59 @@
     </section>
 
     <!-- ===================== FOOTER ===================== -->
-    <footer id="contact" class="relative bg-gray-50 pt-14">
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">We're Here to Help</p>
+          <h2 class="section-title">Contact Us</h2>
+          <p class="mt-3 text-gray-600">Have a question about the series or your registration? Reach out to any of us directly.</p>
+        </div>
+
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="c in contactPeople"
+            :key="c.email"
+            class="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm card-hover"
+            v-motion="fadeUp"
+          >
+            <div class="flex items-center gap-4">
+              <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-sm font-bold brand-gradient-text">
+                {{ initials(c.name) }}
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-base font-semibold text-gray-900 leading-snug">{{ c.name }}</h3>
+                <p class="mt-0.5 text-sm text-gray-600 leading-snug">{{ c.role }}</p>
+              </div>
+            </div>
+
+            <span v-if="c.detail" class="mt-4 self-start rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ c.detail }}</span>
+
+            <!-- mt-auto pins this block to the bottom so the divider lines up
+                 across a row even when a card has no alumnus pill; pt-5 keeps a
+                 minimum gap when the card above is full. -->
+            <div class="mt-auto pt-5">
+            <div class="space-y-2.5 border-t border-gray-100 pt-4">
+              <a :href="`tel:${c.phone.replace(/\s+/g, '')}`" class="contact-link">
+                <span class="contact-ico">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.5 6.5c0-1.1.9-2 2-2h2.2c.9 0 1.7.6 1.9 1.5l.7 2.6c.2.7 0 1.5-.6 2l-1.3 1a14 14 0 0 0 5.9 5.9l1-1.3c.5-.6 1.3-.8 2-.6l2.6.7c.9.2 1.5 1 1.5 1.9v2.2c0 1.1-.9 2-2 2A17.5 17.5 0 0 1 2.5 6.5Z"/></svg>
+                </span>
+                {{ c.phone }}
+              </a>
+              <a :href="`mailto:${c.email}`" class="contact-link">
+                <span class="contact-ico">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m3.5 7 8.5 6 8.5-6"/></svg>
+                </span>
+                <span class="truncate">{{ c.email }}</span>
+              </a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="relative bg-gray-50 pt-14">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
         <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="mx-auto w-56 sm:w-64 h-auto" />
         <!-- Tagline is longer than the previous one, so tracking is eased
@@ -749,6 +801,7 @@ import {
   team,
   faqs,
   contact,
+  contactPeople,
   yearOptions,
   courseOptions,
   genderOptions,
@@ -1261,6 +1314,18 @@ const submit = async () => {
   .countdown-pulse {
     animation: none;
   }
+}
+
+/* Contact card phone/email rows. min-w-0 lets the long addresses truncate
+   instead of stretching the card. */
+.contact-link {
+  @apply flex min-w-0 items-center gap-2.5 text-sm text-gray-700 transition hover:text-[#D61C75];
+}
+.contact-ico {
+  @apply grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition;
+}
+.contact-link:hover .contact-ico {
+  @apply bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white;
 }
 
 .info-card {
