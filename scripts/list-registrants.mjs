@@ -1,10 +1,28 @@
 // Reads the Success Engineering registrations and prints them as a table plus
 // a CSV. Read-only: it never writes to the database.
+//
+//   node scripts/list-registrants.mjs
+//   node scripts/list-registrants.mjs --exclude IITK26_SE --out non-iitk.csv
+//   node scripts/list-registrants.mjs --only "IIT BHU"
+//
+// --exclude and --only match either the college name or the access code, so
+// "IIT Kanpur" and "IITK26_SE" select the same people. Both are repeatable.
 import { MongoClient } from 'mongodb';
 import { writeFileSync } from 'fs';
 import { config } from 'dotenv';
 
 config();
+
+const argv = process.argv.slice(2);
+const flagValues = (name) =>
+  argv.reduce((acc, a, i) => (a === name && argv[i + 1] ? [...acc, argv[i + 1]] : acc), []);
+
+const excludes = flagValues('--exclude').map((v) => v.toLowerCase());
+const onlys = flagValues('--only').map((v) => v.toLowerCase());
+const outFile = flagValues('--out')[0] || 'registrants.csv';
+
+const keysOf = (r) => [r.college, r.institute, r.couponCode, r.code].filter(Boolean).map((v) => String(v).toLowerCase());
+const matches = (r, list) => keysOf(r).some((k) => list.includes(k));
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB || 'gitaunlocked';
@@ -19,10 +37,16 @@ const client = new MongoClient(uri);
 await client.connect();
 const db = client.db(dbName);
 
-const rows = await db.collection(collName).find({}).sort({ createdAt: 1 }).toArray();
+const all = await db.collection(collName).find({}).sort({ createdAt: 1 }).toArray();
+
+const rows = all.filter(
+  (r) => (!onlys.length || matches(r, onlys)) && (!excludes.length || !matches(r, excludes))
+);
 
 console.log(`collection: ${dbName}.${collName}`);
-console.log(`total registrants: ${rows.length}\n`);
+if (onlys.length) console.log(`only:    ${onlys.join(', ')}`);
+if (excludes.length) console.log(`exclude: ${excludes.join(', ')}`);
+console.log(`registrants: ${rows.length}${rows.length !== all.length ? ` of ${all.length}` : ''}\n`);
 
 if (rows.length) {
   const fmt = (d) =>
@@ -52,7 +76,10 @@ if (rows.length) {
     ['WhatsApp', (r) => r.whatsapp],
     ['Year', (r) => r.year],
     ['Course', (r) => r.course],
+    // Free-text on the form, so expect anything from "CSE" to a stray word.
+    ['Branch', (r) => r.branch],
     ['Gender', (r) => r.gender],
+    ['City', (r) => r.city],
     ['Registered (IST)', (r) => fmt(r.createdAt)],
   ];
 
@@ -64,8 +91,8 @@ if (rows.length) {
 
   // The BOM is what makes Excel read the file as UTF-8 instead of mangling
   // any non-ASCII name.
-  writeFileSync('registrants.csv', '\uFEFF' + csv, 'utf-8');
-  console.log('\nCSV written to registrants.csv');
+  writeFileSync(outFile, '\uFEFF' + csv, 'utf-8');
+  console.log(`\nCSV written to ${outFile}`);
 
   const byCollege = rows.reduce((acc, r) => {
     const k = r.college || r.couponCode || 'Unknown';

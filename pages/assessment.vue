@@ -5,7 +5,7 @@
 
     <header class="relative z-10 mx-auto flex max-w-3xl items-center justify-center px-4 pt-10">
       <a href="/" class="flex items-center">
-        <img src="/logo2.png" alt="Gita Unlocked" class="h-12 w-auto sm:h-14" />
+        <img src="/logo-se-mark.png" alt="Success Engineering" class="h-20 w-auto sm:h-24" />
       </a>
     </header>
 
@@ -45,6 +45,10 @@
               <div>
                 <label for="phone" class="block text-sm font-semibold text-gray-700">Phone number <span class="text-[#D61C75]">*</span></label>
                 <input id="phone" v-model="contact.phone" type="tel" required class="field-input" placeholder="10-digit mobile number" />
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700">Institute email ID <span class="text-[#D61C75]">*</span></label>
+                <input id="email" v-model="contact.email" type="email" required class="field-input" placeholder="username@collegedomain" />
               </div>
               <div>
                 <label for="college" class="block text-sm font-semibold text-gray-700">College <span class="text-[#D61C75]">*</span></label>
@@ -217,17 +221,20 @@ const phase = ref('intro')
 const stepIndex = ref(0)
 const answers = ref({})
 const followupText = ref('')
-const contact = ref({ name: '', phone: '', college: '' })
+const contact = ref({ name: '', phone: '', email: '', college: '' })
 const contactError = ref('')
 const results = ref(null)
 const submitting = ref(false)
 const submitError = ref('')
 
 const phoneDigits = (v) => v.replace(/\D/g, '')
+// Deliberately loose: institute domains vary too much to whitelist.
+const looksLikeEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
 
 const canStart = computed(() =>
   contact.value.name.trim().length > 0
   && contact.value.college.trim().length > 0
+  && looksLikeEmail(contact.value.email)
   && phoneDigits(contact.value.phone).length >= 10,
 )
 
@@ -253,6 +260,10 @@ function startQuiz() {
   }
   if (phoneDigits(contact.value.phone).length < 10) {
     contactError.value = 'Please enter a valid 10-digit phone number.'
+    return
+  }
+  if (!looksLikeEmail(contact.value.email)) {
+    contactError.value = 'Please enter a valid institute email ID.'
     return
   }
   phase.value = 'quiz'
@@ -310,6 +321,7 @@ async function submitAssessment() {
       answers: answers.value,
       name: contact.value.name.trim(),
       phone: contact.value.phone.trim(),
+      email: contact.value.email.trim(),
       college: contact.value.college.trim(),
     }
 
@@ -332,7 +344,7 @@ function retake() {
   stepIndex.value = 0
   answers.value = {}
   followupText.value = ''
-  contact.value = { name: '', phone: '', college: '' }
+  contact.value = { name: '', phone: '', email: '', college: '' }
   contactError.value = ''
   results.value = null
   submitError.value = ''

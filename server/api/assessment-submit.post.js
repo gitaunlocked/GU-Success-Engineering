@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
 
   const name = str(body?.name, 120)
   const phone = str(body?.phone, 20)
+  const email = str(body?.email, 200).toLowerCase()
   const college = str(body?.college, 200)
 
   if (!name) {
@@ -26,6 +27,10 @@ export default defineEventHandler(async (event) => {
   }
   if (phone.replace(/\D/g, '').length < 10) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter a valid phone number.' })
+  }
+  // Institute domains are too varied to whitelist, so only the shape is checked.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid institute email ID.' })
   }
 
   const required = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
@@ -42,6 +47,7 @@ export default defineEventHandler(async (event) => {
     assessment: 'success-profile',
     name,
     phone,
+    email,
     college,
     answers: serialized,
     scores: {

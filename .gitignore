@@ -20,4 +20,5 @@ server/data/
 scripts/lists/
 
 # Registrant exports pulled from MongoDB (names, emails, phone numbers)
-registrants.csv
+registrants*.csv
+*-registrants.csv
