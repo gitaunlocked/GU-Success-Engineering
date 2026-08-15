@@ -172,10 +172,7 @@
         </div>
 
         <div class="mt-8 rounded-[2rem] bg-white p-7 ring-1 ring-gray-100">
-          <p class="text-lg font-bold text-gray-900">Step into a new way of seeing</p>
-          <p class="mt-2 text-sm text-gray-600">Join Session 2 — The Hidden Dimension, live with Yashas Tadikamalla.</p>
-          <a href="/session" class="btn-brand mt-6 w-full justify-center py-3.5">Go to Session Room</a>
-          <button type="button" class="btn-ghost mt-3 w-full justify-center py-3" @click="retake">
+          <button type="button" class="btn-ghost w-full justify-center py-3" @click="retake">
             Retake Assessment
           </button>
         </div>
