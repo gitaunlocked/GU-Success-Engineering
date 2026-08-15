@@ -129,12 +129,8 @@
           <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Thank you!</h2>
           <p class="mt-4 text-base leading-relaxed text-gray-600">
             Your application to <strong>The Human Advantage Ecosystem</strong> has been received.
-            We'll get in touch if you've been shortlisted for the next stage.
+            We will contact the shortlisted candidates.
           </p>
-          <p class="mt-3 text-sm text-gray-500">Keep an eye on your phone and email.</p>
-
-          <a href="/session" class="btn-brand mt-8 w-full justify-center py-3.5">Go to Session Room</a>
-          <a href="/" class="btn-ghost mt-3 w-full justify-center py-3">Back to Home</a>
         </div>
       </section>
 
