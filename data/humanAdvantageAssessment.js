@@ -1,19 +1,22 @@
-// The Human Advantage Series — Application (Shortlisting) Assessment
+// The Human Advantage Ecosystem — Application (Shortlisting) Assessment
 // Shareable link: https://www.gitaunlocked.com/human-advantage
 //
 // Design notes:
-//   - 8 multiple-choice questions (q1–q8) + 2 short-response questions (q9–q10).
+//   - 5 multiple-choice questions + 2 short-response questions. All compulsory.
 //   - There is NO scoring. Responses are collected for shortlisting only.
 //   - No section tags / labels are shown — questions stand on their own.
+//   - Question ids are historical, not sequential: applications collected in the
+//     earlier round used q1–q10, so retained questions keep their original id and
+//     the Independence Day question was added as q11. Never reuse a retired id.
 
 export const assessmentMeta = {
-  title: "The Human Advantage Series",
+  title: "The Human Advantage Ecosystem",
   subtitle:
     "Application Assessment — a short reflection to help us understand you. Selected applicants will be contacted.",
-  duration: "10 Questions • 5 Minutes",
+  duration: "7 Questions • 4 Minutes",
   sharePath: "/human-advantage",
   instructions:
-    "Answer honestly — there are no right or wrong answers. This is an application, and we'll reach out to those who are shortlisted.",
+    "Answer honestly — there are no right or wrong answers. Every question is required. This is an application, and we'll reach out to those who are shortlisted.",
 };
 
 export const questions = [
@@ -62,47 +65,14 @@ export const questions = [
     ],
   },
   {
-    id: "q5",
-    text: "Have you ever attended any session, workshop, course, or discussion related to topics such as self-development, purpose, happiness, philosophy, mindfulness, or personal growth?",
+    id: "q11",
+    text: "As India steps into the age of AI, the generation graduating today will shape what the country offers the world. As an emerging leader from India, where do you believe India can contribute most meaningfully?",
     type: "choice",
     options: [
-      { id: "a", label: "Frequently" },
-      { id: "b", label: "A few times" },
-      { id: "c", label: "Once or twice" },
-      { id: "d", label: "Never" },
-    ],
-  },
-  {
-    id: "q6",
-    text: "When making an important decision, what influences you the most?",
-    type: "choice",
-    options: [
-      { id: "a", label: "Logic and facts" },
-      { id: "b", label: "Advice from others" },
-      { id: "c", label: "My values and principles" },
-      { id: "d", label: "A combination of the above" },
-    ],
-  },
-  {
-    id: "q7",
-    text: "Which question interests you the most?",
-    type: "choice",
-    options: [
-      { id: "a", label: "How can I build a successful career?" },
-      { id: "b", label: "How can I become a better leader?" },
-      { id: "c", label: "What creates lasting happiness and fulfillment?" },
-      { id: "d", label: "How can society solve major future challenges?" },
-    ],
-  },
-  {
-    id: "q8",
-    text: "How often do you spend time reflecting on your life, choices, or future direction?",
-    type: "choice",
-    options: [
-      { id: "a", label: "Regularly" },
-      { id: "b", label: "Occasionally" },
-      { id: "c", label: "Rarely" },
-      { id: "d", label: "Almost never" },
+      { id: "a", label: "Building technology and enterprise the world depends on" },
+      { id: "b", label: "Setting the standard for the ethical, humane use of AI" },
+      { id: "c", label: "Sharing its timeless wisdom on purpose, character, and inner growth" },
+      { id: "d", label: "Creating opportunity and dignity for every citizen at home first" },
     ],
   },
   {
@@ -113,7 +83,7 @@ export const questions = [
   },
   {
     id: "q10",
-    text: "Why would you like to be selected for The Human Advantage Series? What do you hope to gain from this journey?",
+    text: "Why would you like to be selected for The Human Advantage Ecosystem? What do you hope to gain from this journey?",
     type: "text",
     placeholder: "3–5 sentences…",
   },

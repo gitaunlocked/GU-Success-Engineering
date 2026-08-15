@@ -1,10 +1,14 @@
-// The Human Advantage Series — server-side response handling.
+// The Human Advantage Ecosystem — server-side response handling.
 //
 // Kept self-contained inside server/utils (no cross-dir import of /data) so the
 // Nitro server bundle has no fragile relative-path dependency. Keep the
 // question text / option labels in sync with data/humanAdvantageAssessment.js.
 //
 // There is NO scoring here — this assessment only collects and stores answers.
+//
+// Ids are historical, not sequential: q5–q8 were retired after the earlier round
+// and q11 was added in their place. Never reuse a retired id — stored records
+// from the earlier round still carry the old meaning.
 
 const QUESTIONS = {
   q1: {
@@ -43,40 +47,13 @@ const QUESTIONS = {
       d: 'Assume this feeling is normal and ignore it',
     },
   },
-  q5: {
-    text: 'Have you ever attended any session, workshop, course, or discussion related to topics such as self-development, purpose, happiness, philosophy, mindfulness, or personal growth?',
+  q11: {
+    text: 'As India steps into the age of AI, the generation graduating today will shape what the country offers the world. As an emerging leader from India, where do you believe India can contribute most meaningfully?',
     options: {
-      a: 'Frequently',
-      b: 'A few times',
-      c: 'Once or twice',
-      d: 'Never',
-    },
-  },
-  q6: {
-    text: 'When making an important decision, what influences you the most?',
-    options: {
-      a: 'Logic and facts',
-      b: 'Advice from others',
-      c: 'My values and principles',
-      d: 'A combination of the above',
-    },
-  },
-  q7: {
-    text: 'Which question interests you the most?',
-    options: {
-      a: 'How can I build a successful career?',
-      b: 'How can I become a better leader?',
-      c: 'What creates lasting happiness and fulfillment?',
-      d: 'How can society solve major future challenges?',
-    },
-  },
-  q8: {
-    text: 'How often do you spend time reflecting on your life, choices, or future direction?',
-    options: {
-      a: 'Regularly',
-      b: 'Occasionally',
-      c: 'Rarely',
-      d: 'Almost never',
+      a: 'Building technology and enterprise the world depends on',
+      b: 'Setting the standard for the ethical, humane use of AI',
+      c: 'Sharing its timeless wisdom on purpose, character, and inner growth',
+      d: 'Creating opportunity and dignity for every citizen at home first',
     },
   },
   q9: {
@@ -84,12 +61,12 @@ const QUESTIONS = {
     type: 'text',
   },
   q10: {
-    text: 'Why would you like to be selected for The Human Advantage Series? What do you hope to gain from this journey?',
+    text: 'Why would you like to be selected for The Human Advantage Ecosystem? What do you hope to gain from this journey?',
     type: 'text',
   },
 }
 
-export const choiceQuestionIds = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
+export const choiceQuestionIds = ['q1', 'q2', 'q3', 'q4', 'q11']
 export const textQuestionIds = ['q9', 'q10']
 
 // Builds a readable, self-describing record of the submitted answers.
