@@ -17,8 +17,16 @@ server/data/
 
 # Rendered outreach previews and recipient lists (contain student addresses)
 .outreach-preview-*.html
+.preview/
 scripts/lists/
 
 # Registrant exports pulled from MongoDB (names, emails, phone numbers)
 registrants*.csv
 *-registrants.csv
+registrant-emails.txt
+*-emails.txt
+assessment-responses*.csv
+
+# Zoom participant lists (student names)
+attendance/
+*.xlsx
