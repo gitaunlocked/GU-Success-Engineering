@@ -306,20 +306,6 @@ export const contact = {
 // `phone` is displayed as written; the tel: link strips the spaces.
 export const contactPeople = [
   {
-    name: "Mr. Srinivas Kandula",
-    role: "PD Engineer, Texas Instruments",
-    detail: "Alumnus, IIT BHU",
-    phone: "+91 81256 30802",
-    email: "s-kandula@ti.com",
-  },
-  {
-    name: "Mr. Shantanu Tiwari",
-    role: "Founder, Brightstudio.io",
-    detail: "Alumnus, IIT Guwahati",
-    phone: "+91 93891 72531",
-    email: "shantanu.tiwari@iitg.ac.in",
-  },
-  {
     name: "Mr. Anurag Pindiproli",
     role: "AI Engineer, Cisco",
     detail: "Alumnus, IIIT Lucknow",
@@ -334,11 +320,11 @@ export const contactPeople = [
     email: "a-dhara@ti.com",
   },
   {
-    name: "Mr. Chaitanya Koduri",
-    role: "Digital Design Engineer, Texas Instruments",
+    name: "Mr. Srinivas Kandula",
+    role: "PD Engineer, Texas Instruments",
     detail: "Alumnus, IIT BHU",
-    phone: "+91 94938 46111",
-    email: "k-chaitanya@ti.com",
+    phone: "+91 81256 30802",
+    email: "s-kandula@ti.com",
   },
 ];
 
