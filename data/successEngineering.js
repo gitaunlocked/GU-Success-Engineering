@@ -139,7 +139,7 @@ export const speakers = [
   {
     name: "Mr. Vaibhav Joshi",
     designation: "AI Operations Specialist, GlobalLogic",
-    designation2: "MBA, ISESG Paris",
+    designation2: "MBA, IESEG Paris",
     company: "GlobalLogic",
     companyLogo: "/logos/globallogic.svg",
     photo: "/speakers/vaibhav-joshi.jpg",
