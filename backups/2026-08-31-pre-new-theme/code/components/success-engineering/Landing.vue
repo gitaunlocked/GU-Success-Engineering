@@ -1,0 +1,1428 @@
+<template>
+  <div id="top" class="relative overflow-x-hidden bg-white text-gray-800 antialiased selection:bg-[#D61C75]/20">
+    <!-- ===================== NAV ===================== -->
+    <header
+      :class="[
+        'fixed top-0 inset-x-0 z-50 transition-all duration-300',
+        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-white/80 backdrop-blur-sm py-3',
+      ]"
+    >
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between">
+        <a href="#top" @click.prevent="scrollTo('top')" class="flex items-center">
+          <!-- Co-brand lockup is ~3.3:1, so height is pinned to keep the nav
+               rhythm and width is left auto — pinning both would squash it. -->
+          <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="h-12 sm:h-14 w-auto" />
+        </a>
+
+        <ul class="hidden md:flex items-center gap-9 lg:gap-12 text-lg font-medium text-gray-700">
+          <li><a href="#top" @click.prevent="scrollTo('top')" class="hover:text-[#D61C75] transition">HOME</a></li>
+          <li><a href="#about" @click.prevent="scrollTo('about')" class="hover:text-[#D61C75] transition">ABOUT US</a></li>
+          <li><a href="#contact" @click.prevent="scrollTo('contact')" class="hover:text-[#D61C75] transition">CONTACT US</a></li>
+        </ul>
+
+        <div class="hidden md:block">
+          <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand text-sm">Register Now</a>
+        </div>
+
+        <button class="md:hidden text-gray-700" @click="mobileOpen = !mobileOpen" aria-label="Toggle menu">
+          <svg v-if="!mobileOpen" class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <svg v-else class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile menu -->
+      <div v-if="mobileOpen" class="md:hidden mx-4 mt-3 rounded-2xl bg-white shadow-lg ring-1 ring-gray-100 p-5 space-y-4">
+        <a href="#top" @click.prevent="scrollTo('top')" class="block font-medium text-gray-700 hover:text-[#D61C75]">HOME</a>
+        <a href="#about" @click.prevent="scrollTo('about')" class="block font-medium text-gray-700 hover:text-[#D61C75]">ABOUT US</a>
+        <a href="#contact" @click.prevent="scrollTo('contact')" class="block font-medium text-gray-700 hover:text-[#D61C75]">CONTACT US</a>
+        <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand w-full justify-center text-sm">Register Now</a>
+      </div>
+    </header>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="relative flex items-center pt-36 pb-24 lg:min-h-screen bg-gradient-to-b from-orange-50 via-pink-50 to-white">
+      <div class="pointer-events-none absolute -top-32 -right-32 h-[34rem] w-[34rem] rounded-full bg-[#FF7A00]/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-40 h-[32rem] w-[32rem] rounded-full bg-[#7A10FF]/10 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-14 items-center">
+        <div v-motion="heroReveal" class="text-center lg:text-left">
+          <h1 class="font-bold leading-[0.95] text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight brand-gradient-text heading-script">
+            <span class="block">Success</span>
+            <span class="block">Engineering</span>
+          </h1>
+
+          <!-- Tagline / heading above the series description -->
+          <h2 class="mt-7 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 max-w-xl mx-auto lg:mx-0">
+            {{ event.tagline }}
+          </h2>
+
+          <!-- Interactive podcast series description -->
+          <p class="mt-4 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg leading-relaxed text-gray-600">
+            <!-- Pill row: original "Interactive Podcast Series" tag + the
+                 Academic Session edition badge. Wrapped in an inline-flex
+                 container so the two pills sit side by side with a small
+                 gap and wrap gracefully on narrow screens. -->
+            <span class="inline-flex flex-wrap items-center gap-2 align-middle">
+              <span class="inline-flex items-center gap-2 rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                Interactive Podcast Series
+              </span>
+              <span class="edition-badge">
+                <span class="edition-badge-dot"></span>
+                <span class="brand-gradient-text">{{ sessionEdition.badgeText }}</span>
+              </span>
+            </span>
+            <span class="mt-3 block font-bold text-gray-800">
+              A 3-part live, interactive podcast series with
+              IIT alumni, industry leaders and global technology professionals.
+            </span>
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
+            <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand">Register Now</a>
+            <a href="#speakers" @click.prevent="scrollTo('speakers')" class="btn-ghost">View Speakers</a>
+          </div>
+
+          <!-- Countdown to the first session. Client-only because the values
+               tick; the fallback holds the same footprint so the hero doesn't
+               jump once hydration swaps the real numbers in. -->
+          <div class="mt-9 max-w-md mx-auto lg:mx-0">
+            <ClientOnly>
+              <template v-if="hasStarted">
+                <p class="countdown-label">
+                  <span class="countdown-pulse"></span>{{ countdown.liveLabel }}
+                </p>
+                <p class="mt-2 text-sm text-gray-600">{{ countdown.liveNote }}</p>
+              </template>
+              <template v-else>
+                <p class="countdown-label">
+                  <span class="countdown-pulse"></span>{{ countdown.label }}
+                </p>
+                <!-- A value that changes every second is unreadable to a screen
+                     reader, so the clock is hidden from it and the plain date
+                     below carries the same information. -->
+                <div class="mt-3 grid grid-cols-4 gap-2.5 sm:gap-3" aria-hidden="true">
+                  <div v-for="part in countdownParts" :key="part.label" class="countdown-cell">
+                    <span class="countdown-num">{{ padCount(part.value) }}</span>
+                    <span class="countdown-unit">{{ part.label }}</span>
+                  </div>
+                </div>
+                <p class="sr-only">The series begins on {{ event.date }}.</p>
+              </template>
+
+              <template #fallback>
+                <p class="countdown-label"><span class="countdown-pulse"></span>{{ countdown.label }}</p>
+                <div class="mt-3 grid grid-cols-4 gap-2.5 sm:gap-3" aria-hidden="true">
+                  <div v-for="unit in ['Days', 'Hours', 'Mins', 'Secs']" :key="unit" class="countdown-cell">
+                    <span class="countdown-num">--</span>
+                    <span class="countdown-unit">{{ unit }}</span>
+                  </div>
+                </div>
+              </template>
+            </ClientOnly>
+          </div>
+
+          <div class="mt-10 grid sm:grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
+            <div class="info-card group">
+              <span class="info-ico">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
+              </span>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Start Date</p>
+                <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.date }}</p>
+              </div>
+            </div>
+            <div class="info-card group">
+              <span class="info-ico">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="13" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m9.5 9 5 3-5 3V9Z"/></svg>
+              </span>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Venue</p>
+                <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.venue }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero live-podcast visual -->
+        <div class="relative hidden lg:block" v-motion="heroReveal">
+          <!-- ambient gradient glow -->
+          <div class="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-gradient-to-br from-[#FF7A00]/25 via-[#D61C75]/20 to-[#7A10FF]/25 blur-3xl"></div>
+
+          <!-- main now-playing card -->
+          <div class="relative mx-auto max-w-md rounded-[2rem] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-8 text-white shadow-[0_30px_80px_-20px_rgba(214,28,117,0.55)]">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider backdrop-blur">
+                <span class="relative flex h-2 w-2">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70"></span>
+                  <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                </span>
+                Live Podcast
+              </span>
+              <span class="text-xs font-medium text-white/80">3 Episodes</span>
+            </div>
+
+            <!-- mic + title -->
+            <div class="mt-8 flex items-center gap-4">
+              <div class="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              </div>
+              <div>
+                <p class="text-xl font-bold leading-tight">Building the Human Edge</p>
+                <p class="text-sm text-white/80">in the Age of AI</p>
+              </div>
+            </div>
+
+            <!-- animated equalizer -->
+            <div class="mt-8 flex h-20 items-end gap-1.5">
+              <span
+                v-for="(b, i) in eqBars"
+                :key="i"
+                class="eq-bar h-full flex-1 rounded-full bg-white/85"
+                :style="{ animationDelay: b.delay, animationDuration: b.dur }"
+              ></span>
+            </div>
+
+            <!-- play + progress -->
+            <div class="mt-6 flex items-center gap-4">
+              <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-[#D61C75] shadow-md">
+                <svg class="h-5 w-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-white/25">
+                <div class="h-full w-2/5 rounded-full bg-white"></div>
+              </div>
+              <span class="text-xs font-medium text-white/80">On air</span>
+            </div>
+          </div>
+
+          <!-- floating: speaker stack -->
+          <div class="absolute -bottom-6 -left-6 z-10 rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-black/5">
+            <div class="flex items-center gap-3">
+              <div class="flex -space-x-2.5">
+                <img
+                  v-for="s in speakers"
+                  :key="s.name"
+                  :src="s.photo"
+                  :alt="s.name"
+                  class="h-8 w-8 rounded-full border-2 border-white object-cover"
+                />
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-900">Expert Speakers</p>
+                <p class="text-[11px] text-gray-500">IITs &amp; global tech</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT'S NEW ============ -->
+    <!-- Combines the "we're back, evolved" narrative (intro paragraph) with
+         the five feature cards. Replaces the earlier standalone Returning
+         banner so the whole story lives in one focused block. -->
+    <section id="whats-new" class="relative py-20 sm:py-24 bg-gray-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-3xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">Evolving Every Edition</p>
+          <h2 class="section-title">What's New</h2>
+          <p class="mt-6 text-base sm:text-lg leading-relaxed text-gray-600">{{ whatsNewIntro }}</p>
+        </div>
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="c in whatsNewCards"
+            :key="c.title"
+            class="group card-hover flex h-full items-start gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+            v-motion="fadeUp"
+          >
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition duration-300 group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white">
+              <svg v-if="c.icon === 'ai'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 10h4v4h-4zM9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
+              <svg v-else-if="c.icon === 'briefcase'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+              <svg v-else-if="c.icon === 'mic'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg>
+              <svg v-else-if="c.icon === 'clipboard'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 4V3.5A1.5 1.5 0 0 1 10.5 2h3A1.5 1.5 0 0 1 15 3.5V4M9.5 12l1.75 1.75L15 10"/></svg>
+              <svg v-else-if="c.icon === 'users'" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+              <svg v-else class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="flex-1 font-semibold text-gray-900 leading-snug">{{ c.title }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 text-center" v-motion="fadeUp">
+        <p class="kicker">Who We Are</p>
+        <h2 class="section-title">
+          <span class="brand-gradient-text">IIT · IITM · LEAD</span>
+          <span class="mt-2 block text-gray-900">Youth Potential Initiative</span>
+        </h2>
+        <p class="mt-5 text-lg sm:text-xl text-gray-600 leading-relaxed">
+          A society of intellectual minds from premier institutes &amp; industry — guiding students toward clarity, purpose, and meaningful success.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== WHY ===================== -->
+    <section id="why" class="relative py-20 sm:py-24 bg-gray-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">The Case For It</p>
+          <h2 class="section-title">Why Success Engineering?</h2>
+        </div>
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div
+            v-for="(card, i) in whyCards"
+            :key="card.title"
+            class="group card-hover rounded-2xl border border-gray-100 bg-white p-7 shadow-sm"
+            v-motion="fadeUp"
+          >
+            <div class="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white transition">
+              <svg v-if="card.icon === 'chip'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
+              <svg v-else-if="card.icon === 'trophy'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4m-5-17h10v4a5 5 0 0 1-10 0V4Zm10 1h3v2a3 3 0 0 1-3 3m-10-5H4v2a3 3 0 0 0 3 3"/></svg>
+              <svg v-else-if="card.icon === 'spark'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l1.8 4.8L18 9.6l-4.2 1.8L12 16l-1.8-4.6L6 9.6l4.2-1.8L12 3Zm6 9 .9 2.4L21 15l-2.1.6L18 18l-.9-2.4L15 15l2.1-.6L18 12Z"/></svg>
+              <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="m15 9-2 4-4 2 2-4 4-2Z"/></svg>
+            </div>
+            <h3 class="mt-5 font-semibold text-lg text-gray-900">{{ card.title }}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600">{{ card.body }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SPEAKERS ===================== -->
+    <section id="speakers" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">Learn From The Best</p>
+          <h2 class="section-title">Meet The Speakers</h2>
+          <p class="mt-4 text-gray-600">IIT alumni, industry leaders and global technology professionals guiding the series.</p>
+        </div>
+        <!-- Front-only cards (the flip-to-bio back face was removed). Five
+             speakers land as 3 + 2 on desktop; `items-stretch` + `h-full`
+             keeps both rows' cards equal height despite differing title
+             lengths. -->
+        <div class="mt-14 grid items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="s in speakers"
+            :key="s.name"
+            class="group relative flex h-full flex-col items-center overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20"
+            v-motion="fadeUp"
+          >
+            <span class="absolute inset-x-10 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
+            <div class="mx-auto h-36 w-36 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
+              <div class="h-full w-full rounded-full bg-white p-[3px]">
+                <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-3xl font-bold brand-gradient-text">
+                  {{ initials(s.name) }}
+                </div>
+              </div>
+            </div>
+            <h3 class="mt-6 text-lg font-semibold text-gray-900">{{ s.name }}</h3>
+            <p class="mt-1 text-sm text-gray-600">{{ s.designation }}</p>
+            <p v-if="s.designation2" class="mt-0.5 text-xs font-medium text-[#D61C75]">{{ s.designation2 }}</p>
+
+            <!-- Company logo + name on a clean white pill. The wrapper carries
+                 `mt-auto` so the pills align along the card bottom regardless
+                 of how many lines the name/title take. -->
+            <div class="mt-auto pt-5">
+              <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
+                <!-- Marks vary in aspect (Cisco's bars are ~3.6:1, Adobe's "A"
+                     near square), so height is fixed and width left to
+                     object-contain. max-w only guards against clamping. -->
+                <img v-if="s.companyLogo" :src="s.companyLogo" :alt="s.company" class="h-6 w-auto max-w-[96px] object-contain" />
+                <span class="text-sm font-semibold text-gray-900">{{ s.company }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SUCCESS ENGINEERING SO FAR (STATS) ============ -->
+    <!-- Animated statistics strip. Numeric values count up from 0 to their
+         target when the grid scrolls into view; each card's value also
+         slides up in a staggered sequence. String-valued items ("Hundreds",
+         "Growing") carry the same visual weight and ride the same reveal.
+         Soft brand-tinted background gives the numbers their own "moment"
+         without breaking the section rhythm. -->
+    <section id="impact" class="relative py-20 sm:py-24 bg-gradient-to-b from-white via-orange-50/40 to-white">
+      <div class="pointer-events-none absolute -top-24 -left-32 h-96 w-96 rounded-full bg-[#FF7A00]/8 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 -right-32 h-96 w-96 rounded-full bg-[#7A10FF]/8 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">Momentum &amp; Reach</p>
+          <h2 class="section-title">Success Engineering So Far</h2>
+        </div>
+
+        <div ref="statsSectionEl" class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div
+            v-for="(stat, i) in seFarStats"
+            :key="stat.label"
+            class="stat-card"
+            v-motion="fadeUp"
+          >
+            <!-- The reveal transform lives on this wrapper, never on the
+                 gradient text itself. `.stat-num` uses background-clip:text,
+                 which stops painting into descendants that create their own
+                 clipping/containing context — so the value is rendered as a
+                 single plain text node inside it. -->
+            <div class="stat-reveal" :class="{ 'is-in': statsInView }" :style="{ transitionDelay: `${i * 90}ms` }">
+              <p class="stat-num">{{ statDisplay(stat, i) }}</p>
+            </div>
+            <p class="stat-label">{{ stat.label }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GAINS ===================== -->
+    <section id="gains" class="relative py-20 sm:py-24 bg-gray-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">The Takeaways</p>
+          <h2 class="section-title">What You Will Gain</h2>
+        </div>
+        <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="(g, i) in gains"
+            :key="g.title"
+            class="group flex items-center gap-4 rounded-2xl border p-5 shadow-sm transition duration-300 hover:-translate-y-1.5"
+            :class="g.highlight
+              ? 'border-transparent bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white shadow-lg shadow-[#D61C75]/30 hover:shadow-xl hover:shadow-[#D61C75]/40'
+              : 'border-gray-100 bg-white hover:border-[#D61C75]/30 hover:shadow-xl hover:shadow-[#D61C75]/10'"
+            v-motion="fadeUp"
+          >
+            <span
+              class="grid h-12 w-12 shrink-0 place-items-center rounded-xl transition duration-300"
+              :class="g.highlight
+                ? 'bg-white/20 text-white'
+                : 'bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white'"
+            >
+              <svg v-if="g.icon === 'certificate'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-2.5 2.5L5 22l4-2 4 2-1.5-6.5M5 5h-1v14M20 5h-6"/></svg>
+              <svg v-else-if="g.icon === 'trophy'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4M7 4h10v4a5 5 0 0 1-10 0V4Zm10 1h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+              <svg v-else-if="g.icon === 'trip'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.5 20 12 5l8.5 15M12 5v15M7 20l5-6 5 6"/></svg>
+              <svg v-else-if="g.icon === 'rocket'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15c-1 0-3 .5-4 1.5C4 18 4 21 4 21s3 0 4.5-1c1-1 1.5-3 1.5-4M9 15l-3-3c1-4 5-9 9.5-9 1.5 0 2.5.5 2.5.5s.5 1 .5 2.5C18.5 10 13.5 14 9.5 15M14.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
+              <svg v-else-if="g.icon === 'users'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm13 9v-1a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+              <svg v-else-if="g.icon === 'spark'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+              <svg v-else-if="g.icon === 'frameworks'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 22V4m0 0 4-1 6 2 4-1v9l-4 1-6-2-4 1"/></svg>
+            </span>
+            <p class="font-semibold leading-snug" :class="g.highlight ? 'text-white' : 'text-gray-800'">{{ g.title }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== JOURNEY ===================== -->
+    <section id="journey" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="text-center max-w-3xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">The Roadmap</p>
+          <h2 class="section-title">Your Journey Through Success Engineering</h2>
+        </div>
+
+        <div class="relative mt-16">
+          <div class="hidden lg:block absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#D61C75]/40 to-transparent"></div>
+          <ol class="grid gap-8 lg:grid-cols-4">
+            <li v-for="(step, i) in journey" :key="step.title" class="group relative" v-motion="fadeUp">
+              <div class="flex lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
+                <span
+                  class="relative z-10 grid h-12 w-12 place-items-center rounded-full text-sm font-bold shrink-0 shadow-sm bg-white border-2 border-[#D61C75]/40 text-[#D61C75] transition duration-300 group-hover:border-transparent group-hover:text-white group-hover:bg-gradient-to-br group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF]"
+                >
+                  {{ i + 1 }}
+                </span>
+                <div class="lg:mt-6 rounded-2xl border border-gray-100 bg-white p-5 w-full shadow-sm card-hover">
+                  <p class="text-xs uppercase tracking-wider text-[#D61C75] font-semibold">{{ step.label }}</p>
+                  <h3 class="mt-1 font-semibold text-gray-900 leading-snug">{{ step.title }}</h3>
+                  <p v-if="step.date" class="mt-2 flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                    <svg class="h-3.5 w-3.5 shrink-0 text-[#D61C75]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
+                    {{ step.date }}
+                  </p>
+                  <p v-if="step.topic" class="mt-2 text-sm leading-snug text-gray-600">{{ step.topic }}</p>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TEAM ===================== -->
+    <section id="team" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">The People Behind It</p>
+          <h2 class="section-title">Meet Our Team</h2>
+        </div>
+        <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="(m, i) in team"
+            :key="m.name"
+            class="group flex flex-col items-center text-center"
+            v-motion="fadeUp"
+          >
+            <div class="h-32 w-32 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition group-hover:-translate-y-1 group-hover:shadow-lg">
+              <div class="h-full w-full rounded-full bg-white p-[3px]">
+                <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-2xl font-bold brand-gradient-text">
+                  {{ initials(m.name) }}
+                </div>
+              </div>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ m.name }}</h3>
+            <p v-if="m.role" class="mt-1 text-sm font-medium brand-gradient-text">{{ m.role }}</p>
+            <span class="mt-2 inline-block rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ m.detail }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== REGISTRATION ===================== -->
+    <section id="register" class="relative py-20 sm:py-24 bg-gradient-to-b from-pink-50 via-orange-50 to-white">
+      <div class="relative mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="text-center" v-motion="fadeUp">
+          <p class="kicker">Limited Seats</p>
+          <h2 class="section-title">Reserve Your Seat</h2>
+          <p class="mt-3 text-gray-600">Apply the <span class="font-semibold text-[#D61C75]">access code shared with you</span> below to unlock</p>
+        </div>
+
+        <div class="mt-10 rounded-3xl border border-gray-100 bg-white p-6 sm:p-9 shadow-xl">
+          <!-- Success state -->
+          <div v-if="state === 'success'" class="text-center py-10">
+            <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white">
+              <svg class="h-9 w-9" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" /></svg>
+            </div>
+            <h3 class="mt-5 text-2xl font-bold text-gray-900">Congratulations! You're in 🎉</h3>
+            <p class="mt-3 text-gray-600">Your seat for <strong class="text-[#D61C75]">Success Engineering</strong> is reserved. The Zoom link and session details will be shared on WhatsApp.</p>
+
+            <!-- WhatsApp channel — must-do step (shown here so it never gets missed in email/spam) -->
+            <div class="mx-auto mt-8 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5">
+              <p class="text-sm font-bold text-gray-900">⚠️ Important — final step</p>
+              <p class="mt-1 text-sm text-gray-600">All session links &amp; reminders are shared in our WhatsApp channel. Follow it now so you don't miss the sessions.</p>
+              <a
+                :href="whatsappUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Follow WhatsApp Channel
+              </a>
+              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to follow the channel:</p>
+              <img src="/wa-channel-qr.png" alt="WhatsApp channel QR code" class="mx-auto mt-2 w-40 rounded-xl" />
+              <p class="mt-3 text-xs text-gray-500">Tip: if your confirmation email isn't in your inbox, check Spam/Promotions and mark it "Not spam".</p>
+            </div>
+
+            <button class="btn-ghost mt-8" @click="resetForm">Register another student</button>
+          </div>
+
+          <!-- Duplicate state -->
+          <div v-else-if="state === 'duplicate'" class="text-center py-10">
+            <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100 text-amber-600">
+              <svg class="h-9 w-9" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z" /></svg>
+            </div>
+            <h3 class="mt-5 text-2xl font-bold text-gray-900">Already registered</h3>
+            <p class="mt-3 text-gray-600">This email is already on the list. Check your inbox for the confirmation — we'll see you at the sessions!</p>
+
+            <!-- WhatsApp channel — make sure already-registered students follow it too -->
+            <div class="mx-auto mt-8 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5">
+              <p class="text-sm font-bold text-gray-900">Make sure you've followed the WhatsApp channel</p>
+              <p class="mt-1 text-sm text-gray-600">All session links &amp; reminders are shared there.</p>
+              <a
+                :href="whatsappUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
+              >
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Follow WhatsApp Channel
+              </a>
+              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to follow the channel:</p>
+              <img src="/wa-channel-qr.png" alt="WhatsApp channel QR code" class="mx-auto mt-2 w-40 rounded-xl" />
+            </div>
+
+            <button class="btn-ghost mt-8" @click="resetForm">Register your friend</button>
+          </div>
+
+          <!-- Form -->
+          <form v-else class="grid sm:grid-cols-2 gap-5" novalidate @submit.prevent="submit">
+            <div>
+              <label class="field-label">Full Name <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.name" type="text" class="field" :class="errors.name && 'field-error'" placeholder="e.g. Aarav Sharma" />
+              <p v-if="errors.name" class="field-msg">{{ errors.name }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Gender <span class="text-[#D61C75]">*</span></label>
+              <select v-model="form.gender" class="field" :class="errors.gender && 'field-error'">
+                <option value="" disabled>Select gender</option>
+                <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
+              </select>
+              <p v-if="errors.gender" class="field-msg">{{ errors.gender }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">College <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.college" type="text" class="field" :class="errors.college && 'field-error'" placeholder="e.g. IIT" />
+              <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Course <span class="text-[#D61C75]">*</span></label>
+              <select v-model="form.course" class="field" :class="errors.course && 'field-error'">
+                <option value="" disabled>Select course</option>
+                <option v-for="c in courseOptions" :key="c" :value="c">{{ c }}</option>
+              </select>
+              <p v-if="errors.course" class="field-msg">{{ errors.course }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Branch <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.branch" type="text" class="field" :class="errors.branch && 'field-error'" placeholder="e.g. Computer Science" />
+              <p v-if="errors.branch" class="field-msg">{{ errors.branch }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Year <span class="text-[#D61C75]">*</span></label>
+              <select v-model="form.year" class="field" :class="errors.year && 'field-error'">
+                <option value="" disabled>Select year</option>
+                <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
+              </select>
+              <p v-if="errors.year" class="field-msg">{{ errors.year }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Home Town <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.city" type="text" class="field" :class="errors.city && 'field-error'" placeholder="e.g. Bengaluru" />
+              <p v-if="errors.city" class="field-msg">{{ errors.city }}</p>
+            </div>
+
+            <div>
+              <label class="field-label">Phone Number (preferably WhatsApp) <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.phone" type="tel" inputmode="tel" class="field" :class="errors.phone && 'field-error'" placeholder="10-digit WhatsApp number" />
+              <p v-if="errors.phone" class="field-msg">{{ errors.phone }}</p>
+            </div>
+
+            <!-- Full width so the 2-column grid stays even (eight single-column
+                 fields sit above this) and the longer label + email values get
+                 room to breathe. -->
+            <div class="sm:col-span-2">
+              <label class="field-label">Institute (college) Email <span class="text-[#D61C75]">*</span></label>
+              <input v-model.trim="form.email" type="email" class="field" :class="errors.email && 'field-error'" placeholder="you@collegedomain" />
+              <p v-if="errors.email" class="field-msg">{{ errors.email }}</p>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="field-label">Why are you interested?</label>
+              <textarea v-model.trim="form.reason" rows="3" class="field resize-none" placeholder="Tell us what you'd love to get out of this series"></textarea>
+            </div>
+
+            <!-- Access code + price summary -->
+            <div class="sm:col-span-2 rounded-2xl border border-dashed border-[#D61C75]/30 bg-pink-50/40 p-4 sm:p-5">
+              <label class="field-label">Access Code</label>
+              <p class="-mt-1 mb-2 text-xs text-gray-500">Please check the details shared with you for your access code.</p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input
+                  v-model="couponInput"
+                  type="text"
+                  class="field flex-1 uppercase tracking-widest font-mono"
+                  :class="couponStatus.state === 'error' && 'field-error'"
+                  placeholder="Enter your access code"
+                  @input="onCouponInput"
+                  @keydown.enter.prevent="applyCoupon"
+                />
+                <button
+                  type="button"
+                  class="btn-brand justify-center px-6 whitespace-nowrap disabled:opacity-60"
+                  :disabled="!!appliedCoupon"
+                  @click="applyCoupon"
+                >
+                  {{ appliedCoupon ? "Applied" : "Apply" }}
+                </button>
+              </div>
+              <p
+                v-if="couponStatus.message"
+                class="mt-2 text-sm font-medium"
+                :class="couponStatus.state === 'success' ? 'text-green-600' : 'text-red-500'"
+              >
+                {{ couponStatus.message }}
+              </p>
+
+              <!-- Price summary -->
+              <!-- flex-wrap so the longer label can wrap on narrow screens
+                   without squeezing the price out of alignment. -->
+              <div class="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-[#D61C75]/15 pt-3">
+                <span class="text-sm text-gray-600">
+                  Registration fee
+                  <span class="text-gray-400">(Free with valid access code)</span>
+                </span>
+                <span class="flex items-baseline gap-2">
+                  <span
+                    class="text-lg font-semibold"
+                    :class="appliedCoupon ? 'text-gray-400 line-through decoration-[#D61C75] decoration-2' : 'text-gray-900'"
+                  >
+                    {{ event.currency }}{{ event.basePrice }}
+                  </span>
+                  <span
+                    v-if="appliedCoupon"
+                    class="text-xl font-extrabold bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] bg-clip-text text-transparent"
+                  >
+                    FREE
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <div class="sm:col-span-2">
+              <p v-if="state === 'error'" class="mb-3 rounded-lg bg-red-50 border border-red-200 px-4 py-2 text-sm text-red-600">{{ serverMessage }}</p>
+              <button
+                type="submit"
+                :disabled="!appliedCoupon || state === 'submitting'"
+                class="btn-brand w-full justify-center text-base py-3.5 transition disabled:cursor-not-allowed"
+                :class="!appliedCoupon ? 'blur-[2px] opacity-50' : ''"
+              >
+                <span v-if="state === 'submitting'" class="flex items-center gap-2">
+                  <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4Z"/></svg>
+                  Reserving your seat…
+                </span>
+                <span v-else>Register Now</span>
+              </button>
+              <p v-if="!appliedCoupon" class="mt-3 flex items-center justify-center gap-1.5 text-center text-xs font-medium text-[#D61C75]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                Apply a valid access code above to unlock registration.
+              </p>
+              <p v-else class="mt-3 text-center text-xs text-gray-400">We respect your privacy. Your details are used only for this event.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section id="faq" class="relative py-20 sm:py-24 bg-gray-50">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
+        <div class="text-center" v-motion="fadeUp">
+          <p class="kicker">Good To Know</p>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="mt-12 space-y-3">
+          <div v-for="(f, i) in faqs" :key="f.q" class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+            <button class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left" @click="openFaq = openFaq === i ? -1 : i">
+              <span class="font-medium text-gray-900">{{ f.q }}</span>
+              <svg class="h-5 w-5 shrink-0 text-[#D61C75] transition-transform duration-300" :class="openFaq === i && 'rotate-45'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div v-show="openFaq === i" class="px-6 pb-5 -mt-1 text-gray-600 leading-relaxed">{{ f.a }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" class="relative py-20 sm:py-24 bg-white">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto" v-motion="fadeUp">
+          <p class="kicker">We're Here to Help</p>
+          <h2 class="section-title">Contact Us</h2>
+          <p class="mt-3 text-gray-600">Have a question about the series or your registration? Reach out to any of us directly.</p>
+        </div>
+
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="c in contactPeople"
+            :key="c.email"
+            class="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm card-hover"
+            v-motion="fadeUp"
+          >
+            <div class="flex items-center gap-4">
+              <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-sm font-bold brand-gradient-text">
+                {{ initials(c.name) }}
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-base font-semibold text-gray-900 leading-snug">{{ c.name }}</h3>
+                <p class="mt-0.5 text-sm text-gray-600 leading-snug">{{ c.role }}</p>
+              </div>
+            </div>
+
+            <span v-if="c.detail" class="mt-4 self-start rounded-full border border-[#D61C75]/15 bg-[#D61C75]/5 px-3 py-0.5 text-xs font-semibold text-[#D61C75]">{{ c.detail }}</span>
+
+            <!-- mt-auto pins this block to the bottom so the divider lines up
+                 across a row even when a card has no alumnus pill; pt-5 keeps a
+                 minimum gap when the card above is full. -->
+            <div class="mt-auto pt-5">
+            <div class="space-y-2.5 border-t border-gray-100 pt-4">
+              <a :href="`tel:${c.phone.replace(/\s+/g, '')}`" class="contact-link">
+                <span class="contact-ico">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.5 6.5c0-1.1.9-2 2-2h2.2c.9 0 1.7.6 1.9 1.5l.7 2.6c.2.7 0 1.5-.6 2l-1.3 1a14 14 0 0 0 5.9 5.9l1-1.3c.5-.6 1.3-.8 2-.6l2.6.7c.9.2 1.5 1 1.5 1.9v2.2c0 1.1-.9 2-2 2A17.5 17.5 0 0 1 2.5 6.5Z"/></svg>
+                </span>
+                {{ c.phone }}
+              </a>
+              <a :href="`mailto:${c.email}`" class="contact-link">
+                <span class="contact-ico">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="m3.5 7 8.5 6 8.5-6"/></svg>
+                </span>
+                <span class="truncate">{{ c.email }}</span>
+              </a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="relative bg-gray-50 pt-14">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 text-center pb-12">
+        <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="mx-auto w-56 sm:w-64 h-auto" />
+        <!-- Tagline is longer than the previous one, so tracking is eased
+             slightly to stop the uppercase line breaking mid-phrase. -->
+        <p class="mt-3 text-[#D61C75] tracking-[0.12em] sm:tracking-[0.2em] text-sm uppercase font-semibold">Building the Human Edge for the Age of AI</p>
+        <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering students to thrive through future-ready thinking, human potential, and timeless wisdom.</p>
+
+        <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand mt-8 text-sm">Reserve Your Seat</a>
+      </div>
+      <!-- Brand gradient copyright bar (matches the main site footer) -->
+      <div class="w-full flex justify-center items-center shadow-md tracking-[0.2em] px-4 py-3 font-bold text-base md:text-xl bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white">
+        Copyright © {{ year }} Gita Unlocked - All Rights Reserved.
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script setup>
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from "vue";
+import {
+  event,
+  speakers,
+  whyCards,
+  gains,
+  journey,
+  team,
+  faqs,
+  contact,
+  contactPeople,
+  yearOptions,
+  courseOptions,
+  genderOptions,
+  validCoupons,
+  couponColleges,
+  WHATSAPP_CHANNEL_URL,
+  sessionEdition,
+  whatsNewIntro,
+  whatsNewCards,
+  seFarStats,
+  countdown,
+} from "~/data/successEngineering";
+
+const year = new Date().getFullYear();
+
+// ---------------------------------------------------------------------------
+// Hero countdown
+// ---------------------------------------------------------------------------
+// The ticking values are rendered inside <ClientOnly>: the server's clock and
+// the browser's never agree to the second, and rendering them on both sides
+// would be a guaranteed hydration mismatch.
+const startsAt = new Date(countdown.startsAt).getTime();
+const now = ref(startsAt);
+let countdownTicker = null;
+
+const hasStarted = computed(() => now.value >= startsAt);
+
+const countdownParts = computed(() => {
+  const seconds = Math.max(0, Math.floor((startsAt - now.value) / 1000));
+  return [
+    { label: "Days", value: Math.floor(seconds / 86400) },
+    { label: "Hours", value: Math.floor(seconds / 3600) % 24 },
+    { label: "Mins", value: Math.floor(seconds / 60) % 60 },
+    { label: "Secs", value: seconds % 60 },
+  ];
+});
+
+const padCount = (n) => String(n).padStart(2, "0");
+
+onMounted(() => {
+  now.value = Date.now();
+  countdownTicker = setInterval(() => {
+    now.value = Date.now();
+    // Nothing left to count, so stop waking the page up every second.
+    if (hasStarted.value) clearInterval(countdownTicker);
+  }, 1000);
+});
+
+onBeforeUnmount(() => {
+  if (countdownTicker) clearInterval(countdownTicker);
+});
+
+useHead({
+  title: "Success Engineering — Building the Human Edge in the Age of AI | Gita Unlocked",
+  meta: [
+    {
+      name: "description",
+      content:
+        "A free 3-part live interactive series for IIT & NIT students with IIT alumni, industry leaders and global technology professionals. Build your human edge for the age of AI. Register now.",
+    },
+    { property: "og:title", content: "Success Engineering — Building the Human Edge in the Age of AI" },
+    { property: "og:description", content: "Free 3-part live series for IIT/NIT students. AI-era skills, human potential, leadership. Register now." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ],
+  link: [
+    { rel: "preconnect", href: "https://fonts.googleapis.com" },
+    { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+    { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" },
+  ],
+});
+
+// ---- Motion variants (snappy, no laggy spring delay) ----
+// Hero animates immediately on mount; sections reveal quickly when scrolled into view.
+const heroReveal = {
+  initial: { opacity: 0, y: 24 },
+  enter: { opacity: 1, y: 0, transition: { duration: 500, ease: "easeOut" } },
+};
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  visibleOnce: { opacity: 1, y: 0, transition: { duration: 420, ease: "easeOut" } },
+};
+
+// ---- UI state ----
+const scrolled = ref(false);
+const mobileOpen = ref(false);
+const openFaq = ref(0);
+
+const onScroll = () => {
+  scrolled.value = window.scrollY > 24;
+};
+onMounted(() => window.addEventListener("scroll", onScroll, { passive: true }));
+onBeforeUnmount(() => window.removeEventListener("scroll", onScroll));
+
+const scrollTo = (id) => {
+  mobileOpen.value = false;
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const initials = (name) =>
+  name
+    .replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s*/i, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+// Shown on the success screen so it never depends on email delivery. Imported
+// from the shared data module so the site and the confirmation email can't drift.
+const whatsappUrl = WHATSAPP_CHANNEL_URL;
+
+// Hero audio equalizer — varied delays/durations give a lively, organic bounce.
+const eqBars = Array.from({ length: 26 }, (_, i) => ({
+  delay: `-${((i * 0.26) % 2.2).toFixed(2)}s`,
+  dur: `${(1.9 + (i % 5) * 0.4).toFixed(2)}s`,
+}));
+
+// -----------------------------------------------------------------------------
+// "Success Engineering So Far" — scroll-triggered count-up
+// -----------------------------------------------------------------------------
+// Numeric stats tick 0 → target with an easeOutCubic ramp the first time the
+// grid scrolls into view; text stats ("Hundreds", "Growing") just ride the
+// accompanying slide-up reveal. The value is rendered as a single text node
+// so the brand gradient (background-clip: text) paints reliably.
+const statsSectionEl = ref(null);
+const statsInView = ref(false);
+const animatedStats = ref(seFarStats.map(() => 0));
+
+let statsFrame = null;
+let statsObserver = null;
+
+// 1800 → "1,800". Non-numeric stats fall through to their literal text.
+const statDisplay = (stat, i) => {
+  if (typeof stat.value !== "number") return stat.text;
+  return `${animatedStats.value[i].toLocaleString("en-US")}${stat.suffix || ""}`;
+};
+
+const settleStatsInstantly = () => {
+  animatedStats.value = seFarStats.map((s) =>
+    typeof s.value === "number" ? s.value : 0,
+  );
+  statsInView.value = true;
+};
+
+const runStatsCountUp = () => {
+  statsInView.value = true;
+
+  const duration = 1600;
+  const start = performance.now();
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+  const tick = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = easeOut(p);
+    animatedStats.value = seFarStats.map((s) =>
+      typeof s.value === "number" ? Math.round(eased * s.value) : 0,
+    );
+    statsFrame = p < 1 ? requestAnimationFrame(tick) : null;
+  };
+  statsFrame = requestAnimationFrame(tick);
+};
+
+onMounted(() => {
+  const el = statsSectionEl.value;
+
+  // No element or no observer support → show final values, no animation.
+  if (!el || typeof IntersectionObserver === "undefined") {
+    settleStatsInstantly();
+    return;
+  }
+
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    settleStatsInstantly();
+    return;
+  }
+
+  // If the grid is already on screen at mount (short viewport, reload
+  // mid-page, or an anchor deep-link), start immediately — an observer
+  // wouldn't fire again on its own without a scroll.
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    runStatsCountUp();
+    return;
+  }
+
+  statsObserver = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      statsObserver?.disconnect();
+      statsObserver = null;
+      runStatsCountUp();
+    },
+    // Fire a little before the grid is fully visible so the roll-up is
+    // already underway by the time it's centred.
+    { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+  );
+  statsObserver.observe(el);
+});
+
+onBeforeUnmount(() => {
+  statsObserver?.disconnect();
+  if (statsFrame !== null) cancelAnimationFrame(statsFrame);
+});
+
+// ---- Registration form ----
+const form = reactive({
+  name: "",
+  gender: "",
+  college: "",
+  course: "",
+  branch: "",
+  year: "",
+  email: "",
+  phone: "",
+  city: "",
+  reason: "",
+});
+const errors = reactive({});
+const state = ref("idle"); // idle | submitting | success | duplicate | error
+const serverMessage = ref("");
+
+// Dev-only preview of the post-registration screens (no real submit needed):
+//   /?previewState=success    /?previewState=duplicate
+// Stripped from production builds via import.meta.dev.
+onMounted(() => {
+  if (!import.meta.dev) return;
+  const preview = new URLSearchParams(window.location.search).get("previewState");
+  if (preview === "success" || preview === "duplicate") {
+    state.value = preview;
+    document.getElementById("register")?.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// ---- Access code / coupon ----
+const couponInput = ref("");
+const appliedCoupon = ref("");
+const couponStatus = reactive({ state: "", message: "" }); // '' | 'success' | 'error'
+
+const onCouponInput = () => {
+  couponInput.value = couponInput.value.toUpperCase();
+  // If the field is changed after applying, clear the applied state.
+  if (appliedCoupon.value && couponInput.value.trim() !== appliedCoupon.value) {
+    appliedCoupon.value = "";
+    couponStatus.state = "";
+    couponStatus.message = "";
+  }
+};
+
+// Resolve a code (case-insensitive) to its college, or "" if unknown.
+const collegeForCode = (code) => {
+  const entry = Object.entries(couponColleges).find(
+    ([c]) => c.toUpperCase() === code.toUpperCase(),
+  );
+  return entry ? entry[1] : "";
+};
+
+const applyCoupon = () => {
+  const code = couponInput.value.trim().toUpperCase();
+  if (!code) {
+    couponStatus.state = "error";
+    couponStatus.message = "Please enter your access code.";
+    return;
+  }
+  const college = collegeForCode(code);
+  if (college) {
+    appliedCoupon.value = code;
+    // The code is college-specific — auto-fill the college so it matches
+    // the code and the personalised confirmation email.
+    form.college = college;
+    couponStatus.state = "success";
+    couponStatus.message = `Code applied for ${college} — your registration is free!`;
+  } else {
+    appliedCoupon.value = "";
+    couponStatus.state = "error";
+    couponStatus.message = "Invalid or expired code. Please check and try again.";
+  }
+};
+
+// Pre-fill and apply an access code passed in the URL, e.g.
+//   https://gitaunlocked.com/?code=IITK26_SE#register
+// so each college's outreach email can link students straight to a form with
+// their own code already applied.
+//
+// Runs on mount (client only) rather than during setup, so the pre-applied
+// state can't cause an SSR hydration mismatch. An unrecognised code is left in
+// the field without validating, so a mistyped link doesn't greet a student with
+// a red error before they've touched anything.
+onMounted(() => {
+  const fromUrl = new URLSearchParams(window.location.search).get("code");
+  if (!fromUrl) return;
+  const code = fromUrl.trim().toUpperCase();
+  couponInput.value = code;
+  if (collegeForCode(code)) applyCoupon();
+});
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const validate = () => {
+  Object.keys(errors).forEach((k) => delete errors[k]);
+  if (!form.name) errors.name = "Please enter your full name.";
+  if (!form.gender) errors.gender = "Please select your gender.";
+  if (!form.college) errors.college = "Please enter your college.";
+  if (!form.course) errors.course = "Please select your course.";
+  if (!form.branch) errors.branch = "Please enter your branch.";
+  if (!form.year) errors.year = "Please select your year.";
+  if (!form.city) errors.city = "Please enter your city.";
+  if (!EMAIL_RE.test(form.email)) errors.email = "Enter a valid email address.";
+  if (form.phone.replace(/\D/g, "").length < 10) errors.phone = "Enter a valid phone number.";
+  return Object.keys(errors).length === 0;
+};
+
+const resetForm = () => {
+  Object.keys(form).forEach((k) => (form[k] = ""));
+  Object.keys(errors).forEach((k) => delete errors[k]);
+  couponInput.value = "";
+  appliedCoupon.value = "";
+  couponStatus.state = "";
+  couponStatus.message = "";
+  state.value = "idle";
+  serverMessage.value = "";
+};
+
+const submit = async () => {
+  // Registration is gated behind a valid access code.
+  if (!appliedCoupon.value) {
+    couponStatus.state = "error";
+    couponStatus.message = "Please apply a valid access code to unlock registration.";
+    return;
+  }
+  if (!validate()) return;
+  state.value = "submitting";
+  serverMessage.value = "";
+
+  const payload = {
+    name: form.name,
+    gender: form.gender,
+    college: form.college,
+    course: form.course,
+    branch: form.branch,
+    year: form.year,
+    email: form.email.toLowerCase(),
+    phone: form.phone,
+    // The form now collects a single number, asked for as the student's
+    // WhatsApp. Send it as `whatsapp` too so the stored document keeps the
+    // same shape as earlier registrations and the admin notification email
+    // still surfaces a reachable WhatsApp number.
+    whatsapp: form.phone,
+    city: form.city,
+    reason: form.reason,
+    couponCode: appliedCoupon.value || "",
+  };
+
+  try {
+    // Stored in MongoDB via a server route (handles dedupe + confirmation emails).
+    const res = await $fetch("/api/se-register", { method: "POST", body: payload });
+
+    if (res?.duplicate) {
+      state.value = "duplicate";
+      return;
+    }
+
+    state.value = "success";
+  } catch (err) {
+    console.error("Registration error:", err);
+    serverMessage.value =
+      err?.data?.statusMessage ||
+      "Something went wrong while saving your registration. Please try again.";
+    state.value = "error";
+  }
+};
+</script>
+
+<style scoped>
+/* Brand heading font (matches the main Gita Unlocked site) */
+.heading-script {
+  font-family: "Kaushan Script", cursive;
+}
+
+/* Signature orange -> magenta -> purple brand gradient text */
+.brand-gradient-text {
+  @apply bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] bg-clip-text text-transparent;
+}
+
+.kicker {
+  @apply inline-block rounded-full bg-[#D61C75]/10 px-3.5 py-1 text-xs uppercase tracking-[0.25em] text-[#D61C75] font-semibold mb-4;
+}
+.section-title {
+  @apply text-3xl sm:text-4xl font-bold text-gray-900 leading-tight;
+}
+/* Subtle gradient underline accent under each centered section title */
+.section-title::after {
+  content: "";
+  display: block;
+  width: 3.25rem;
+  height: 4px;
+  margin: 1rem auto 0;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #ff7a00, #d61c75, #7a10ff);
+}
+.btn-brand {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] px-6 py-2.5 font-semibold text-white shadow-lg shadow-[#D61C75]/25 transition duration-200 hover:shadow-xl hover:shadow-[#D61C75]/40 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-95;
+}
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#D61C75]/30 px-6 py-2.5 font-semibold text-[#D61C75] transition duration-200 hover:border-[#D61C75] hover:bg-[#D61C75]/5 hover:-translate-y-0.5;
+}
+.card-hover {
+  @apply transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
+}
+
+/* Academic Session edition badge — glass pill that sits beside the
+   "Interactive Podcast Series" tag in the hero. Sizing is matched to that
+   pill (px-3 py-1, text-xs sm:text-sm, font-semibold, tracking-wider) so
+   the two pills feel like a set. */
+.edition-badge {
+  @apply inline-flex items-center gap-2 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-[#D61C75]/25 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider shadow-sm;
+  animation: badge-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: 220ms;
+}
+.edition-badge-dot {
+  @apply h-1.5 w-1.5 rounded-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF];
+}
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .edition-badge {
+    animation: none;
+  }
+}
+
+/* "Success Engineering So Far" statistic cards */
+.stat-card {
+  @apply relative flex flex-col items-center rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm p-6 sm:p-7 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
+}
+.stat-num {
+  @apply text-4xl sm:text-5xl font-extrabold leading-none brand-gradient-text tracking-tight;
+  /* Fixed-width digits stop the card from twitching as the value ticks up. */
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  @apply mt-3 text-sm font-medium text-gray-600 leading-snug;
+}
+
+/* Slide-up reveal wrapper for each stat value. Kept separate from
+   `.stat-num` so the transform never sits on the background-clip:text
+   element itself (that combination is unreliable in older Safari). */
+.stat-reveal {
+  transform: translateY(30%);
+  opacity: 0;
+  transition:
+    transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.stat-reveal.is-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-reveal {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Hero date/venue info cards with hover lift + gradient icon */
+/* Hero countdown — built from the same parts as .info-card and .stat-num so
+   it reads as part of the hero rather than a widget dropped into it. */
+.countdown-label {
+  @apply inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-semibold text-[#D61C75];
+}
+.countdown-pulse {
+  @apply h-1.5 w-1.5 rounded-full bg-[#D61C75];
+  animation: countdown-pulse 2s ease-in-out infinite;
+}
+.countdown-cell {
+  @apply flex flex-col items-center rounded-xl border border-gray-100 bg-white px-2 py-2.5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#D61C75]/30 hover:shadow-lg hover:shadow-[#D61C75]/10;
+}
+.countdown-num {
+  @apply text-2xl sm:text-3xl font-extrabold leading-none brand-gradient-text;
+  /* Without tabular figures the boxes twitch as the seconds tick. */
+  font-variant-numeric: tabular-nums;
+}
+.countdown-unit {
+  @apply mt-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-gray-500;
+}
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .countdown-pulse {
+    animation: none;
+  }
+}
+
+/* Contact card phone/email rows. min-w-0 lets the long addresses truncate
+   instead of stretching the card. */
+.contact-link {
+  @apply flex min-w-0 items-center gap-2.5 text-sm text-gray-700 transition hover:text-[#D61C75];
+}
+.contact-ico {
+  @apply grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition;
+}
+.contact-link:hover .contact-ico {
+  @apply bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white;
+}
+
+.info-card {
+  @apply flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/30;
+}
+.info-ico {
+  @apply grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] transition duration-300;
+}
+.info-card:hover .info-ico {
+  @apply bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white;
+}
+.field-label {
+  @apply block text-sm font-medium text-gray-700 mb-1.5;
+}
+.field {
+  @apply w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-800 placeholder-gray-400 outline-none transition focus:border-[#D61C75]/60 focus:ring-2 focus:ring-[#D61C75]/20 focus:bg-white;
+}
+.field-error {
+  @apply border-red-400 focus:border-red-400 focus:ring-red-200;
+}
+.field-msg {
+  @apply mt-1 text-xs text-red-500;
+}
+.contact-card {
+  @apply flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-gray-50 p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg;
+}
+.contact-ico {
+  @apply h-7 w-7 text-[#D61C75];
+}
+.contact-k {
+  @apply mt-1 text-xs uppercase tracking-wider text-gray-400;
+}
+.contact-v {
+  @apply text-sm font-medium text-gray-700 break-all;
+}
+.social-btn {
+  @apply grid h-11 w-11 place-items-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#D61C75]/40 hover:text-white hover:bg-gradient-to-br hover:from-[#FF7A00] hover:via-[#D61C75] hover:to-[#7A10FF];
+}
+
+/* Offset anchor jumps so sections aren't hidden behind the fixed nav */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 28s linear infinite;
+}
+.animate-spin-slower {
+  animation: spin-slow 42s linear infinite reverse;
+}
+
+/* ---- Hero audio equalizer ---- */
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bounce 1s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes eq-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.18);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eq-bar {
+    animation: none;
+    transform: scaleY(0.5);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-spin-slower,
+  .animate-float {
+    animation: none;
+  }
+}
+</style>

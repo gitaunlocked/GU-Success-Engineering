@@ -1,0 +1,23 @@
+ M .gitignore
+ M emails/session-2-reminder.html
+ M emails/session-2-reminder.txt
+?? backups/
+?? emails/session-2-live.html
+?? emails/session-2-live.txt
+?? public/posters/se-2026-p2-square.jpg
+?? scripts/attendees-export.mjs
+?? scripts/college-lists.mjs
+?? scripts/count-applications.mjs
+?? scripts/csv-to-xlsx.py
+?? scripts/find-name.mjs
+?? scripts/gender-emails.mjs
+?? scripts/landing-snapshot.mjs
+?? scripts/lib/attendee-match.mjs
+?? scripts/lib/emails.mjs
+?? scripts/lib/exports.mjs
+?? scripts/list-applications.mjs
+?? scripts/list-assessments.mjs
+?? scripts/match-attendees.mjs
+?? scripts/registrant-emails-sorted.mjs
+?? scripts/registrant-emails.mjs
+?? scripts/registrants-filter.mjs
