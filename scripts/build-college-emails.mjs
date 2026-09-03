@@ -40,8 +40,12 @@ if (roleFlag !== -1 && !role) {
   process.exit(1)
 }
 
-const args = argv
-  .filter((a, i) => i !== roleFlag && i !== roleFlag + 1)
+// Guard the -1 case: without --role, roleFlag + 1 is 0, which would drop the
+// first code on the command line and build one college fewer than asked for.
+const args = (roleFlag === -1
+  ? argv
+  : argv.filter((a, i) => i !== roleFlag && i !== roleFlag + 1)
+)
   .map((a) => a.trim().toUpperCase())
   .filter(Boolean)
 
