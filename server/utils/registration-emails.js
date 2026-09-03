@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 // Nuxt alias, not a relative path: Nitro rewrites this module's location in the
 // dev build, which makes '../../data/...' resolve outside the project.
-import { WHATSAPP_CHANNEL_URL, journey } from '~/data/successEngineering.js'
+import { WHATSAPP_GROUP_URL, journey } from '~/data/successEngineering.js'
 
 // Per-college access codes. Keep in sync with data/successEngineering.js
 // (duplicated here so the server bundle has no cross-dir import dependency).
@@ -28,6 +28,8 @@ const couponColleges = {
   // Other institutions
   CU26_SE: 'Chandigarh University',
   RGIPT26_SE: 'RGIPT',
+  SNU26_SE: 'Shiv Nadar University',
+  GLBITM26_SE: 'GL Bajaj Institute of Technology & Management',
 }
 
 const normCode = (reg) => (reg.couponCode || '').trim().toUpperCase()
@@ -47,7 +49,7 @@ export const CONFIRMATION_POSTER_FILE = 'posters/se-2026-confirmation.jpg'
 // Owned by data/successEngineering.js — that file is import-safe from client
 // components, whereas this module pulls in nodemailer. Re-exported here so
 // existing server-side importers keep working off a single source of truth.
-export { WHATSAPP_CHANNEL_URL }
+export { WHATSAPP_GROUP_URL }
 
 // Escape values before embedding in HTML email bodies (prevents HTML/script injection).
 const escapeHtml = (v) =>
@@ -109,12 +111,12 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
          </div>`
     : ''
 
-  const whatsappUrl = WHATSAPP_CHANNEL_URL
+  const whatsappUrl = WHATSAPP_GROUP_URL
 
   const qrBlockHtml = qrSrc
     ? `<div style="margin-top:14px">
-                  <p style="margin:0 0 8px;color:#888;font-size:13px">Or scan to follow the channel:</p>
-                  <img src="${qrSrc}" alt="WhatsApp channel QR" width="170" style="width:170px;max-width:60%;height:auto;border-radius:12px;border:1px solid #e6e8ec" />
+                  <p style="margin:0 0 8px;color:#888;font-size:13px">Or scan to join the group:</p>
+                  <img src="${qrSrc}" alt="WhatsApp group QR" width="170" style="width:170px;max-width:60%;height:auto;border-radius:12px;border:1px solid #e6e8ec" />
                 </div>`
     : ''
 
@@ -161,10 +163,10 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
 
   const text =
     `Hi ${reg.name},\n\n` +
-    `Your registration for ${eventName} (Building the Human Edge in the Age of AI) is confirmed. Your seat is reserved.\n\n` +
+    `Your registration for ${eventName} (Making the Most of Your Engineering Journey) is confirmed. Your seat is reserved.\n\n` +
     collegeLineText +
-    `Next step — follow the WhatsApp channel:\n` +
-    `All session links and reminders are shared in our WhatsApp channel, so please follow it now to make sure you don't miss any session:\n${whatsappUrl}\n\n` +
+    `Next step — join the WhatsApp group:\n` +
+    `All session links and reminders are shared in our WhatsApp group, so please join it now to make sure you don't miss any session:\n${whatsappUrl}\n\n` +
     sessionsText +
     `Warm regards,\nTeam ${eventName}\n\n` +
     `—\n` +
@@ -176,7 +178,7 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
             <div style="height:6px;background:linear-gradient(to right,#FF7A00,#D61C75,#7A10FF)"></div>
             <div style="padding:28px 24px 4px">
               <h1 style="margin:0 0 2px;color:#15171c;font-size:26px">Success Engineering</h1>
-              <p style="margin:0;color:#FF7A00;font-weight:bold">Building the Human Edge in the Age of AI</p>
+              <p style="margin:0;color:#D61C75;font-weight:bold">Making the Most of Your Engineering Journey</p>
             </div>
             ${posterImgHtml}
             <div style="padding:8px 24px 28px;color:#444;line-height:1.7;font-size:15px">
@@ -184,11 +186,11 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
               <p>Your registration for <strong>${eventName}</strong> is confirmed and your seat is reserved.</p>
               ${collegeLineHtml}
 
-              <!-- WhatsApp channel — the one action we need them to take -->
+              <!-- WhatsApp group — the one action we need them to take -->
               <div style="border:1px solid #d9e9df;border-radius:12px;padding:18px 16px;margin:20px 0">
-                <p style="margin:0 0 6px;font-weight:bold;color:#15171c;font-size:15px">Next step: follow the WhatsApp channel</p>
-                <p style="margin:0 0 14px;color:#555;font-size:14px">All session links and reminders are shared in the channel. Please follow it now so you don't miss any session.</p>
-                <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Follow the WhatsApp channel</a>
+                <p style="margin:0 0 6px;font-weight:bold;color:#15171c;font-size:15px">Next step: join the WhatsApp group</p>
+                <p style="margin:0 0 14px;color:#555;font-size:14px">All session links and reminders are shared in the group. Please join it now so you don't miss any session.</p>
+                <a href="${whatsappUrl}" target="_blank" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 26px;border-radius:8px">Join the WhatsApp group</a>
                 ${qrBlockHtml}
               </div>
               ${sessionsHtml}
@@ -241,10 +243,10 @@ export const sendRegistrationEmails = async (reg, opts = {}) => {
       ? `<div style="padding:0 24px 8px"><img src="cid:sePoster" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
       : ''
 
-    // WhatsApp channel QR — embed inline (cid) so it renders without remote loads.
-    const qrBuffer = await loadPoster('wa-channel-qr.png', baseUrl)
+    // WhatsApp group QR — embed inline (cid) so it renders without remote loads.
+    const qrBuffer = await loadPoster('wa-group-qr.png', baseUrl)
     if (qrBuffer) {
-      attachments.push({ filename: 'WhatsApp-Channel-QR.png', content: qrBuffer, cid: 'waQr' })
+      attachments.push({ filename: 'WhatsApp-Group-QR.png', content: qrBuffer, cid: 'waQr' })
     }
     const qrSrc = qrBuffer ? 'cid:waQr' : ''
 

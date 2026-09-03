@@ -5,69 +5,79 @@
 // Update text, dates, speakers, links etc. without touching the page layout.
 // ---------------------------------------------------------------------------
 
+import { WHATSAPP_GROUP_URL } from "./whatsapp.js";
+
 export const event = {
   presenter: "Presented by Gita Unlocked",
   title: "Success Engineering",
-  tagline: "Building the Human Edge in the Age of AI",
+  tagline: "Making the Most of Your Engineering Journey",
   description:
-    "A 3-Part Live Interactive Series with IIT Alumni, Industry Leaders and Global Technology Professionals.",
-  date: "9 August 2026 · Sunday",
+    "A 2-part live, interactive podcast series with IIT alumni, industry leaders and global technology professionals.",
+  date: "5 & 6 September 2026",
+  days: "Saturday & Sunday",
+  dateLong: "5 & 6 September 2026 · Saturday & Sunday",
   venue: "Live on Zoom",
   venueNote: "Link shared after registration",
-  pricing: "Free for IIT / NIT Students",
+  pricing: "Free for students of partner institutions",
   currency: "₹",
   basePrice: 500, // shown as the struck-off total once a valid code is applied
-  couponCode: "IITK26_SE", // featured code displayed on the page
 };
 
-// Hero edition badge — shown as a small pill above the H1.
-// Edit `badgeText` when the session/edition changes.
+// Hero edition badge — shown as a small pill beside the "Interactive Podcast
+// Series" tag. Edit when the edition changes.
 export const sessionEdition = {
-  badgeText: "Academic Session 2026 Edition",
+  badgeText: "Exclusive Engineering Edition",
 };
 
-// Hero countdown, ticking down to the first session.
-//
-// `startsAt` needs a time and an offset, not just a date: without them the
-// browser assumes UTC and the counter reads five and a half hours out for
-// everyone in India. Set the real start time here when it is confirmed.
-export const countdown = {
-  startsAt: "2026-08-09T21:00:00+05:30",
-  label: "Series begins in",
-  liveLabel: "The series has begun",
-  liveNote: "Session 01 is under way — register to join the next one.",
-};
+// The three-part promise carried across the poster and the hero.
+// Rendered as a slim strip above the H1, then expanded into the pillars below.
+export const motto = ["Think Deeper", "Perform Better", "Build Your Future"];
+
+// The premise of this edition — the paragraph that frames why the series
+// exists right now. Shown in the band directly under the hero.
+export const premise =
+  "In an era of rapid AI and technological change, learn best practices, make smarter choices, build the right mindset and skills, and unlock your unique potential for a meaningful future.";
+
+// Phrases inside `premise` that get painted in the brand gradient. Each must
+// appear verbatim in the paragraph above; anything that doesn't match is
+// quietly ignored, so editing the prose can never break the sentence.
+export const premiseHighlights = [
+  "best practices",
+  "smarter choices",
+  "right mindset and skills",
+  "unlock your unique potential",
+];
 
 // "What's New" — short intro paragraph shown under the section title.
-// Preserves the "we're back, evolved" narrative from the earlier Returning
-// banner in a single, focused block.
 export const whatsNewIntro =
-  "Following the overwhelming response received from students across premier engineering institutions during our Summer edition, Success Engineering returns with updated discussions, new speakers and enhanced learning experiences.";
+  "Following the overwhelming response received from students across premier engineering institutions during our past editions, Success Engineering returns with updated discussions, new speakers and enhanced learning experiences.";
 
 // "What's New" — icon cards under the intro.
 // `icon` maps to an inline SVG defined in Landing.vue.
 export const whatsNewCards = [
-  { icon: "ai", title: "Updated Discussions on AI, Careers & the Future" },
-  { icon: "briefcase", title: "Startup, Research & Industry Exposure Opportunities" },
-  { icon: "mic", title: "New Industry Leaders & IIT Alumni Speakers" },
-  { icon: "clipboard", title: "Refined Interactive Assessments" },
-  { icon: "users", title: "Enhanced Networking & Student Community" },
+  { icon: "mic", title: "Two Focused Podcasts, One Continuous Journey" },
+  { icon: "briefcase", title: "Career Insights From Industry Leaders" },
+  { icon: "clipboard", title: "New Success Potential Assessment" },
+  { icon: "users", title: "A Wider Alumni & Professional Network" },
 ];
 
 // "Success Engineering So Far" — animated statistics rendered under Speakers.
 // Numeric `value` items count up from 0 when the section enters the viewport;
-// text-only items (e.g. "Hundreds", "Growing") render as-is with a fade-up.
+// text-only items (e.g. "Growing") render as-is with a fade-up.
 export const seFarStats = [
-  { value: 20, suffix: "+", label: "Premier Institutions Reached" },
-  { value: 1800, suffix: "+", label: "Students Engaged" },
-  { value: 40, suffix: "+", label: "Industry Leaders & IIT Alumni" },
-  { text: "Hundreds", label: "Human Potential Assessments Completed" },
+  { value: 23, suffix: "+", label: "Premier Institutions Reached" },
+  { value: 1900, suffix: "+", label: "Students Engaged" },
+  { value: 45, suffix: "+", label: "Industry Leaders & IIT Alumni" },
+  { value: 1200, suffix: "+", label: "Success Potential Assessments" },
   { text: "Growing", label: "Student Community Across India" },
 ];
 
 // Per-college access codes that unlock free registration.
 // The applied code identifies the student's college, which is used to
 // personalise the confirmation email. Add new colleges/codes here.
+//
+// NOTE: server/utils/registration-emails.js keeps its own copy of this map
+// (the server bundle can't reach across directories). Add codes to both.
 export const couponColleges = {
   // IITs
   IITB26_SE: "IIT Bombay",
@@ -89,146 +99,139 @@ export const couponColleges = {
   // Other institutions
   CU26_SE: "Chandigarh University",
   RGIPT26_SE: "RGIPT",
+  SNU26_SE: "Shiv Nadar University",
+  GLBITM26_SE: "GL Bajaj Institute of Technology & Management",
 };
 
 // Any of these codes unlocks FREE registration.
 export const validCoupons = Object.keys(couponColleges);
 
-// SECTION 4 — Speakers ------------------------------------------------------
+// Hero countdown, ticking down to the first podcast.
+//
+// `startsAt` needs a time and an offset, not just a date: without them the
+// browser assumes UTC and the counter reads five and a half hours out for
+// everyone in India. The start time isn't published on the page — it's only
+// here to make the countdown land on the right moment.
+export const countdown = {
+  startsAt: "2026-09-05T15:00:00+05:30",
+  label: "Podcast 01 begins in",
+  liveLabel: "The series is live",
+  liveNote: "Podcast 01 is under way — register to join the next one.",
+};
+
+// SECTION — Speakers --------------------------------------------------------
 // `photo` can be a path under /public (e.g. "/speakers/name.jpg") or a full URL.
 // Leave `photo` empty ("") to fall back to a clean monogram avatar.
-// `companyLogo` is optional — the company pill renders the name alone without it.
+// `companyLogo` is optional — the pill renders the name on its own without one.
+// Marks live in /public/logos and want a transparent background: the pill is
+// white and lifts to a subtle tint on hover, so anything with its own baked-in
+// backdrop shows up as a visible rectangle.
 // `designation2` is an optional secondary credential shown under the role.
-//
-// NOTE: `bio`, `tags` and `linkedin` are currently unused — the speaker cards
-// are front-only (the flip-to-bio back face was removed). They're retained so
-// the back face can be reinstated without re-sourcing the copy.
 export const speakers = [
   {
-    name: "Mr. Sriraj Chellapan",
-    designation: "Senior Manager, AI Chip Design",
-    company: "Texas Instruments",
-    companyLogo: "/logos/texasinstruments.svg",
-    photo: "/speakers/sriraj.png",
-    bio: "",
-    tags: [],
-    linkedin: "",
+    name: "Mr. Niranjan Pendharkar",
+    designation: "Senior AI Leader, Google",
+    designation2: "80+ US Patents",
+    company: "Google",
+    companyLogo: "/logos/google.png",
+    photo: "/speakers/niranjan-pendharkar.jpg",
   },
   {
-    name: "Mr. Gaurav Rai",
-    designation: "Senior Manager, AI Copilot Security",
-    company: "Microsoft",
-    companyLogo: "/logos/microsoft.svg",
-    photo: "/speakers/gaurav.png",
-    bio: "20+ years in cybersecurity, now leading AI security at Microsoft — Copilot, MCP security, Responsible AI and privacy. BITS Pilani.",
-    tags: ["Microsoft", "AI Copilot", "AI Security", "BITS Pilani"],
-    linkedin: "https://www.linkedin.com/in/gauravsecurity/",
+    name: "Mr. Vaibhav Joshi",
+    designation: "AI Operations Specialist, GlobalLogic",
+    designation2: "MBA, ISESG Paris",
+    company: "GlobalLogic",
+    companyLogo: "/logos/globallogic.svg",
+    photo: "/speakers/vaibhav-joshi.jpg",
   },
   {
-    name: "Mr. Samyak Jain",
-    designation: "AI Research PhD at UC Berkeley",
-    company: "UC Berkeley",
-    companyLogo: "/logos/ucberkeley.png",
-    photo: "/speakers/samyak.png",
-    bio: "Research Fellow at Microsoft Research and incoming CS PhD at UC Berkeley. Work spans AI safety, mechanistic interpretability, and adversarial robustness. IIT BHU CSE (9.60 CPI).",
-    tags: ["Microsoft Research", "AI Safety", "UC Berkeley", "IIT BHU"],
-    linkedin: "https://www.linkedin.com/in/samyak-jain-276738178/",
+    name: "Mr. Indraneel Natu",
+    designation: "PhD, IIM Bengaluru",
+    designation2: "B.Tech, IIT BHU",
+    company: "IIM Bengaluru",
+    companyLogo: "/logos/iimb.png",
+    photo: "/speakers/indraneel-natu.jpg",
   },
   {
-    name: "Mr. Anurag Pindiproli",
-    designation: "AI Defense Engineer, Cisco",
-    designation2: "Amazon AI — ML School",
-    company: "Cisco",
-    companyLogo: "/logos/cisco.png",
-    photo: "/speakers/anurag.png",
-    bio: "",
-    tags: [],
-    linkedin: "",
-  },
-  {
-    name: "Mr. Akhilender Bongirwar",
-    designation: "AI Engineer, Adobe",
-    company: "Adobe",
-    companyLogo: "/logos/adobe.png",
-    photo: "/speakers/akhilender.png",
-    bio: "",
-    tags: [],
-    linkedin: "",
+    name: "Mr. Aman Tiwari",
+    designation: "AI Engineer, NVIDIA",
+    designation2: "B.Tech, IIT BHU",
+    company: "NVIDIA",
+    companyLogo: "/logos/nvidia.png",
+    // Shot arrived portrait; padded to square with white so the circular
+    // crop doesn't clip the top of his head.
+    photo: "/speakers/aman-tiwari.jpg",
   },
 ];
 
-// SECTION 3 — Why this series ----------------------------------------------
+// SECTION — Why this series -------------------------------------------------
 export const whyCards = [
   {
-    title: "AI is changing everything",
-    body: "The rules of work, learning and value creation are being rewritten. Standing still is the only real risk.",
+    title: "These Four Years Compound",
+    body: "The subjects you take seriously, the people you build with and the risks you take now quietly set the range of everything that follows.",
+    icon: "route",
+  },
+  {
+    title: "Technology Outruns the Syllabus",
+    body: "What industry is building today reaches a curriculum years later. Practitioners are the shortest path to an honest signal.",
     icon: "chip",
   },
   {
-    title: "Career success alone is not enough",
-    body: "Titles and packages fade fast. Lasting fulfilment comes from clarity, purpose and direction.",
-    icon: "trophy",
-  },
-  {
-    title: "Human skills are becoming more valuable",
-    body: "As machines automate the routine, judgement, creativity and emotional depth become your edge.",
-    icon: "spark",
-  },
-  {
-    title: "Understand both technology and yourself",
-    body: "The future belongs to those who can pair cutting-edge tools with deep self-awareness.",
+    title: "Smarter Choices, Not Just Harder Work",
+    body: "Effort is abundant in engineering colleges. Direction is what's scarce — and direction is what actually changes outcomes.",
     icon: "compass",
   },
+  {
+    title: "Mindset Is the Multiplier",
+    body: "Skills get you the interview. How you think, decide and recover is what carries you through the decade after it.",
+    icon: "spark",
+  },
 ];
 
-// SECTION 5 — What you will gain -------------------------------------------
+// SECTION — What you will gain ---------------------------------------------
 export const gains = [
-  { icon: "trophy", title: "Exciting Prizes & Quizzes", highlight: true },
-  { icon: "trip", title: "Sponsored Trip Opportunities", highlight: true },
-  { icon: "certificate", title: "Certificate of Participation", highlight: true },
-  { icon: "rocket", title: "Internship & Placement Insights" },
-  { icon: "users", title: "Networking with IIT Alumni" },
-  { icon: "spark", title: "High Performance Mindset" },
-  { icon: "frameworks", title: "Human Potential Frameworks" },
-  { icon: "leader", title: "Leadership Development" },
+  { icon: "rocket", title: "Career Insights from Industry Leaders", highlight: true },
+  { icon: "users", title: "Networking with IIT Alumni & Professionals", highlight: true },
+  { icon: "certificate", title: "Certificate Opportunities", highlight: true },
+  { icon: "trophy", title: "Exciting Prizes & Quizzes" },
+  { icon: "trip", title: "Sponsored Trip Opportunities" },
+  { icon: "frameworks", title: "Success Potential Assessment" },
 ];
 
-// SECTION 6 — Program journey ----------------------------------------------
+// SECTION — Program journey ------------------------------------------------
+//
+// Kept under the name `journey` because server/utils/registration-emails.js
+// reads this export (filtering on `kind === "session"`) to build the line-up
+// printed in every confirmation email. Renaming it silently changes that email.
 export const journey = [
   {
     kind: "session",
-    label: "Session 1",
-    title: "The Success Code",
-    date: "9 August 2026 · Sunday",
-    topic: "AI, Careers & Future Readiness",
+    icon: "mic",
+    label: "Podcast 01",
+    title: "The Engineering Landscape",
+    date: "5 September 2026 · Saturday",
+    topic: "Technology, Careers & New Perspectives",
   },
   {
     kind: "session",
-    label: "Session 2",
-    title: "The Missing Dimension",
-    date: "15 August 2026 · Saturday",
-    topic: "Exploring the Dimensions of Human Potential",
-  },
-  {
-    kind: "session",
-    label: "Session 3",
-    title: "The Human Edge",
-    date: "16 August 2026 · Sunday",
-    topic: "What Makes Us Stand Out?",
+    icon: "mic",
+    label: "Podcast 02",
+    title: "Building Your Advantage",
+    date: "6 September 2026 · Sunday",
+    topic: "Mindset, Choices & Growth for the Journey Ahead",
   },
   {
     kind: "milestone",
+    icon: "target",
     label: "Outcome",
-    title: "Human Potential Assessment Report",
+    title: "Success Potential Assessment",
     date: "",
-    topic: "",
+    topic: "Discover your strengths, direction & opportunities for growth.",
   },
 ];
 
 // Meet Our Team ------------------------------------------------------------
 // Six members render as a clean 3 × 2 grid on desktop (lg:grid-cols-3).
-// `role` is optional and currently unused — every member shows just their
-// name and institute badge, which keeps the row heights uniform.
 export const team = [
   { name: "Shantanu Tiwari", detail: "IIT Guwahati", photo: "/team/shantanu.png" },
   { name: "Tushar Maini", detail: "IIT Roorkee", photo: "/team/tushar.png" },
@@ -238,66 +241,52 @@ export const team = [
   { name: "Adarsh C", detail: "IIM Bengaluru", photo: "/team/adarsh.png" },
 ];
 
-// SECTION 8 — Testimonials (placeholders, future-ready) ---------------------
-export const testimonials = [
-  {
-    quote:
-      "Your space is reserved for the first cohort. Real student stories will appear here soon.",
-    name: "Future Participant",
-    detail: "IIT · 2026",
-  },
-  {
-    quote:
-      "We are gathering feedback from our pilot sessions. Be one of the first to share yours.",
-    name: "Future Participant",
-    detail: "NIT · 2026",
-  },
-  {
-    quote:
-      "This is your seat. Register, attend, and your reflection could feature right here.",
-    name: "Future Participant",
-    detail: "Premier College · 2026",
-  },
-];
-
-// SECTION 9 — FAQ -----------------------------------------------------------
+// SECTION — FAQ -----------------------------------------------------------
 export const faqs = [
   {
-    q: "Who can join?",
-    a: "Students of IITs, NITs and other premier institutes who want to build a real edge for the AI era. Motivated learners from all backgrounds are welcome.",
+    q: "Who is this series for?",
+    a: "Students of IITs, NITs and other premier institutes — first year to final year, and every branch. If you're trying to work out how to make your engineering years actually count, this was built for you.",
   },
   {
     q: "Is it only for CS branch students?",
-    a: "No. Success Engineering is open to students from every branch and discipline. The series is built for complete beginners as well as advanced learners — no prior background is required, just the curiosity to grow.",
+    a: "No. Success Engineering is open to students from every branch and discipline. Both podcasts are built to be followed by a complete beginner and still be worth the time of someone already building.",
   },
   {
-    q: "Do I need AI knowledge?",
-    a: "Not at all. The series is designed to be accessible whether you are an AI beginner or already building with it.",
+    q: "Do I need any AI or technical background?",
+    a: "Not at all. We talk about technology and AI in terms of the choices in front of you, not in jargon. Nothing is assumed beyond curiosity.",
   },
   {
-    q: "Will certificates be provided?",
-    a: "Yes. Participants receive a Certificate of Participation, along with access to prizes, quizzes and the assessment report.",
+    q: "When exactly are the two podcasts?",
+    a: "Saturday 5 September and Sunday 6 September 2026, live on Zoom. The joining link and exact timings are sent to your email and shared in our WhatsApp group once you register.",
   },
   {
-    q: "How will Zoom links be shared?",
-    a: "After you register, the Zoom joining link and reminders are sent directly to your email and WhatsApp number.",
+    q: "Do I have to attend both?",
+    a: "They're designed to build on each other, so attending both gets you far more. If you can only make one, you're still very welcome.",
+  },
+  {
+    q: "What is the Success Potential Assessment?",
+    a: "A short interactive assessment that follows the podcasts and gives you a personal read on your strengths, your direction and the areas with the most room to grow.",
+  },
+  {
+    q: "Is it really free?",
+    a: "Yes. Access is sponsored for students of our partner institutions — the access code shared with your campus unlocks registration at no cost.",
+  },
+  {
+    q: "How will the Zoom link reach me?",
+    a: "By email to the address you register with, and in our WhatsApp group. Please join the group after registering, as that's where every reminder and link is posted.",
   },
 ];
 
-// The single destination for registrants — shown on the post-registration
-// success/duplicate screens and in the confirmation email. The student group and
-// the earlier channel were retired, so this is the only forum we publish.
-//
-// Declared here rather than in the server's email util because this file is safe
-// to import from client components; the email util pulls in nodemailer.
-export const WHATSAPP_CHANNEL_URL =
-  "https://whatsapp.com/channel/0029Vb8UA7b7Noa3HdhnHu2f";
+// Shown on the post-registration success/duplicate screens and in the
+// confirmation email. Defined in data/whatsapp.js and re-exported here so the
+// existing importers keep working off the shared definition.
+export { WHATSAPP_GROUP_URL };
 
-// SECTION 10 — Contact ------------------------------------------------------
+// SECTION — Contact -------------------------------------------------------
 export const contact = {
   email: "gitaunlocked@gmail.com",
   phone: "+91 81256 30802",
-  whatsapp: WHATSAPP_CHANNEL_URL,
+  whatsapp: WHATSAPP_GROUP_URL,
   instagram: "https://www.instagram.com/gitaunlocked",
   youtube: "https://www.youtube.com/@GitaUnlocked-w8n",
 };

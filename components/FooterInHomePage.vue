@@ -47,7 +47,7 @@
           <!-- WhatsApp -->
           <li class="flex items-center justify-center md:justify-start space-x-3">
             <img src="/whatsapp.jpeg" alt="WhatsApp" class="w-6 h-6">
-            <a href="https://whatsapp.com/channel/0029Vb9c7bB7IUYSUbEyJx3X" target="_blank"
+            <a :href="whatsappGroupUrl" target="_blank"
                class="text-gray-700 hover:text-pink-500 font-medium">
               WhatsApp - Join Our Group
             </a>
@@ -66,3 +66,11 @@
   <!-- Spacer -->
   <div class="h-6 bg-white"></div>
 </template>
+
+<script setup>
+// Was a separate Gita Unlocked broadcast channel; now points at the one group
+// every programme sends registrants to.
+import { WHATSAPP_GROUP_URL } from '~/data/whatsapp.js'
+
+const whatsappGroupUrl = WHATSAPP_GROUP_URL
+</script>

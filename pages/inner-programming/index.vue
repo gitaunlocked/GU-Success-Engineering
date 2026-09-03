@@ -297,7 +297,7 @@
 
           <!-- WhatsApp group — visible below the final CTA so anyone can join -->
           <div class="relative mx-auto mt-8 max-w-xl rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur">
-            <p class="text-sm font-bold text-white">Mastering the Mind (IPW) — WhatsApp Group</p>
+            <p class="text-sm font-bold text-white">Gita Unlocked — WhatsApp Group</p>
             <p class="mt-1 text-xs leading-relaxed text-white/70">
               Join our student community — get session links, updates and connect with fellow participants.
             </p>
@@ -335,7 +335,7 @@
             <!-- Make sure they've joined the WhatsApp group too -->
             <div class="mx-auto mt-6 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5 text-left">
               <p class="text-sm font-extrabold text-gray-900">Make sure you've joined the WhatsApp group</p>
-              <p class="mt-1 text-sm text-gray-600">All session links and reminders are shared in the <strong>Mastering the Mind (IPW)</strong> group.</p>
+              <p class="mt-1 text-sm text-gray-600">All session links and reminders are shared in our <strong>WhatsApp group</strong>.</p>
               <a
                 :href="whatsappGroupUrl"
                 target="_blank"
@@ -364,7 +364,7 @@
                 <span aria-hidden="true">⚠️</span> Important — final step
               </p>
               <p class="mt-1 text-sm text-gray-600">
-                Join the <strong>Mastering the Mind (IPW)</strong> WhatsApp group now so you don't miss session links, reminders and updates.
+                Join our <strong>WhatsApp group</strong> now so you don't miss session links, reminders and updates.
               </p>
               <a
                 :href="whatsappGroupUrl"
@@ -577,8 +577,8 @@ const form = ref({
   college: '', course: '', branch: '', branchOther: '', year: '', track: '', reason: '',
 })
 
-// Same URL as data/innerProgramming.js#WHATSAPP_GROUP_URL — kept as a local
-// alias so the template stays readable.
+// Local alias so the template stays readable. Resolves to the shared group in
+// data/whatsapp.js, which every programme now points at.
 const whatsappGroupUrl = WHATSAPP_GROUP_URL
 
 const branchOptions = [

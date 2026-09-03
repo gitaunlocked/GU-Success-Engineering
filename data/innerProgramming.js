@@ -276,8 +276,8 @@ export const courseOptions = [
 // Registration form — gender options.
 export const genderOptions = ["Male", "Female", "Prefer not to say"]
 
-// Official WhatsApp group invite for registered IPW students ("Mastering the
-// Mind _ (IPW)"). Shown on the post-registration success screen so it never
-// depends on email/WhatsApp delivery.
-export const WHATSAPP_GROUP_URL =
-  "https://chat.whatsapp.com/J8GXxYlD1oEIN9dwOB2twf?s=sh&p=a&ilr=1&amv=3"
+// Shown on the post-registration success screen so it never depends on
+// email/WhatsApp delivery. The separate "Mastering the Mind (IPW)" group was
+// retired: registrants across all programmes now go to the one group defined in
+// data/whatsapp.js, re-exported here so this file's importers are unaffected.
+export { WHATSAPP_GROUP_URL } from "./whatsapp.js"

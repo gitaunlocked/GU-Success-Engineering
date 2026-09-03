@@ -21,12 +21,21 @@ server/data/
 scripts/lists/
 
 # Registrant exports pulled from MongoDB (names, emails, phone numbers)
+exports/
 registrants*.csv
 *-registrants.csv
 registrant-emails.txt
 *-emails.txt
+*-emails-*.txt
 assessment-responses*.csv
+ha-applications*.csv
 
 # Zoom participant lists (student names)
 attendance/
 *.xlsx
+
+# Design-history snapshots. The code copies and revert patches are committed so
+# a past layout can be restored, but the full-page screenshots that accompany
+# them run to ~90MB and would bloat every clone for reference material that is
+# only useful locally.
+backups/**/screenshots/

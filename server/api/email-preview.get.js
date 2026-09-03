@@ -21,7 +21,7 @@ export default defineEventHandler((event) => {
 
   const posterImgHtml = `<div style="padding:0 24px 8px"><img src="/${CONFIRMATION_POSTER_FILE}" alt="Success Engineering" style="width:100%;border-radius:12px;display:block" /></div>`
 
-  const { html } = buildConfirmationEmail(reg, { posterImgHtml, qrSrc: '/wa-channel-qr.png' })
+  const { html } = buildConfirmationEmail(reg, { posterImgHtml, qrSrc: '/wa-group-qr.png' })
 
   setHeader(event, 'content-type', 'text/html; charset=utf-8')
   return html

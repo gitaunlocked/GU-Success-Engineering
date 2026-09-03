@@ -14,25 +14,32 @@
           <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="h-12 sm:h-14 w-auto" />
         </a>
 
-        <ul class="hidden md:flex items-center gap-9 lg:gap-12 text-lg font-medium text-gray-700">
+        <!-- Five links plus the logo and the CTA need more room than a tablet
+             has, so the full bar waits for `lg` and everything below that
+             gets the menu button instead. -->
+        <ul class="hidden lg:flex items-center gap-8 xl:gap-10 text-base xl:text-lg font-medium text-gray-700">
           <li><a href="#top" @click.prevent="scrollTo('top')" class="hover:text-[#D61C75] transition">HOME</a></li>
+          <li><a href="#journey" @click.prevent="scrollTo('journey')" class="hover:text-[#D61C75] transition">SESSIONS</a></li>
+          <li><a href="#speakers" @click.prevent="scrollTo('speakers')" class="hover:text-[#D61C75] transition">SPEAKERS</a></li>
           <li><a href="#about" @click.prevent="scrollTo('about')" class="hover:text-[#D61C75] transition">ABOUT US</a></li>
           <li><a href="#contact" @click.prevent="scrollTo('contact')" class="hover:text-[#D61C75] transition">CONTACT US</a></li>
         </ul>
 
-        <div class="hidden md:block">
+        <div class="hidden lg:block">
           <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand text-sm">Register Now</a>
         </div>
 
-        <button class="md:hidden text-gray-700" @click="mobileOpen = !mobileOpen" aria-label="Toggle menu">
+        <button class="lg:hidden text-gray-700" @click="mobileOpen = !mobileOpen" aria-label="Toggle menu">
           <svg v-if="!mobileOpen" class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
           <svg v-else class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </nav>
 
       <!-- Mobile menu -->
-      <div v-if="mobileOpen" class="md:hidden mx-4 mt-3 rounded-2xl bg-white shadow-lg ring-1 ring-gray-100 p-5 space-y-4">
+      <div v-if="mobileOpen" class="lg:hidden mx-4 mt-3 rounded-2xl bg-white shadow-lg ring-1 ring-gray-100 p-5 space-y-4">
         <a href="#top" @click.prevent="scrollTo('top')" class="block font-medium text-gray-700 hover:text-[#D61C75]">HOME</a>
+        <a href="#journey" @click.prevent="scrollTo('journey')" class="block font-medium text-gray-700 hover:text-[#D61C75]">SESSIONS</a>
+        <a href="#speakers" @click.prevent="scrollTo('speakers')" class="block font-medium text-gray-700 hover:text-[#D61C75]">SPEAKERS</a>
         <a href="#about" @click.prevent="scrollTo('about')" class="block font-medium text-gray-700 hover:text-[#D61C75]">ABOUT US</a>
         <a href="#contact" @click.prevent="scrollTo('contact')" class="block font-medium text-gray-700 hover:text-[#D61C75]">CONTACT US</a>
         <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand w-full justify-center text-sm">Register Now</a>
@@ -46,6 +53,18 @@
 
       <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-14 items-center">
         <div v-motion="heroReveal" class="text-center lg:text-left">
+          <!-- The three-part promise, carried over from the poster. Sits above
+               the wordmark as a slim strip so it sets the tone without
+               competing with the H1. -->
+          <p class="mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-gray-500 lg:justify-start">
+            <!-- Each word carries its own leading separator so a wrap can
+                 never leave a dot dangling at the end of a line. -->
+            <span v-for="(word, i) in motto" :key="word" class="inline-flex items-center gap-3">
+              <span v-if="i" class="h-1 w-1 rounded-full bg-gradient-to-r from-[#FF7A00] to-[#7A10FF]"></span>
+              <span :class="i === motto.length - 1 && 'brand-gradient-text'">{{ word }}</span>
+            </span>
+          </p>
+
           <h1 class="font-bold leading-[0.95] text-5xl sm:text-6xl lg:text-7xl uppercase tracking-tight brand-gradient-text heading-script">
             <span class="block">Success</span>
             <span class="block">Engineering</span>
@@ -56,26 +75,28 @@
             {{ event.tagline }}
           </h2>
 
+          <!-- Pill row: the "Interactive Podcast Series" tag plus the edition
+               badge. It sits outside the description below rather than inside
+               it, because that paragraph is held to a `max-w-xl` measure for
+               readability — narrower than the hero column — which forced the
+               two pills onto separate lines even with room to spare beside
+               them. `whitespace-nowrap` keeps each pill's own label intact;
+               the row still wraps as a whole on phones, where two pills can't
+               fit on one line at a legible size. -->
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+            <span class="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+              Interactive Podcast Series
+            </span>
+            <span class="edition-badge whitespace-nowrap">
+              <span class="edition-badge-dot"></span>
+              <span class="brand-gradient-text">{{ sessionEdition.badgeText }}</span>
+            </span>
+          </div>
+
           <!-- Interactive podcast series description -->
-          <p class="mt-4 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg leading-relaxed text-gray-600">
-            <!-- Pill row: original "Interactive Podcast Series" tag + the
-                 Academic Session edition badge. Wrapped in an inline-flex
-                 container so the two pills sit side by side with a small
-                 gap and wrap gracefully on narrow screens. -->
-            <span class="inline-flex flex-wrap items-center gap-2 align-middle">
-              <span class="inline-flex items-center gap-2 rounded-full bg-[#D61C75]/10 px-3 py-1 text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#D61C75]">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-                Interactive Podcast Series
-              </span>
-              <span class="edition-badge">
-                <span class="edition-badge-dot"></span>
-                <span class="brand-gradient-text">{{ sessionEdition.badgeText }}</span>
-              </span>
-            </span>
-            <span class="mt-3 block font-bold text-gray-800">
-              A 3-part live, interactive podcast series with
-              IIT alumni, industry leaders and global technology professionals.
-            </span>
+          <p class="mt-4 max-w-xl mx-auto lg:mx-0 text-base sm:text-lg font-bold leading-relaxed text-gray-800">
+            {{ event.description }}
           </p>
 
           <div class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
@@ -139,6 +160,7 @@
               <div>
                 <p class="text-xs uppercase tracking-wider text-gray-500 group-hover:text-[#D61C75] transition">Venue</p>
                 <p class="mt-1 font-semibold text-gray-900 text-sm">{{ event.venue }}</p>
+                <p class="mt-0.5 text-xs text-gray-500">{{ event.venueNote }}</p>
               </div>
             </div>
           </div>
@@ -159,7 +181,7 @@
                 </span>
                 Live Podcast
               </span>
-              <span class="text-xs font-medium text-white/80">3 Episodes</span>
+              <span class="text-xs font-medium text-white/80">2 Episodes</span>
             </div>
 
             <!-- mic + title -->
@@ -168,13 +190,28 @@
                 <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
               </div>
               <div>
-                <p class="text-xl font-bold leading-tight">Building the Human Edge</p>
-                <p class="text-sm text-white/80">in the Age of AI</p>
+                <p class="text-xl font-bold leading-tight">Making the Most of</p>
+                <p class="text-sm text-white/80">Your Engineering Journey</p>
               </div>
             </div>
 
+            <!-- Episode line-up, so the card advertises the actual sessions
+                 rather than just looking like a player. -->
+            <ul class="mt-7 space-y-2.5">
+              <li
+                v-for="(s, i) in sessionSteps"
+                :key="s.title"
+                class="flex items-center gap-3 rounded-xl bg-white/10 px-3.5 py-2.5 backdrop-blur"
+              >
+                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/20 text-[11px] font-bold">
+                  {{ String(i + 1).padStart(2, "0") }}
+                </span>
+                <span class="min-w-0 text-sm font-semibold leading-tight">{{ s.title }}</span>
+              </li>
+            </ul>
+
             <!-- animated equalizer -->
-            <div class="mt-8 flex h-20 items-end gap-1.5">
+            <div class="mt-7 flex h-14 items-end gap-1.5">
               <span
                 v-for="(b, i) in eqBars"
                 :key="i"
@@ -200,7 +237,7 @@
             <div class="flex items-center gap-3">
               <div class="flex -space-x-2.5">
                 <img
-                  v-for="s in speakers"
+                  v-for="s in speakersWithPhotos"
                   :key="s.name"
                   :src="s.photo"
                   :alt="s.name"
@@ -208,10 +245,36 @@
                 />
               </div>
               <div>
-                <p class="text-sm font-bold text-gray-900">Expert Speakers</p>
-                <p class="text-[11px] text-gray-500">IITs &amp; global tech</p>
+                <p class="text-sm font-bold text-gray-900">{{ speakers.length }} Expert Speakers</p>
+                <p class="text-[11px] text-gray-500">Google · NVIDIA · GlobalLogic · IIMB</p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE PREMISE ============ -->
+    <!-- Frames why this edition exists — the poster's opening statement. The
+         faint blueprint grid behind it is the one piece of "engineering"
+         texture on the page, kept very low contrast so it reads as paper
+         rather than decoration. -->
+    <section id="premise" class="relative overflow-hidden bg-white py-16 sm:py-20">
+      <div class="blueprint-grid pointer-events-none absolute inset-0"></div>
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white to-transparent"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div
+          class="mx-auto max-w-4xl rounded-3xl bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] p-[2px] shadow-xl shadow-[#D61C75]/10"
+          v-motion="fadeUp"
+        >
+          <div class="flex flex-col items-center gap-6 rounded-[1.4rem] bg-white p-7 text-center sm:flex-row sm:gap-7 sm:p-9 sm:text-left">
+            <span class="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white shadow-lg shadow-[#D61C75]/30">
+              <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5a4.5 4.5 0 0 0-4.5 4.5v.6A3.4 3.4 0 0 0 8 16h8a3.4 3.4 0 0 0 .5-6.4V9A4.5 4.5 0 0 0 12 4.5Z"/><path stroke-linecap="round" d="M12 16v3.5M9.5 19.5h5M12 2.5V4M5.5 6 6.6 7M18.5 6 17.4 7M10 10.5h4v3h-4z"/></svg>
+            </span>
+            <p class="text-base leading-relaxed text-gray-700 sm:text-lg">
+              <span v-for="(seg, i) in premiseSegments" :key="i" :class="seg.em && 'font-bold brand-gradient-text'">{{ seg.text }}</span>
+            </p>
           </div>
         </div>
       </div>
@@ -228,7 +291,7 @@
           <h2 class="section-title">What's New</h2>
           <p class="mt-6 text-base sm:text-lg leading-relaxed text-gray-600">{{ whatsNewIntro }}</p>
         </div>
-        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <div
             v-for="c in whatsNewCards"
             :key="c.title"
@@ -278,7 +341,8 @@
             v-motion="fadeUp"
           >
             <div class="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-[#FF7A00]/10 via-[#D61C75]/10 to-[#7A10FF]/10 text-[#D61C75] group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white transition">
-              <svg v-if="card.icon === 'chip'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
+              <svg v-if="card.icon === 'route'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="6" cy="5.5" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path stroke-linecap="round" d="M6 8v3.5a3 3 0 0 0 3 3h3.5a3 3 0 0 1 3 3v.5"/></svg>
+              <svg v-else-if="card.icon === 'chip'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/></svg>
               <svg v-else-if="card.icon === 'trophy'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4m-5-17h10v4a5 5 0 0 1-10 0V4Zm10 1h3v2a3 3 0 0 1-3 3m-10-5H4v2a3 3 0 0 0 3 3"/></svg>
               <svg v-else-if="card.icon === 'spark'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l1.8 4.8L18 9.6l-4.2 1.8L12 16l-1.8-4.6L6 9.6l4.2-1.8L12 3Zm6 9 .9 2.4L21 15l-2.1.6L18 18l-.9-2.4L15 15l2.1-.6L18 12Z"/></svg>
               <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="m15 9-2 4-4 2 2-4 4-2Z"/></svg>
@@ -298,19 +362,19 @@
           <h2 class="section-title">Meet The Speakers</h2>
           <p class="mt-4 text-gray-600">IIT alumni, industry leaders and global technology professionals guiding the series.</p>
         </div>
-        <!-- Front-only cards (the flip-to-bio back face was removed). Five
-             speakers land as 3 + 2 on desktop; `items-stretch` + `h-full`
-             keeps both rows' cards equal height despite differing title
+        <!-- Front-only cards (the flip-to-bio back face was removed). Four
+             speakers land as a single row on desktop; `items-stretch` +
+             `h-full` keeps the cards equal height despite differing title
              lengths. -->
-        <div class="mt-14 grid items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-14 grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
           <div
             v-for="s in speakers"
             :key="s.name"
-            class="group relative flex h-full flex-col items-center overflow-hidden rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20"
+            class="group relative flex h-full flex-col items-center overflow-hidden rounded-3xl border border-gray-100 bg-white p-7 text-center shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#D61C75]/10 hover:border-[#D61C75]/20"
             v-motion="fadeUp"
           >
-            <span class="absolute inset-x-10 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
-            <div class="mx-auto h-36 w-36 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
+            <span class="absolute inset-x-8 top-0 h-1 rounded-b-full bg-gradient-to-r from-[#FF7A00] via-[#D61C75] to-[#7A10FF] opacity-0 group-hover:opacity-100 transition"></span>
+            <div class="mx-auto h-32 w-32 rounded-full p-[3px] bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] transition duration-300 group-hover:scale-105">
               <div class="h-full w-full rounded-full bg-white p-[3px]">
                 <img v-if="s.photo" :src="s.photo" :alt="s.name" class="h-full w-full rounded-full object-cover" />
                 <div v-else class="grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 text-3xl font-bold brand-gradient-text">
@@ -327,8 +391,8 @@
                  of how many lines the name/title take. -->
             <div class="mt-auto pt-5">
               <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm transition duration-300 group-hover:border-[#D61C75]/30 group-hover:shadow-md">
-                <!-- Marks vary in aspect (Cisco's bars are ~3.6:1, Adobe's "A"
-                     near square), so height is fixed and width left to
+                <!-- Marks vary in aspect (the IIMB arc is ~1.7:1, Google's "G"
+                     square), so height is fixed and width left to
                      object-contain. max-w only guards against clamping. -->
                 <img v-if="s.companyLogo" :src="s.companyLogo" :alt="s.company" class="h-6 w-auto max-w-[96px] object-contain" />
                 <span class="text-sm font-semibold text-gray-900">{{ s.company }}</span>
@@ -420,27 +484,59 @@
       <div class="mx-auto max-w-7xl px-4 sm:px-6">
         <div class="text-center max-w-3xl mx-auto" v-motion="fadeUp">
           <p class="kicker">The Roadmap</p>
-          <h2 class="section-title">Your Journey Through Success Engineering</h2>
+          <h2 class="section-title">2 Powerful Sessions. One Transformative Journey.</h2>
+          <p class="mt-6 text-base sm:text-lg leading-relaxed text-gray-600">
+            Both podcasts run live on Zoom across a single weekend, and the assessment that follows turns
+            everything you heard into a read on your own strengths and direction.
+          </p>
         </div>
 
         <div class="relative mt-16">
           <div class="hidden lg:block absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#D61C75]/40 to-transparent"></div>
-          <ol class="grid gap-8 lg:grid-cols-4">
+          <ol class="grid gap-8 lg:grid-cols-3">
             <li v-for="(step, i) in journey" :key="step.title" class="group relative" v-motion="fadeUp">
               <div class="flex lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
+                <!-- The outcome step is filled rather than outlined so the
+                     assessment reads as the payoff, not a third session. -->
                 <span
-                  class="relative z-10 grid h-12 w-12 place-items-center rounded-full text-sm font-bold shrink-0 shadow-sm bg-white border-2 border-[#D61C75]/40 text-[#D61C75] transition duration-300 group-hover:border-transparent group-hover:text-white group-hover:bg-gradient-to-br group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF]"
+                  class="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 shadow-sm transition duration-300"
+                  :class="step.kind === 'milestone'
+                    ? 'border-transparent bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white'
+                    : 'border-[#D61C75]/40 bg-white text-[#D61C75] group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-[#FF7A00] group-hover:via-[#D61C75] group-hover:to-[#7A10FF] group-hover:text-white'"
                 >
-                  {{ i + 1 }}
+                  <svg v-if="step.icon === 'mic'" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg>
+                  <svg v-else class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path stroke-linecap="round" d="M12 3.5v-2m0 22v-2M3.5 12h-2m22 0h-2"/></svg>
                 </span>
-                <div class="lg:mt-6 rounded-2xl border border-gray-100 bg-white p-5 w-full shadow-sm card-hover">
-                  <p class="text-xs uppercase tracking-wider text-[#D61C75] font-semibold">{{ step.label }}</p>
-                  <h3 class="mt-1 font-semibold text-gray-900 leading-snug">{{ step.title }}</h3>
+
+                <div
+                  class="w-full rounded-2xl border p-5 shadow-sm lg:mt-6"
+                  :class="step.kind === 'milestone'
+                    ? 'border-transparent bg-gradient-to-br from-[#FF7A00] via-[#D61C75] to-[#7A10FF] text-white shadow-lg shadow-[#D61C75]/30 transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-[#D61C75]/40'
+                    : 'card-hover border-gray-100 bg-white'"
+                >
+                  <p
+                    class="text-xs font-semibold uppercase tracking-wider"
+                    :class="step.kind === 'milestone' ? 'text-white/80' : 'text-[#D61C75]'"
+                  >
+                    {{ step.label }}
+                  </p>
+                  <h3
+                    class="mt-1 text-lg font-bold leading-snug"
+                    :class="step.kind === 'milestone' ? 'text-white' : 'text-gray-900'"
+                  >
+                    {{ step.title }}
+                  </h3>
                   <p v-if="step.date" class="mt-2 flex items-center gap-1.5 text-xs font-medium text-gray-500">
                     <svg class="h-3.5 w-3.5 shrink-0 text-[#D61C75]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path stroke-linecap="round" d="M3 9h18M8 2.5v4m8-4v4"/></svg>
                     {{ step.date }}
                   </p>
-                  <p v-if="step.topic" class="mt-2 text-sm leading-snug text-gray-600">{{ step.topic }}</p>
+                  <p
+                    v-if="step.topic"
+                    class="mt-2 text-sm leading-relaxed"
+                    :class="step.kind === 'milestone' ? 'text-white/90' : 'text-gray-600'"
+                  >
+                    {{ step.topic }}
+                  </p>
                 </div>
               </div>
             </li>
@@ -497,10 +593,10 @@
             <h3 class="mt-5 text-2xl font-bold text-gray-900">Congratulations! You're in 🎉</h3>
             <p class="mt-3 text-gray-600">Your seat for <strong class="text-[#D61C75]">Success Engineering</strong> is reserved. The Zoom link and session details will be shared on WhatsApp.</p>
 
-            <!-- WhatsApp channel — must-do step (shown here so it never gets missed in email/spam) -->
+            <!-- WhatsApp group — must-do step (shown here so it never gets missed in email/spam) -->
             <div class="mx-auto mt-8 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5">
               <p class="text-sm font-bold text-gray-900">⚠️ Important — final step</p>
-              <p class="mt-1 text-sm text-gray-600">All session links &amp; reminders are shared in our WhatsApp channel. Follow it now so you don't miss the sessions.</p>
+              <p class="mt-1 text-sm text-gray-600">All session links &amp; reminders are shared in our WhatsApp group. Join it now so you don't miss the sessions.</p>
               <a
                 :href="whatsappUrl"
                 target="_blank"
@@ -508,10 +604,10 @@
                 class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
               >
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                Follow WhatsApp Channel
+                Join WhatsApp Group
               </a>
-              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to follow the channel:</p>
-              <img src="/wa-channel-qr.png" alt="WhatsApp channel QR code" class="mx-auto mt-2 w-40 rounded-xl" />
+              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to join the group:</p>
+              <img src="/wa-group-qr.png" alt="WhatsApp group QR code" class="mx-auto mt-2 w-40 rounded-xl" />
               <p class="mt-3 text-xs text-gray-500">Tip: if your confirmation email isn't in your inbox, check Spam/Promotions and mark it "Not spam".</p>
             </div>
 
@@ -526,9 +622,9 @@
             <h3 class="mt-5 text-2xl font-bold text-gray-900">Already registered</h3>
             <p class="mt-3 text-gray-600">This email is already on the list. Check your inbox for the confirmation — we'll see you at the sessions!</p>
 
-            <!-- WhatsApp channel — make sure already-registered students follow it too -->
+            <!-- WhatsApp group — make sure already-registered students join it too -->
             <div class="mx-auto mt-8 max-w-md rounded-2xl border-2 border-[#25D366] bg-[#25D366]/5 p-5">
-              <p class="text-sm font-bold text-gray-900">Make sure you've followed the WhatsApp channel</p>
+              <p class="text-sm font-bold text-gray-900">Make sure you've joined the WhatsApp group</p>
               <p class="mt-1 text-sm text-gray-600">All session links &amp; reminders are shared there.</p>
               <a
                 :href="whatsappUrl"
@@ -537,10 +633,10 @@
                 class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-base font-bold text-white shadow-md transition hover:bg-[#1ebe5a]"
               >
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                Follow WhatsApp Channel
+                Join WhatsApp Group
               </a>
-              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to follow the channel:</p>
-              <img src="/wa-channel-qr.png" alt="WhatsApp channel QR code" class="mx-auto mt-2 w-40 rounded-xl" />
+              <p class="mt-4 text-xs font-medium text-gray-500">Or scan to join the group:</p>
+              <img src="/wa-group-qr.png" alt="WhatsApp group QR code" class="mx-auto mt-2 w-40 rounded-xl" />
             </div>
 
             <button class="btn-ghost mt-8" @click="resetForm">Register your friend</button>
@@ -777,8 +873,8 @@
         <img src="/logo-se.png" alt="Gita Unlocked × Success Engineering" class="mx-auto w-56 sm:w-64 h-auto" />
         <!-- Tagline is longer than the previous one, so tracking is eased
              slightly to stop the uppercase line breaking mid-phrase. -->
-        <p class="mt-3 text-[#D61C75] tracking-[0.12em] sm:tracking-[0.2em] text-sm uppercase font-semibold">Building the Human Edge for the Age of AI</p>
-        <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Empowering students to thrive through future-ready thinking, human potential, and timeless wisdom.</p>
+        <p class="mt-3 text-[#D61C75] tracking-[0.12em] sm:tracking-[0.2em] text-sm uppercase font-semibold">{{ event.tagline }}</p>
+        <p class="mt-4 mx-auto max-w-xl text-gray-600 text-sm">Helping students think deeper, perform better and build a future they chose on purpose.</p>
 
         <a href="#register" @click.prevent="scrollTo('register')" class="btn-brand mt-8 text-sm">Reserve Your Seat</a>
       </div>
@@ -807,8 +903,11 @@ import {
   genderOptions,
   validCoupons,
   couponColleges,
-  WHATSAPP_CHANNEL_URL,
+  WHATSAPP_GROUP_URL,
   sessionEdition,
+  motto,
+  premise,
+  premiseHighlights,
   whatsNewIntro,
   whatsNewCards,
   seFarStats,
@@ -816,6 +915,34 @@ import {
 } from "~/data/successEngineering";
 
 const year = new Date().getFullYear();
+
+// The premise paragraph is stored as plain prose so it stays easy to edit;
+// the phrases listed in `premiseHighlights` are lifted out here and painted
+// in the brand gradient, the way they're emphasised on the poster.
+const premiseSegments = computed(() => {
+  const segments = [];
+  let rest = premise;
+
+  for (const phrase of premiseHighlights) {
+    const at = rest.indexOf(phrase);
+    // A phrase that's been edited out of the paragraph is simply skipped
+    // rather than throwing the rest of the sentence away.
+    if (at === -1) continue;
+    if (at > 0) segments.push({ text: rest.slice(0, at) });
+    segments.push({ text: phrase, em: true });
+    rest = rest.slice(at + phrase.length);
+  }
+
+  if (rest) segments.push({ text: rest });
+  return segments;
+});
+
+// The two podcasts, without the assessment that follows them.
+const sessionSteps = computed(() => journey.filter((s) => s.kind === "session"));
+
+// The hero's overlapping avatar stack; a speaker whose photo hasn't reached us
+// yet would otherwise render as a broken image at 32px.
+const speakersWithPhotos = computed(() => speakers.filter((s) => s.photo));
 
 // ---------------------------------------------------------------------------
 // Hero countdown
@@ -855,15 +982,15 @@ onBeforeUnmount(() => {
 });
 
 useHead({
-  title: "Success Engineering — Building the Human Edge in the Age of AI | Gita Unlocked",
+  title: "Success Engineering — Making the Most of Your Engineering Journey | Gita Unlocked",
   meta: [
     {
       name: "description",
       content:
-        "A free 3-part live interactive series for IIT & NIT students with IIT alumni, industry leaders and global technology professionals. Build your human edge for the age of AI. Register now.",
+        "A free 2-part live interactive podcast series for IIT & NIT students with IIT alumni, industry leaders and global technology professionals. Think deeper, perform better, build your future. 5 & 6 September 2026, live on Zoom.",
     },
-    { property: "og:title", content: "Success Engineering — Building the Human Edge in the Age of AI" },
-    { property: "og:description", content: "Free 3-part live series for IIT/NIT students. AI-era skills, human potential, leadership. Register now." },
+    { property: "og:title", content: "Success Engineering — Making the Most of Your Engineering Journey" },
+    { property: "og:description", content: "Free 2-part live podcast series for engineering students, 5 & 6 September 2026. Careers, technology, mindset — plus a Success Potential Assessment. Register now." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ],
@@ -914,7 +1041,7 @@ const initials = (name) =>
 
 // Shown on the success screen so it never depends on email delivery. Imported
 // from the shared data module so the site and the confirmation email can't drift.
-const whatsappUrl = WHATSAPP_CHANNEL_URL;
+const whatsappUrl = WHATSAPP_GROUP_URL;
 
 // Hero audio equalizer — varied delays/durations give a lively, organic bounce.
 const eqBars = Array.from({ length: 26 }, (_, i) => ({
@@ -1240,6 +1367,18 @@ const submit = async () => {
   .edition-badge {
     animation: none;
   }
+}
+
+/* Faint engineering graph-paper grid behind the premise band. Kept at ~3%
+   brand tint and masked to fade out at the edges so it reads as the texture
+   of the paper rather than a visible grid drawn on top of it. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgba(214, 28, 117, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 28, 117, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 45%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 45%, #000 40%, transparent 100%);
 }
 
 /* "Success Engineering So Far" statistic cards */
