@@ -103,11 +103,11 @@ export const buildConfirmationEmail = (reg, { posterImgHtml = '', qrSrc = '' } =
   const college = collegeFromCode(reg)
 
   const collegeLineText = college
-    ? `We're glad to welcome you from ${college}! This access is reserved for select students across multiple IITs & NITs.\n\n`
+    ? `We're glad to welcome you from ${college}! This access is reserved for select students across multiple Premier Institutes across India.\n\n`
     : ''
   const collegeLineHtml = college
     ? `<div style="background:#f5f0ff;border-left:4px solid #7A10FF;border-radius:8px;padding:14px 16px;margin:18px 0">
-           <p style="margin:0;color:#444">We're glad to welcome you from <strong style="color:#7A10FF">${escapeHtml(college)}</strong>. This access is reserved for select students across multiple IITs &amp; NITs.</p>
+           <p style="margin:0;color:#444">We're glad to welcome you from <strong style="color:#7A10FF">${escapeHtml(college)}</strong>. This access is reserved for select students across multiple Premier Institutes across India.</p>
          </div>`
     : ''
 
