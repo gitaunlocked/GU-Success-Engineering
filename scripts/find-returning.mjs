@@ -9,12 +9,13 @@
 // personal address or a differently spelled name.
 import { MongoClient } from 'mongodb';
 import { config } from 'dotenv';
+import { registrationsCollectionName } from '../data/registrations.js';
 
 config();
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB || 'gitaunlocked';
-const currentName = process.env.MONGODB_SE_2026_COLLECTION || 'successEngineering2026';
+const currentName = registrationsCollectionName();
 
 if (!uri) {
   console.error('MONGODB_URI is not set');

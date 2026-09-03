@@ -7,6 +7,7 @@
 import { MongoClient } from 'mongodb';
 import { writeFileSync } from 'fs';
 import { config } from 'dotenv';
+import { registrationsCollectionName } from '../data/registrations.js';
 
 config();
 
@@ -21,7 +22,7 @@ const outFile = flag('--out') || '/tmp/se-shots/registrants.html';
 
 const uri = process.env.MONGODB_URI;
 const dbName = process.env.MONGODB_DB || 'gitaunlocked';
-const collName = process.env.MONGODB_SE_2026_COLLECTION || 'successEngineering2026';
+const collName = registrationsCollectionName();
 
 if (!uri) {
   console.error('MONGODB_URI is not set');
