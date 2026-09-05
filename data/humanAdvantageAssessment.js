@@ -5,9 +5,13 @@
 //   - 5 multiple-choice questions + 2 short-response questions. All compulsory.
 //   - There is NO scoring. Responses are collected for shortlisting only.
 //   - No section tags / labels are shown — questions stand on their own.
-//   - Question ids are historical, not sequential: applications collected in the
-//     earlier round used q1–q10, so retained questions keep their original id and
-//     the Independence Day question was added as q11. Never reuse a retired id.
+//   - Question ids are historical, not sequential. Earlier rounds used q1–q11;
+//     the September set that replaced them is q12–q18. Never reuse a retired id —
+//     the stored records from those rounds still carry the old meaning, and an id
+//     serving two different questions makes them impossible to tell apart when
+//     the answers are read back together.
+//   - `subtext` is optional: a second paragraph for questions that set up a
+//     scenario before asking the actual question.
 
 export const assessmentMeta = {
   title: "The Human Advantage Ecosystem",
@@ -21,69 +25,83 @@ export const assessmentMeta = {
 
 export const questions = [
   {
-    id: "q1",
-    text: "AI can increasingly perform tasks involving information processing, analysis, and problem-solving. Which human ability do you believe will become most valuable in the coming decade?",
+    id: "q12",
+    text: "Technology is evolving rapidly, and many technical skills are changing faster than ever. Which ability do you think will be most valuable throughout your engineering journey?",
     type: "choice",
     options: [
-      { id: "a", label: "Technical knowledge" },
-      { id: "b", label: "Ability to learn and adapt" },
-      { id: "c", label: "Creativity and innovation" },
-      { id: "d", label: "Understanding oneself and others" },
+      { id: "a", label: "Building strong technical knowledge" },
+      { id: "b", label: "Learning, adapting and picking up new skills" },
+      { id: "c", label: "Thinking creatively and finding new solutions" },
+      { id: "d", label: "Understanding yourself, your strengths and how you work best" },
     ],
   },
   {
-    id: "q2",
-    text: "When faced with an unfamiliar challenge, what is your usual approach?",
+    id: "q13",
+    text: "When you encounter a problem or challenge you have never faced before, what do you usually do?",
     type: "choice",
     options: [
-      { id: "a", label: "Wait for guidance" },
-      { id: "b", label: "Learn independently and experiment" },
-      { id: "c", label: "Observe how others solve it first" },
-      { id: "d", label: "Avoid taking responsibility until necessary" },
+      { id: "a", label: "Wait for someone to guide me" },
+      { id: "b", label: "Try to understand it, learn independently and experiment" },
+      { id: "c", label: "First observe how others approach it" },
+      { id: "d", label: "Avoid taking responsibility until I am confident" },
     ],
   },
   {
-    id: "q3",
-    text: "Which statement best describes your current focus?",
+    id: "q14",
+    text: "Which statement best describes where you are currently in your engineering journey?",
     type: "choice",
     options: [
-      { id: "a", label: "Securing a good placement/job" },
-      { id: "b", label: "Building skills and career opportunities" },
-      { id: "c", label: "Understanding what I truly want from life" },
-      { id: "d", label: "Trying to balance all of the above" },
+      { id: "a", label: "I am mainly focused on getting a good placement/job" },
+      { id: "b", label: "I am focused on building skills and exploring career opportunities" },
+      { id: "c", label: "I am still figuring out what direction suits me best" },
+      {
+        id: "d",
+        label:
+          "I am trying to balance academics, career, personal growth and other priorities",
+      },
     ],
   },
   {
-    id: "q4",
-    text: "Imagine that you achieve everything you currently desire: a successful career, financial security, recognition, and the goals you have set for yourself. A few years later, you still feel that something is missing. What would you most likely do?",
+    id: "q15",
+    text: "Imagine you achieve the major goals you currently have — a good career, financial security, recognition and the opportunities you are working towards.",
+    subtext:
+      "A few years later, what do you think you would be most likely to focus on?",
     type: "choice",
     options: [
-      { id: "a", label: "Set bigger goals and chase new achievements" },
-      { id: "b", label: "Focus on gaining more wealth and success" },
-      { id: "c", label: "Explore deeper questions about purpose, fulfillment, and meaning" },
-      { id: "d", label: "Assume this feeling is normal and ignore it" },
+      { id: "a", label: "Setting bigger goals and pursuing new achievements" },
+      { id: "b", label: "Building greater financial success and security" },
+      { id: "c", label: "Exploring what gives me deeper fulfillment and meaning" },
+      { id: "d", label: "I am not sure yet" },
     ],
   },
   {
-    id: "q11",
-    text: "As India steps into the age of AI, the generation graduating today will shape what the country offers the world. As an emerging leader from India, where do you believe India can contribute most meaningfully?",
+    id: "q16",
+    text: "Engineering can open doors to careers, innovation and opportunities not only in India but around the world. As an engineering student, where do you think you can create the greatest impact?",
     type: "choice",
     options: [
-      { id: "a", label: "Building technology and enterprise the world depends on" },
-      { id: "b", label: "Setting the standard for the ethical, humane use of AI" },
-      { id: "c", label: "Sharing its timeless wisdom on purpose, character, and inner growth" },
-      { id: "d", label: "Creating opportunity and dignity for every citizen at home first" },
+      { id: "a", label: "Building technology and solutions that solve important problems" },
+      { id: "b", label: "Creating businesses, products and opportunities for others" },
+      {
+        id: "c",
+        label:
+          "Contributing to society through responsible innovation and meaningful work",
+      },
+      {
+        id: "d",
+        label: "I am still exploring where I can make the greatest contribution",
+      },
     ],
   },
   {
-    id: "q9",
-    text: "What is one question about life, success, happiness, purpose, human potential, or the future that you genuinely want to understand better?",
+    id: "q17",
+    text: "What is one question about your engineering journey, career, success, personal growth or future that you genuinely want to understand better?",
     type: "text",
     placeholder: "2–4 sentences…",
   },
   {
-    id: "q10",
-    text: "Why would you like to be selected for The Human Advantage Ecosystem? What do you hope to gain from this journey?",
+    id: "q18",
+    text: "Why would you like to be part of Success Engineering?",
+    subtext: "What would you hope to learn, explore or gain from the journey?",
     type: "text",
     placeholder: "3–5 sentences…",
   },

@@ -6,68 +6,73 @@
 //
 // There is NO scoring here — this assessment only collects and stores answers.
 //
-// Ids are historical, not sequential: q5–q8 were retired after the earlier round
-// and q11 was added in their place. Never reuse a retired id — stored records
-// from the earlier round still carry the old meaning.
+// Ids are historical, not sequential: q1–q11 served the June and August rounds
+// and were retired when the September set replaced them, so the current
+// questions are q12–q18. Never reuse a retired id — stored records from those
+// rounds still carry the old meaning, and an id serving two different questions
+// makes them impossible to tell apart when the answers are read back together.
+//
+// The full question text is written into each record below, so a retired
+// question stays legible in its own records long after it leaves this file.
 
 const QUESTIONS = {
-  q1: {
-    text: 'AI can increasingly perform tasks involving information processing, analysis, and problem-solving. Which human ability do you believe will become most valuable in the coming decade?',
+  q12: {
+    text: 'Technology is evolving rapidly, and many technical skills are changing faster than ever. Which ability do you think will be most valuable throughout your engineering journey?',
     options: {
-      a: 'Technical knowledge',
-      b: 'Ability to learn and adapt',
-      c: 'Creativity and innovation',
-      d: 'Understanding oneself and others',
+      a: 'Building strong technical knowledge',
+      b: 'Learning, adapting and picking up new skills',
+      c: 'Thinking creatively and finding new solutions',
+      d: 'Understanding yourself, your strengths and how you work best',
     },
   },
-  q2: {
-    text: 'When faced with an unfamiliar challenge, what is your usual approach?',
+  q13: {
+    text: 'When you encounter a problem or challenge you have never faced before, what do you usually do?',
     options: {
-      a: 'Wait for guidance',
-      b: 'Learn independently and experiment',
-      c: 'Observe how others solve it first',
-      d: 'Avoid taking responsibility until necessary',
+      a: 'Wait for someone to guide me',
+      b: 'Try to understand it, learn independently and experiment',
+      c: 'First observe how others approach it',
+      d: 'Avoid taking responsibility until I am confident',
     },
   },
-  q3: {
-    text: 'Which statement best describes your current focus?',
+  q14: {
+    text: 'Which statement best describes where you are currently in your engineering journey?',
     options: {
-      a: 'Securing a good placement/job',
-      b: 'Building skills and career opportunities',
-      c: 'Understanding what I truly want from life',
-      d: 'Trying to balance all of the above',
+      a: 'I am mainly focused on getting a good placement/job',
+      b: 'I am focused on building skills and exploring career opportunities',
+      c: 'I am still figuring out what direction suits me best',
+      d: 'I am trying to balance academics, career, personal growth and other priorities',
     },
   },
-  q4: {
-    text: 'Imagine that you achieve everything you currently desire: a successful career, financial security, recognition, and the goals you have set for yourself. A few years later, you still feel that something is missing. What would you most likely do?',
+  q15: {
+    text: 'Imagine you achieve the major goals you currently have — a good career, financial security, recognition and the opportunities you are working towards. A few years later, what do you think you would be most likely to focus on?',
     options: {
-      a: 'Set bigger goals and chase new achievements',
-      b: 'Focus on gaining more wealth and success',
-      c: 'Explore deeper questions about purpose, fulfillment, and meaning',
-      d: 'Assume this feeling is normal and ignore it',
+      a: 'Setting bigger goals and pursuing new achievements',
+      b: 'Building greater financial success and security',
+      c: 'Exploring what gives me deeper fulfillment and meaning',
+      d: 'I am not sure yet',
     },
   },
-  q11: {
-    text: 'As India steps into the age of AI, the generation graduating today will shape what the country offers the world. As an emerging leader from India, where do you believe India can contribute most meaningfully?',
+  q16: {
+    text: 'Engineering can open doors to careers, innovation and opportunities not only in India but around the world. As an engineering student, where do you think you can create the greatest impact?',
     options: {
-      a: 'Building technology and enterprise the world depends on',
-      b: 'Setting the standard for the ethical, humane use of AI',
-      c: 'Sharing its timeless wisdom on purpose, character, and inner growth',
-      d: 'Creating opportunity and dignity for every citizen at home first',
+      a: 'Building technology and solutions that solve important problems',
+      b: 'Creating businesses, products and opportunities for others',
+      c: 'Contributing to society through responsible innovation and meaningful work',
+      d: 'I am still exploring where I can make the greatest contribution',
     },
   },
-  q9: {
-    text: 'What is one question about life, success, happiness, purpose, human potential, or the future that you genuinely want to understand better?',
+  q17: {
+    text: 'What is one question about your engineering journey, career, success, personal growth or future that you genuinely want to understand better?',
     type: 'text',
   },
-  q10: {
-    text: 'Why would you like to be selected for The Human Advantage Ecosystem? What do you hope to gain from this journey?',
+  q18: {
+    text: 'Why would you like to be part of Success Engineering? What would you hope to learn, explore or gain from the journey?',
     type: 'text',
   },
 }
 
-export const choiceQuestionIds = ['q1', 'q2', 'q3', 'q4', 'q11']
-export const textQuestionIds = ['q9', 'q10']
+export const choiceQuestionIds = ['q12', 'q13', 'q14', 'q15', 'q16']
+export const textQuestionIds = ['q17', 'q18']
 
 // Builds a readable, self-describing record of the submitted answers.
 export function serializeAnswers(answers) {

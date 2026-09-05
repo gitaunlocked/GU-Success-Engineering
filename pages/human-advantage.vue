@@ -71,6 +71,9 @@
           <h2 class="text-xl font-bold leading-snug text-gray-900 sm:text-2xl">
             {{ currentQuestion.text }}
           </h2>
+          <p v-if="currentQuestion.subtext" class="mt-3 text-base leading-relaxed text-gray-600 sm:text-lg">
+            {{ currentQuestion.subtext }}
+          </p>
 
           <!-- Choice question -->
           <div v-if="currentQuestion.type === 'choice'" class="mt-6 space-y-3">
