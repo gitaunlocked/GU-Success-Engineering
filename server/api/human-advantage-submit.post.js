@@ -4,6 +4,10 @@ import {
   choiceQuestionIds,
   textQuestionIds,
 } from '../utils/humanAdvantageResponses'
+import {
+  haApplicationsCollectionName,
+  HA_APPLICATIONS_EDITION,
+} from '~/data/haApplications.js'
 
 const MIN_TEXT_LENGTH = 2
 
@@ -62,6 +66,7 @@ export default defineEventHandler(async (event) => {
     event: 'success-engineering',
     assessment: 'human-advantage-series',
     type: 'application-shortlisting',
+    edition: HA_APPLICATIONS_EDITION,
     name,
     phone,
     email,
@@ -73,9 +78,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getMongoDb()
-    const collection = db.collection(
-      (process.env.MONGODB_HA_APPLICATION_COLLECTION || 'seHumanAdvantageApplications').trim(),
-    )
+    const collection = db.collection(haApplicationsCollectionName())
     await collection.insertOne(record)
   } catch (err) {
     console.error('human-advantage-submit error:', err?.message || err)
