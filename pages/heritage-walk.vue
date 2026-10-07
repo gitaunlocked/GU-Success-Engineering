@@ -113,8 +113,8 @@
           <p class="eyebrow">The Circuits</p>
           <h2 class="section-title mt-3">Six places that still teach</h2>
           <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
-            Each circuit departs separately and travels as one group. Your campus decides which one you join —
-            you will see yours the moment you pick your college in the form below.
+            Each circuit travels as one group. Your campus decides which one you join — you will see yours the
+            moment you pick your college in the form below.
           </p>
         </div>
 
@@ -126,21 +126,43 @@
             :style="{ '--accent': d.accent }"
           >
             <div class="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]" :class="i % 2 === 1 && 'lg:[direction:rtl]'">
-              <!-- Plate -->
+              <!-- Photo plate. The place name sits in the top corner, over the image. -->
               <div class="destination-plate lg:[direction:ltr]">
-                <span class="destination-index">{{ String(i + 1).padStart(2, '0') }}</span>
-                <h3 class="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{{ d.name }}</h3>
-                <p class="mt-2 text-sm font-medium uppercase tracking-[0.25em] text-white/70">{{ d.state }}</p>
-                <p class="mt-6 font-serif text-xl italic text-white/90">{{ d.tagline }}</p>
-                <span v-if="d.unesco" class="mt-6 inline-flex items-center gap-2 rounded-full bg-white/[0.15] px-3.5 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-inset ring-white/25">
-                  UNESCO World Heritage
-                </span>
+                <img
+                  :src="d.photo"
+                  :alt="d.photoAlt"
+                  class="destination-photo"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="destination-scrim" :style="{ '--accent': d.accent }"></div>
+
+                <div class="destination-plate-top">
+                  <span class="destination-index">{{ String(i + 1).padStart(2, '0') }}</span>
+                  <h3 class="mt-2 text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl">
+                    {{ d.name }}
+                  </h3>
+                  <p class="mt-1.5 text-sm font-medium uppercase tracking-[0.25em] text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
+                    {{ d.state }}
+                  </p>
+                </div>
+
+                <div class="destination-plate-bottom">
+                  <span v-if="d.unesco" class="inline-flex items-center gap-2 self-start rounded-full bg-black/35 px-3.5 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-inset ring-white/30 backdrop-blur-sm">
+                    UNESCO World Heritage
+                  </span>
+                  <p class="mt-3 font-serif text-xl italic text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
+                    {{ d.tagline }}
+                  </p>
+                </div>
+
+                <!-- Licence attribution; required wherever the photo is shown. -->
+                <p class="destination-credit">Photo: {{ d.credit.author }} · {{ d.credit.license }}</p>
               </div>
 
               <!-- Detail -->
               <div class="destination-body lg:[direction:ltr]">
                 <div class="flex flex-wrap items-center gap-2.5">
-                  <span class="meta-pill"><component :is="icon('calendar')" /> Departs {{ d.departs }}</span>
                   <span class="meta-pill"><component :is="icon('clock')" /> {{ d.duration }}</span>
                 </div>
 
@@ -159,6 +181,18 @@
               </div>
             </div>
           </article>
+        </div>
+
+        <!-- The six above are this edition, not the whole map. -->
+        <div class="more-places">
+          <p class="eyebrow">{{ moreDestinations.title }}</p>
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
+            {{ moreDestinations.body }}
+          </p>
+          <ul class="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+            <li v-for="n in moreDestinations.names" :key="n" class="more-pill">{{ n }}</li>
+            <li class="more-pill more-pill--muted">and more to come</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -225,9 +259,7 @@
           <span v-if="confirmedSpot" class="mt-1 font-serif text-base italic text-[#5A4632]">
             {{ confirmedSpot.tagline }}
           </span>
-          <span v-if="confirmedSpot" class="mt-2 text-xs text-[#8A7449]">
-            Departs {{ confirmedSpot.departs }} · {{ confirmedSpot.duration }}
-          </span>
+          <span v-if="confirmedSpot" class="mt-2 text-xs text-[#8A7449]">{{ confirmedSpot.duration }}</span>
         </div>
         <p class="mx-auto mt-8 max-w-lg text-sm text-[#7A6A56]">
           Please keep your transaction reference safe until you hear from us. Submitting this form does not by itself
@@ -255,7 +287,7 @@
         <div class="text-center">
           <p class="eyebrow">Registration</p>
           <h2 class="section-title mt-3">Reserve your place</h2>
-          <p class="mt-4 text-sm text-[#7A6A56]">Two short steps. Takes about a minute.</p>
+          <p class="mt-4 text-sm text-[#7A6A56]">Two steps: your details, then payment. Allow about five minutes.</p>
         </div>
 
         <!-- Step rail -->
@@ -273,79 +305,200 @@
 
         <form class="premium-card mt-10 p-8 sm:p-10" novalidate @submit.prevent="onSubmit">
           <!-- ================= STEP 1 ================= -->
-          <div v-show="step === 1" class="grid gap-6">
-            <div>
-              <label for="hw-name" class="lbl">Full Name <span class="req">*</span></label>
-              <input
-                id="hw-name"
-                v-model.trim="form.fullName"
-                type="text"
-                class="field"
-                :class="errors.fullName && 'field-error'"
-                placeholder="e.g. Aarav Sharma"
-                autocomplete="name"
-              />
-              <p v-if="errors.fullName" class="field-msg">{{ errors.fullName }}</p>
-            </div>
+          <div v-show="step === 1" class="grid gap-9">
+            <!-- ---- About you ---- -->
+            <fieldset class="grid gap-5">
+              <legend class="fieldset-legend">About you</legend>
 
-            <div>
-              <label for="hw-mobile" class="lbl">Mobile Number <span class="req">*</span></label>
-              <input
-                id="hw-mobile"
-                v-model.trim="form.mobile"
-                type="tel"
-                inputmode="tel"
-                class="field"
-                :class="errors.mobile && 'field-error'"
-                placeholder="10-digit mobile"
-                autocomplete="tel"
-              />
-              <p v-if="errors.mobile" class="field-msg">{{ errors.mobile }}</p>
-            </div>
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label for="hw-name" class="lbl">Full Name <span class="req">*</span></label>
+                  <input
+                    id="hw-name"
+                    v-model.trim="form.fullName"
+                    type="text"
+                    class="field"
+                    :class="errors.fullName && 'field-error'"
+                    placeholder="e.g. Aarav Sharma"
+                    autocomplete="name"
+                  />
+                  <p v-if="errors.fullName" class="field-msg">{{ errors.fullName }}</p>
+                </div>
 
-            <div>
-              <label for="hw-college" class="lbl">College <span class="req">*</span></label>
-              <div class="relative">
-                <select
-                  id="hw-college"
-                  v-model="form.college"
-                  class="field appearance-none pr-11"
-                  :class="[errors.college && 'field-error', !form.college && 'text-[#A89880]']"
-                >
-                  <option value="" disabled>Select your college</option>
-                  <option v-for="c in collegeOptions" :key="c" :value="c">{{ c }}</option>
-                </select>
-                <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#8A7449]" aria-hidden="true">
-                  <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                    <path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-              </div>
-              <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
-            </div>
+                <div>
+                  <label for="hw-mobile" class="lbl">Mobile Number <span class="req">*</span></label>
+                  <input
+                    id="hw-mobile"
+                    v-model.trim="form.mobile"
+                    type="tel"
+                    inputmode="tel"
+                    class="field"
+                    :class="errors.mobile && 'field-error'"
+                    placeholder="10-digit mobile"
+                    autocomplete="tel"
+                  />
+                  <p v-if="errors.mobile" class="field-msg">{{ errors.mobile }}</p>
+                </div>
 
-            <!-- Allotted circuit, revealed as soon as a college is picked -->
-            <Transition name="reveal">
-              <div v-if="allottedSpot" class="allotment" :style="{ '--accent': allottedSpot.accent }">
-                <div class="flex items-start gap-4">
-                  <span class="allotment-icon"><component :is="icon('pin')" /></span>
-                  <div>
-                    <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">
-                      Your heritage circuit
-                    </p>
-                    <p class="mt-1 text-2xl font-semibold tracking-tight text-[#1B2A4A]">
-                      {{ allottedSpot.name }}<span class="text-[#8A7449]">, {{ allottedSpot.state }}</span>
-                    </p>
-                    <p class="mt-1.5 font-serif text-base italic text-[#5A4632]">{{ allottedSpot.tagline }}</p>
-                    <p class="mt-3 text-xs text-[#7A6A56]">
-                      Departs {{ allottedSpot.departs }} · {{ allottedSpot.duration }} · allotted by campus
-                    </p>
+                <div>
+                  <label for="hw-gender" class="lbl">Gender <span class="req">*</span></label>
+                  <div class="relative">
+                    <select
+                      id="hw-gender"
+                      v-model="form.gender"
+                      class="field appearance-none pr-11"
+                      :class="[errors.gender && 'field-error', !form.gender && 'text-[#A89880]']"
+                    >
+                      <option value="" disabled>Select</option>
+                      <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
+                    </select>
+                    <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
                   </div>
+                  <p v-if="errors.gender" class="field-msg">{{ errors.gender }}</p>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label for="hw-email" class="lbl">Official College Email <span class="req">*</span></label>
+                  <input
+                    id="hw-email"
+                    v-model.trim="form.collegeEmail"
+                    type="email"
+                    inputmode="email"
+                    class="field"
+                    :class="errors.collegeEmail && 'field-error'"
+                    placeholder="you@iitk.ac.in"
+                    autocomplete="email"
+                  />
+                  <p v-if="errors.collegeEmail" class="field-msg">{{ errors.collegeEmail }}</p>
+                  <p v-else class="field-hint">Your institute address — we use it to confirm you are a current student.</p>
                 </div>
               </div>
-            </Transition>
+            </fieldset>
 
-            <div class="mt-2 flex justify-end">
+            <!-- ---- Your campus ---- -->
+            <fieldset class="grid gap-5">
+              <legend class="fieldset-legend">Your campus</legend>
+
+              <div>
+                <label for="hw-college" class="lbl">College <span class="req">*</span></label>
+                <div class="relative">
+                  <select
+                    id="hw-college"
+                    v-model="form.college"
+                    class="field appearance-none pr-11"
+                    :class="[errors.college && 'field-error', !form.college && 'text-[#A89880]']"
+                  >
+                    <option value="" disabled>Select your college</option>
+                    <option v-for="c in collegeOptions" :key="c" :value="c">{{ c }}</option>
+                  </select>
+                  <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
+                </div>
+                <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
+              </div>
+
+              <!-- Allotted circuit, revealed as soon as a college is picked -->
+              <Transition name="reveal">
+                <div v-if="allottedSpot" class="allotment" :style="{ '--accent': allottedSpot.accent }">
+                  <div class="flex items-start gap-4">
+                    <span class="allotment-icon"><component :is="icon('pin')" /></span>
+                    <div>
+                      <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">
+                        Your heritage circuit
+                      </p>
+                      <p class="mt-1 text-2xl font-semibold tracking-tight text-[#1B2A4A]">
+                        {{ allottedSpot.name }}<span class="text-[#8A7449]">, {{ allottedSpot.state }}</span>
+                      </p>
+                      <p class="mt-1.5 font-serif text-base italic text-[#5A4632]">{{ allottedSpot.tagline }}</p>
+                      <p class="mt-3 text-xs text-[#7A6A56]">
+                        {{ allottedSpot.duration }} · allotted by your campus · dates shared once your group is confirmed
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label for="hw-course" class="lbl">Course <span class="req">*</span></label>
+                  <div class="relative">
+                    <select
+                      id="hw-course"
+                      v-model="form.course"
+                      class="field appearance-none pr-11"
+                      :class="[errors.course && 'field-error', !form.course && 'text-[#A89880]']"
+                    >
+                      <option value="" disabled>Select your course</option>
+                      <option v-for="c in courseOptions" :key="c" :value="c">{{ c }}</option>
+                    </select>
+                    <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
+                  </div>
+                  <p v-if="errors.course" class="field-msg">{{ errors.course }}</p>
+                </div>
+
+                <div>
+                  <label for="hw-year" class="lbl">Year <span class="req">*</span></label>
+                  <div class="relative">
+                    <select
+                      id="hw-year"
+                      v-model="form.year"
+                      class="field appearance-none pr-11"
+                      :class="[errors.year && 'field-error', !form.year && 'text-[#A89880]']"
+                    >
+                      <option value="" disabled>Select your year</option>
+                      <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
+                    </select>
+                    <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
+                  </div>
+                  <p v-if="errors.year" class="field-msg">{{ errors.year }}</p>
+                </div>
+
+                <div>
+                  <label for="hw-branch" class="lbl">Branch <span class="req">*</span></label>
+                  <input
+                    id="hw-branch"
+                    v-model.trim="form.branch"
+                    type="text"
+                    class="field"
+                    :class="errors.branch && 'field-error'"
+                    placeholder="e.g. Mechanical Engineering"
+                  />
+                  <p v-if="errors.branch" class="field-msg">{{ errors.branch }}</p>
+                </div>
+
+                <div>
+                  <label for="hw-mentor" class="lbl">Name of Mentor</label>
+                  <input
+                    id="hw-mentor"
+                    v-model.trim="form.mentor"
+                    type="text"
+                    class="field"
+                    placeholder="Your Success Engineering mentor"
+                  />
+                  <p class="field-hint">Leave blank if you have not been assigned one.</p>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- ---- In your words ---- -->
+            <fieldset class="grid gap-5">
+              <legend class="fieldset-legend">In your words</legend>
+
+              <div v-for="q in openQuestions" :key="q.id">
+                <label :for="`hw-${q.id}`" class="lbl">{{ q.label }} <span class="req">*</span></label>
+                <textarea
+                  :id="`hw-${q.id}`"
+                  v-model.trim="form[q.id]"
+                  rows="4"
+                  class="field resize-y"
+                  :class="errors[q.id] && 'field-error'"
+                  :placeholder="q.placeholder"
+                ></textarea>
+                <p v-if="errors[q.id]" class="field-msg">{{ errors[q.id] }}</p>
+                <p v-else class="field-hint">{{ (form[q.id] || '').length }} / {{ q.minLength }} characters minimum</p>
+              </div>
+            </fieldset>
+
+            <div class="flex justify-end">
               <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="goToStep2">
                 Continue to payment
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -384,7 +537,8 @@
                 </span>
               </p>
               <p v-if="payment.fullCost" class="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#B8860B]">
-                {{ payment.currency }}{{ (payment.fullCost - payment.amount).toLocaleString('en-IN') }} covered by alumni sponsorship
+                {{ payment.currency }}{{ (payment.fullCost - payment.amount).toLocaleString('en-IN') }} sponsored by
+                {{ form.college ? `${form.college} alumni` : 'alumni' }}
               </p>
               <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#5A4632]">{{ payment.note }}</p>
             </div>
@@ -612,7 +766,12 @@ import {
   eligibility,
   destinations,
   destinationById,
+  moreDestinations,
   collegeOptions,
+  courseOptions,
+  genderOptions,
+  yearOptions,
+  openQuestions,
   spotForCollege,
   unmappedColleges,
   inclusions,
@@ -690,7 +849,20 @@ const initials = (name) =>
 
 // --- Form state ---
 const step = ref(1)
-const form = reactive({ fullName: '', mobile: '', college: '', consentAccepted: false })
+const form = reactive({
+  fullName: '',
+  mobile: '',
+  gender: '',
+  collegeEmail: '',
+  college: '',
+  course: '',
+  year: '',
+  branch: '',
+  mentor: '',
+  likedMost: '',
+  thoughts: '',
+  consentAccepted: false,
+})
 const errors = reactive({})
 // 'idle' | 'submitting' | 'success' | 'duplicate'
 const submitState = ref('idle')
@@ -781,14 +953,39 @@ function formatBytes(bytes) {
 }
 
 // --- Validation ---
+const STEP_1_FIELDS = [
+  'fullName',
+  'mobile',
+  'gender',
+  'collegeEmail',
+  'college',
+  'course',
+  'year',
+  'branch',
+  ...openQuestions.map((q) => q.id),
+]
+
 function validateStep1() {
-  delete errors.fullName
-  delete errors.mobile
-  delete errors.college
+  STEP_1_FIELDS.forEach((f) => delete errors[f])
+
   if (!form.fullName) errors.fullName = 'Please enter your full name.'
-  if (form.mobile.replace(/\D/g, '').length < 10) errors.mobile = 'Enter a valid 10-digit mobile number.'
+  if (form.mobile.replace(/\D/g, '').length !== 10) errors.mobile = 'Enter a valid 10-digit mobile number.'
+  if (!genderOptions.includes(form.gender)) errors.gender = 'Please select an option.'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.collegeEmail)) {
+    errors.collegeEmail = 'Enter a valid email address.'
+  }
   if (!collegeOptions.includes(form.college)) errors.college = 'Please select your college.'
-  return !errors.fullName && !errors.mobile && !errors.college
+  if (!courseOptions.includes(form.course)) errors.course = 'Please select your course.'
+  if (!yearOptions.includes(form.year)) errors.year = 'Please select your year.'
+  if (!form.branch) errors.branch = 'Please enter your branch.'
+
+  for (const q of openQuestions) {
+    if ((form[q.id] || '').length < q.minLength) {
+      errors[q.id] = `Please write at least ${q.minLength} characters.`
+    }
+  }
+
+  return STEP_1_FIELDS.every((f) => !errors[f])
 }
 
 function validateStep2() {
@@ -830,10 +1027,7 @@ async function onSubmit() {
   submitState.value = 'submitting'
   try {
     const fd = new FormData()
-    fd.append('fullName', form.fullName)
-    fd.append('mobile', form.mobile)
-    fd.append('college', form.college)
-    fd.append('consentAccepted', String(form.consentAccepted))
+    Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)))
     fd.append('paymentScreenshot', file.value)
 
     const res = await $fetch('/api/heritage-walk-register', { method: 'POST', body: fd })
@@ -859,10 +1053,9 @@ async function onSubmit() {
 }
 
 function resetForm() {
-  form.fullName = ''
-  form.mobile = ''
-  form.college = ''
-  form.consentAccepted = false
+  Object.keys(form).forEach((k) => {
+    form[k] = k === 'consentAccepted' ? false : ''
+  })
   Object.keys(errors).forEach((k) => delete errors[k])
   clearFile()
   serverError.value = ''
@@ -883,6 +1076,7 @@ const wrap = (paths) =>
 const ICONS = {
   calendar: () => wrap(['M3 9h18', 'M8 3v4', 'M16 3v4', 'M4 6h16v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6Z']),
   clock: () => wrap(['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'M12 7v5l3 2']),
+  caret: () => wrap(['m7 10 5 5 5-5']),
   pin: () => wrap(['M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z', 'M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z']),
   bus: () => wrap(['M4 10h16', 'M5 6h14a1 1 0 0 1 1 1v11H4V7a1 1 0 0 1 1-1Z', 'M8 18v2', 'M16 18v2', 'M7.5 14.5h.01', 'M16.5 14.5h.01']),
   bed: () => wrap(['M4 19V6', 'M20 19v-6a3 3 0 0 0-3-3H4', 'M4 15h16', 'M8 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z']),
@@ -973,13 +1167,40 @@ const icon = (key) => ICONS[key] || ICONS.pin
   @apply overflow-hidden rounded-[2rem] border border-[#E4D8C4] bg-white shadow-[0_1px_2px_rgba(45,27,14,0.04),0_30px_70px_-45px_rgba(27,42,74,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_40px_90px_-50px_rgba(27,42,74,0.45)];
 }
 .destination-plate {
-  @apply relative flex flex-col justify-center p-9 sm:p-11;
+  @apply relative flex min-h-[22rem] flex-col justify-between overflow-hidden p-9 sm:p-11 lg:min-h-[26rem];
+  background: var(--accent);
+}
+.destination-photo {
+  @apply absolute inset-0 h-full w-full object-cover;
+}
+/* Keeps the white type legible over any photo, and ties the image back to the
+   circuit's accent colour. */
+.destination-scrim {
+  @apply pointer-events-none absolute inset-0;
   background:
-    radial-gradient(500px 300px at 20% 15%, rgba(255, 255, 255, 0.14), transparent 60%),
-    linear-gradient(145deg, var(--accent) 0%, #1b2a4a 135%);
+    linear-gradient(176deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.06) 38%, rgba(0, 0, 0, 0.68) 100%),
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 62%);
+}
+.destination-plate-top,
+.destination-plate-bottom {
+  @apply relative z-10;
 }
 .destination-index {
-  @apply font-serif text-5xl italic leading-none text-white/50;
+  @apply block font-serif text-5xl italic leading-none text-white/60;
+}
+.destination-credit {
+  @apply absolute bottom-2.5 right-4 z-10 text-[0.6rem] font-medium tracking-wide text-white/55;
+}
+
+/* "And many more" */
+.more-places {
+  @apply mt-16 rounded-[2rem] border border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-8 py-12 text-center sm:px-12;
+}
+.more-pill {
+  @apply rounded-full border border-[#E4D8C4] bg-white px-4 py-1.5 text-sm font-medium text-[#5A4632];
+}
+.more-pill--muted {
+  @apply border-transparent bg-transparent font-serif italic text-[#8A7449];
 }
 .destination-body {
   @apply p-9 sm:p-11;
@@ -1054,6 +1275,18 @@ const icon = (key) => ICONS[key] || ICONS.pin
 }
 .field-msg {
   @apply mt-1.5 text-xs font-medium text-red-500;
+}
+.field-hint {
+  @apply mt-1.5 text-xs text-[#8A7449];
+}
+.fieldset-legend {
+  @apply mb-1 w-full border-b border-[#EFE4D2] pb-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+}
+.select-caret {
+  @apply pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#8A7449];
+}
+.select-caret :deep(svg) {
+  @apply h-4 w-4;
 }
 .step-dot {
   @apply grid h-8 w-8 place-items-center rounded-full border border-[#E4D8C4] bg-white text-xs font-semibold text-[#A89880] transition;

@@ -5,14 +5,22 @@
 // Human Advantage Ecosystem. Copy, destinations, dates, pricing and payment
 // details all live here so the page layout never has to be touched.
 //
-// Three things below are placeholders that must be set before this page is
-// announced anywhere — they are marked CONFIRM in a comment at each spot:
-//   1. payment.amount and the UPI details
-//   2. each destination's `departs` window
-//   3. every testimonial quote (see the note above `testimonials`)
+// Departure dates are deliberately absent: the circuits are announced to each
+// campus once the group is confirmed, so the page never promises a month.
 // ---------------------------------------------------------------------------
 
-import { couponColleges, team as seTeam } from "./successEngineering.js";
+import {
+  couponColleges,
+  courseOptions,
+  genderOptions,
+  team as seTeam,
+  yearOptions,
+} from "./successEngineering.js";
+
+// Re-exported so the page imports every option list from one module. These are
+// the same lists the Success Engineering registration uses, deliberately — a
+// student's answers should line up across both forms.
+export { courseOptions, genderOptions, yearOptions };
 
 export const brand = {
   presenter: "Success Engineering",
@@ -48,8 +56,9 @@ export const eligibility = {
 // Each destination runs as its own departure, so a student travels to the one
 // circuit their campus is grouped into rather than choosing from a menu.
 //
-// CONFIRM: `departs` is a placeholder month. Set the real departure window for
-// each circuit before this page is shared with students.
+// `photo` images are from Wikimedia Commons. `credit` is not decoration — the
+// CC BY-SA licences require the photographer to be named wherever the image is
+// shown, so the page renders it on the image itself.
 export const destinations = [
   {
     id: "jaipur",
@@ -58,8 +67,10 @@ export const destinations = [
     region: "north",
     tagline: "The Engineering of Kings",
     unesco: true,
-    departs: "December 2026",
     duration: "3 Days · 2 Nights",
+    photo: "/heritage-walk/places/jaipur.jpg",
+    photoAlt: "The pink sandstone facade of Hawa Mahal in Jaipur",
+    credit: { author: "Chainwit.", license: "CC BY-SA 4.0" },
     blurb:
       "Long before computational astronomy, Jaipur's rulers built instruments out of stone that still tell the time to within two seconds. The city is a masterclass in design constraint: a grid planned in 1727, a palace facade engineered for airflow, an observatory that is pure applied mathematics in marble.",
     highlights: [
@@ -78,8 +89,10 @@ export const destinations = [
     region: "south",
     tagline: "A Capital Carved From Boulders",
     unesco: true,
-    departs: "December 2026",
     duration: "3 Days · 2 Nights",
+    photo: "/heritage-walk/places/hampi.jpg",
+    photoAlt: "The carved stone chariot at the Vittala temple complex, Hampi",
+    credit: { author: "Ankit Darsi", license: "CC BY-SA 4.0" },
     blurb:
       "The Vijayanagara empire built a city of half a million people among granite hills, and then it vanished. What survives is one of the most extraordinary ruin fields on earth — stone chariots with wheels that once turned, pillars that ring with musical notes, and an aqueduct network that still carries water today.",
     highlights: [
@@ -98,8 +111,10 @@ export const destinations = [
     region: "northeast",
     tagline: "Bridges That Are Grown, Not Built",
     unesco: false,
-    departs: "December 2026",
     duration: "4 Days · 3 Nights",
+    photo: "/heritage-walk/places/shillong.jpg",
+    photoAlt: "The double-decker living root bridge at Nongriat, Meghalaya",
+    credit: { author: "Chiranjeeb Baul", license: "CC BY-SA 4.0" },
     blurb:
       "In the wettest place on earth, concrete rots and steel rusts. So the Khasi people route living fig roots across rivers and let them thicken for decades. The result is infrastructure that gets stronger with age rather than weaker — an idea most modern engineering has no answer to.",
     highlights: [
@@ -118,8 +133,10 @@ export const destinations = [
     region: "north",
     tagline: "Where the Ganga Leaves the Mountains",
     unesco: false,
-    departs: "December 2026",
     duration: "3 Days · 2 Nights",
+    photo: "/heritage-walk/places/rishikesh.jpg",
+    photoAlt: "Lakshman Jhula suspension bridge over the Ganga at Rishikesh",
+    credit: { author: "Snehrashmi", license: "CC BY-SA 4.0" },
     blurb:
       "Rishikesh is where the Ganga finally steps out of the Himalaya onto the plains, and where India has sent people to think for at least two thousand years. Between the evening aarti and a morning on the river, it is the one stop on this walk built around stillness rather than structures.",
     highlights: [
@@ -138,8 +155,10 @@ export const destinations = [
     region: "north",
     tagline: "A City the Ramayana Built",
     unesco: false,
-    departs: "December 2026",
     duration: "2 Days · 1 Night",
+    photo: "/heritage-walk/places/ayodhya.jpg",
+    photoAlt: "Shri Ram Janmabhoomi Mandir, Ayodhya",
+    credit: { author: "Prime Minister's Office", license: "GODL-India" },
     blurb:
       "Few places in India have been written about for as long as Ayodhya, and almost none have been rebuilt as recently. Walking the Saryu ghats at dawn is a lesson in how a civilisation keeps a story alive across millennia — and in what happens when stone, memory and craft are put back to work in our own lifetime.",
     highlights: [
@@ -158,8 +177,10 @@ export const destinations = [
     region: "south",
     tagline: "The World's Busiest Pilgrimage",
     unesco: false,
-    departs: "December 2026",
     duration: "3 Days · 2 Nights",
+    photo: "/heritage-walk/places/tirupati.jpg",
+    photoAlt: "The gopuram of Sri Venkateswara Temple at Tirumala",
+    credit: { author: "Nikhilb239", license: "CC BY-SA 4.0" },
     blurb:
       "Tirumala moves tens of thousands of people a day, every day, and has done so for centuries. Set aside the devotion for a moment and it is also one of the most remarkable logistics operations on the planet — queueing, kitchens, sanitation and crowd flow at a scale no startup has ever attempted.",
     highlights: [
@@ -176,6 +197,24 @@ export const destinations = [
 export const destinationById = Object.fromEntries(
   destinations.map((d) => [d.id, d]),
 );
+
+// Closes the destinations section. The six above are the circuits running this
+// edition, not the full extent of where the Heritage Walk goes.
+export const moreDestinations = {
+  title: "And many more",
+  body: "Six circuits run this edition. Konark, Khajuraho, Madurai, Varanasi, Mahabalipuram, Bhubaneswar, Badami, Thanjavur and Leh are all on the map for the rounds ahead — the Heritage Walk is built to keep going long after this one.",
+  names: [
+    "Konark",
+    "Khajuraho",
+    "Madurai",
+    "Varanasi",
+    "Mahabalipuram",
+    "Bhubaneswar",
+    "Badami",
+    "Thanjavur",
+    "Leh",
+  ],
+};
 
 // SECTION — College → circuit ----------------------------------------------
 // A student does not pick their destination; it follows from their campus, so
@@ -230,9 +269,13 @@ export const spotForCollege = (college) => {
 // SECTION — What's included -------------------------------------------------
 export const inclusions = [
   { icon: "bus", label: "Travel", value: "Group travel to and from the circuit" },
-  { icon: "bed", label: "Stay", value: "Twin-sharing accommodation" },
+  { icon: "bed", label: "Stay", value: "Comfortable shared accommodation" },
   { icon: "meal", label: "Meals", value: "All meals through the journey" },
-  { icon: "guide", label: "Guides", value: "Local historians at every site" },
+  {
+    icon: "guide",
+    label: "Guides",
+    value: "The history and meaning of every place, told on site",
+  },
   { icon: "ticket", label: "Entry", value: "All monument and temple access" },
   { icon: "shield", label: "Support", value: "Success Engineering team on ground" },
 ];
@@ -268,11 +311,31 @@ export const payment = {
   currency: "₹",
   amount: 200,
   fullCost: 5000,
-  note: "Alumni sponsorship covers the rest. You are not paying less for a smaller trip — you are paying less because someone who walked this path before you decided you should go.",
+  note: "You are not paying less for a smaller trip. You are paying less because someone who walked out of your own campus decided you should go.",
   upiId: "9347509554@ybl",
   accountName: "Pindiproli Naga Sai Anurag",
   qrImage: "/heritage-walk/upi-qr.png",
 };
+
+// SECTION — Open questions --------------------------------------------------
+// Asked at registration. Kept here so the wording can be changed per round
+// without touching the page, and so the export scripts can reuse the labels.
+export const openQuestions = [
+  {
+    id: "likedMost",
+    label: "What did you like most in the Human Advantage series?",
+    placeholder:
+      "A session, an idea or a moment that stayed with you.",
+    minLength: 20,
+  },
+  {
+    id: "thoughts",
+    label: "Your thoughts on initiatives like this",
+    placeholder:
+      "What you think a journey like this should do for students.",
+    minLength: 20,
+  },
+];
 
 // SECTION — Consent ---------------------------------------------------------
 // Shown next to the checkbox a student must tick before the form will submit.
@@ -283,7 +346,6 @@ export const consent = {
     "I understand my heritage circuit is allotted by my campus and cannot be exchanged for another.",
     "I understand my seat is confirmed only after Success Engineering verifies my payment, and that submitting this form alone does not reserve a place.",
     "I take responsibility for my own health, conduct and belongings through the journey, and will follow the instructions of the organising team and all site rules.",
-    "I consent to photographs and video taken during the walk being used by Gita Unlocked and Success Engineering in their communications.",
     "I consent to my details being stored and used by Success Engineering to organise this journey and to contact me about it.",
   ],
 };

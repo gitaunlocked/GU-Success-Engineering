@@ -2,7 +2,15 @@ import { readMultipartFormData } from 'h3'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { getMongoDb } from '../utils/mongo'
-import { collegeRegions, regionSpot, destinationById } from '~/data/heritageWalk.js'
+import {
+  collegeRegions,
+  regionSpot,
+  destinationById,
+  courseOptions,
+  genderOptions,
+  yearOptions,
+  openQuestions,
+} from '~/data/heritageWalk.js'
 
 // Coerce every field to a trimmed, length-capped string (prevents NoSQL
 // operator injection — we never let an object/array reach a Mongo document).
@@ -59,22 +67,55 @@ export default defineEventHandler(async (event) => {
   const reg = {
     fullName: str(partText(parts, 'fullName'), 120),
     mobile: str(partText(parts, 'mobile'), 20),
+    gender: str(partText(parts, 'gender'), 40),
+    collegeEmail: str(partText(parts, 'collegeEmail'), 160).toLowerCase(),
     college: str(partText(parts, 'college'), 120),
+    course: str(partText(parts, 'course'), 60),
+    year: str(partText(parts, 'year'), 40),
+    branch: str(partText(parts, 'branch'), 120),
+    mentor: str(partText(parts, 'mentor'), 120),
     consentAccepted: partText(parts, 'consentAccepted') === 'true',
+  }
+  // Long-form answers; capped generously rather than at the 500-char default.
+  for (const q of openQuestions) {
+    reg[q.id] = str(partText(parts, q.id), 4000)
   }
 
   // ---- Field validation (server-side, never trust the client) ----
   if (!reg.fullName) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter your full name.' })
   }
-  if (reg.mobile.replace(/\D/g, '').length < 10) {
+  if (reg.mobile.replace(/\D/g, '').length !== 10) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter a valid 10-digit mobile number.' })
+  }
+  if (!genderOptions.includes(reg.gender)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please select a gender option from the list.' })
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reg.collegeEmail)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid college email address.' })
   }
   // The college must be one we actually run a circuit for. Checking against the
   // mapping rather than a separate list means a college can never pass
   // validation and then be allotted no destination.
   if (!collegeRegions[reg.college]) {
     throw createError({ statusCode: 400, statusMessage: 'Please select your college from the list.' })
+  }
+  if (!courseOptions.includes(reg.course)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please select your course from the list.' })
+  }
+  if (!yearOptions.includes(reg.year)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please select your year from the list.' })
+  }
+  if (!reg.branch) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter your branch.' })
+  }
+  for (const q of openQuestions) {
+    if (reg[q.id].length < q.minLength) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Please answer "${q.label}" in at least ${q.minLength} characters.`,
+      })
+    }
   }
   if (!reg.consentAccepted) {
     throw createError({ statusCode: 400, statusMessage: 'Please accept the participation terms to submit.' })
