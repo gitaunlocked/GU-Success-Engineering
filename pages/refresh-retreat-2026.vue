@@ -1,486 +1,600 @@
 <template>
-  <div class="refresh-retreat relative min-h-screen bg-white text-[#0A2540] antialiased">
+  <div class="heritage">
     <!-- ======================================================================
-         NAVIGATION — minimal, floating, transparent-over-hero then solid
+         DEV-ONLY WARNING — content that is still placeholder
+         Shown only while developing. A banner like this on the live page would
+         read as a broken site to a student, but it must be impossible to miss
+         while the quotes are drafts and the payment details are unset.
+         ====================================================================== -->
+    <div
+      v-if="isDev && blockers.length"
+      class="sticky top-0 z-[60] bg-[#7F1D1D] px-4 py-2 text-center text-xs font-semibold text-white"
+    >
+      DEV ONLY — not ready to publish: {{ blockers.join(' · ') }}
+    </div>
+
+    <!-- ======================================================================
+         NAV
          ====================================================================== -->
     <header
-      :class="[
-        'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        scrolled ? 'border-b border-black/5 bg-white/85 py-3 shadow-sm backdrop-blur-xl' : 'py-4',
-      ]"
+      class="sticky top-0 z-50 transition duration-300"
+      :class="scrolled ? 'bg-[#FBF7F0]/90 shadow-[0_1px_0_rgba(45,27,14,0.08)] backdrop-blur-xl' : 'bg-transparent'"
     >
-      <nav class="mx-auto flex max-w-6xl items-center justify-between px-6">
-        <a href="/" class="flex items-center gap-3">
-          <img :src="brand.logo" alt="Gita Unlocked" class="h-9 w-auto sm:h-10" />
-        </a>
-        <div class="flex items-center gap-3 text-sm">
-          <span :class="['hidden font-medium sm:inline', scrolled ? 'text-[#0A2540]/70' : 'text-white/85']">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <NuxtLink to="/" class="flex items-center gap-3">
+          <img :src="brand.logo" alt="" class="h-9 w-auto" />
+          <span class="hidden text-sm font-semibold tracking-tight text-[#2D1B0E] sm:block">
             {{ brand.presenter }}
           </span>
-          <button
-            type="button"
-            class="btn-primary px-5 py-2 text-sm sm:text-[0.925rem]"
-            @click="scrollToId('register')"
-          >
-            Register
+        </NuxtLink>
+        <div class="hidden items-center gap-8 lg:flex">
+          <button v-for="l in navLinks" :key="l.id" type="button" class="nav-link" @click="scrollToId(l.id)">
+            {{ l.label }}
           </button>
         </div>
+        <button type="button" class="btn-primary px-5 py-2.5 text-sm" @click="scrollToId('register')">
+          {{ hero.primaryCta }}
+        </button>
       </nav>
     </header>
 
     <!-- ======================================================================
-         HERO — full-bleed image with dark gradient overlay
+         HERO
          ====================================================================== -->
-    <section id="hero" class="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden">
-      <!-- Real photo if present, gradient fallback if not -->
-      <img
-        v-if="!heroImageBroken"
-        :src="hero.image"
-        alt="Guruvayur retreat"
-        class="absolute inset-0 -z-10 h-full w-full object-cover"
-        @error="heroImageBroken = true"
-      />
-      <div v-else class="absolute inset-0 -z-10 hero-fallback"></div>
+    <section id="hero" class="relative isolate overflow-hidden">
+      <div class="hero-wash absolute inset-0 -z-10"></div>
+      <div class="absolute inset-0 -z-10 opacity-[0.07] [background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22><path d=%22M20 0 L40 20 L20 40 L0 20 Z%22 fill=%22none%22 stroke=%22%23B8860B%22 stroke-width=%221%22/></svg>')]"></div>
 
-      <!-- Dark gradient overlay -->
-      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-[#0A2540]/70 via-[#0A2540]/55 to-[#0A2540]/85"></div>
-      <!-- Subtle radial accent -->
-      <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_35%,rgba(0,113,227,0.35),transparent_60%)]"></div>
+      <div class="mx-auto max-w-5xl px-6 py-24 text-center sm:py-32">
+        <span class="badge-gold">{{ hero.badge }}</span>
 
-      <div class="relative mx-auto max-w-4xl px-6 py-24 text-center text-white sm:py-28">
-        <div v-motion :initial="{ opacity: 0, y: 24 }" :enter="{ opacity: 1, y: 0, transition: { duration: 700 } }">
-          <span class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] backdrop-blur-md">
-            <span class="relative flex h-1.5 w-1.5">
-              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80"></span>
-              <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-white"></span>
-            </span>
-            {{ hero.eyebrowBadge }}
-          </span>
-        </div>
-
-        <h1
-          v-motion
-          :initial="{ opacity: 0, y: 30 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 800, delay: 120 } }"
-          class="mt-8 text-[3rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-7xl md:text-8xl"
-        >
+        <h1 class="mt-8 text-5xl font-semibold leading-[1.05] tracking-tight text-[#1B2A4A] sm:text-7xl">
           {{ hero.title }}
         </h1>
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 240 } }"
-          class="mt-4 text-xl font-light tracking-tight text-white/85 sm:text-2xl"
-        >
-          {{ hero.subtitle }}
-        </p>
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 16 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 360 } }"
-          class="mx-auto mt-6 max-w-xl text-base text-white/75 sm:text-lg"
-        >
-          {{ hero.tagline }}
-        </p>
+        <p class="mt-4 font-serif text-2xl italic text-[#B8860B] sm:text-3xl">{{ hero.subtitle }}</p>
 
-        <!-- Presenter block -->
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 16 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 480 } }"
-          class="mx-auto mt-10 inline-flex flex-col items-center gap-1 rounded-2xl border border-white/15 bg-white/5 px-6 py-4 backdrop-blur-md"
-        >
-          <p class="text-[0.7rem] font-medium uppercase tracking-[0.28em] text-white/60">Organised by</p>
-          <p class="text-base font-semibold tracking-tight text-white">{{ brand.presenter }}</p>
-          <p class="text-xs text-white/70">{{ brand.ecosystem }}</p>
-        </div>
+        <div class="mx-auto mt-8 h-px w-24 bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
 
-        <!-- Primary CTA -->
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 16 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 600 } }"
-          class="mt-10 flex flex-col items-center gap-3"
-        >
-          <button type="button" class="btn-primary group px-8 py-4 text-base font-semibold sm:text-lg" @click="scrollToId('register')">
+        <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-[#5A4632]">{{ hero.tagline }}</p>
+        <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#7A6A56]">{{ hero.intro }}</p>
+
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="scrollToId('register')">
             {{ hero.primaryCta }}
-            <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M10 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
           </button>
-          <button
-            type="button"
-            class="mt-2 text-xs font-medium uppercase tracking-[0.22em] text-white/70 transition hover:text-white"
-            @click="scrollToId('details')"
-          >
-            Learn more
+          <button type="button" class="btn-secondary px-7 py-3.5 text-base" @click="scrollToId('destinations')">
+            {{ hero.secondaryCta }}
           </button>
         </div>
-      </div>
 
-      <!-- Scroll hint -->
-      <div class="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60">
-        <span class="scroll-mouse" aria-hidden="true"></span>
+        <!-- Destination ticker -->
+        <div class="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+          <template v-for="(d, i) in destinations" :key="d.id">
+            <span class="text-sm font-medium tracking-wide text-[#5A4632]">{{ d.name }}</span>
+            <span v-if="i < destinations.length - 1" class="text-[#B8860B]" aria-hidden="true">◆</span>
+          </template>
+        </div>
       </div>
     </section>
 
     <!-- ======================================================================
-         RETREAT DETAILS
+         ELIGIBILITY
          ====================================================================== -->
-    <section id="details" class="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
-      <div v-motion-fade-visible-once class="mx-auto max-w-2xl text-center">
-        <p class="eyebrow">Overview</p>
-        <h2 class="section-title mt-3">Retreat Details</h2>
-        <p class="mt-4 text-base leading-relaxed text-[#4A5568]">
-          Everything you need to know about the day — thoughtfully curated so you can just show up and be present.
-        </p>
-      </div>
-
-      <div class="mt-14 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-        <div
-          v-for="d in retreatDetails"
-          :key="d.label"
-          v-motion-fade-visible-once
-          class="detail-card group"
-        >
-          <span class="detail-icon">
-            <component :is="iconComponent(d.icon)" />
-          </span>
-          <div class="min-w-0 flex-1">
-            <p class="detail-label">{{ d.label }}</p>
-            <p class="detail-value">{{ d.value }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Activities pill row -->
-      <div class="mt-8 rounded-3xl border border-black/5 bg-gradient-to-br from-[#EFF6FF] to-white p-6 shadow-[0_1px_2px_rgba(10,37,64,0.04)] sm:p-8">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div class="flex items-center gap-3">
-            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white text-lg text-[#0071E3] shadow-sm ring-1 ring-black/5" aria-hidden="true">🛕</span>
-            <div>
-              <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0071E3]">Activities</p>
-              <p class="text-lg font-semibold tracking-tight text-[#0A2540]">A full day of experiences</p>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span
-              v-for="a in activities"
-              :key="a"
-              class="rounded-full border border-[#0071E3]/15 bg-white px-3 py-1 text-xs font-medium text-[#0A2540] shadow-sm"
-            >
-              {{ a }}
+    <section id="eligibility" class="relative mx-auto max-w-5xl px-6 pb-20">
+      <div class="rounded-[2rem] border border-[#B8860B]/[0.25] bg-white p-8 shadow-[0_24px_70px_-40px_rgba(27,42,74,0.35)] sm:p-12">
+        <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
+          <div class="shrink-0">
+            <span class="grid h-14 w-14 place-items-center rounded-2xl bg-[#FDF6E7] text-[#B8860B] ring-1 ring-[#B8860B]/20">
+              <component :is="icon('seal')" />
             </span>
           </div>
+          <div>
+            <h2 class="text-2xl font-semibold tracking-tight text-[#1B2A4A] sm:text-3xl">
+              {{ eligibility.title }}
+            </h2>
+            <p class="mt-3 text-base leading-relaxed text-[#5A4632]">{{ eligibility.body }}</p>
+            <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+              <li v-for="p in eligibility.points" :key="p" class="flex items-start gap-2.5 text-sm text-[#5A4632]">
+                <span class="mt-[0.3rem] text-[#B8860B]" aria-hidden="true">◆</span>
+                <span>{{ p }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================
-         WHAT YOU'LL EXPERIENCE
+         DESTINATIONS — one panel per destination, each with its own departure
          ====================================================================== -->
-    <section id="experience" class="relative bg-[#F8FAFC] py-24 sm:py-32">
+    <section id="destinations" class="relative bg-[#F6EFE3] py-24 sm:py-32">
       <div class="mx-auto max-w-6xl px-6">
-        <div v-motion-fade-visible-once class="mx-auto max-w-2xl text-center">
-          <p class="eyebrow">The experience</p>
-          <h2 class="section-title mt-3">What You'll Experience</h2>
-          <p class="mt-4 text-base leading-relaxed text-[#4A5568]">
-            Six moments — small enough to remember, big enough to change something.
+        <div class="text-center">
+          <p class="eyebrow">The Destinations</p>
+          <h2 class="section-title mt-3">{{ destinations.length }} places that still teach</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
+            Each destination travels as one group. Your campus decides which one you join — you will see yours
+            the moment you pick your college in the form below.
           </p>
         </div>
 
-        <div class="mt-14 grid gap-5 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          <div
-            v-for="e in experiences"
-            :key="e.title"
-            v-motion-fade-visible-once
-            class="experience-card group"
+        <div class="mt-16 space-y-10">
+          <article
+            v-for="(d, i) in destinations"
+            :key="d.id"
+            class="destination-card"
+            :style="{ '--accent': d.accent }"
           >
-            <span class="experience-emoji" aria-hidden="true">{{ e.emoji }}</span>
-            <h3 class="mt-6 text-lg font-semibold tracking-tight text-[#0A2540]">{{ e.title }}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-[#4A5568]">{{ e.body }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+            <div class="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]" :class="i % 2 === 1 && 'lg:[direction:rtl]'">
+              <!-- Photo plate. The place name sits in the top corner, over the image. -->
+              <div class="destination-plate lg:[direction:ltr]">
+                <img
+                  :src="d.photo"
+                  :alt="d.photoAlt"
+                  class="destination-photo"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="destination-scrim" :style="{ '--accent': d.accent }"></div>
 
-    <!-- ======================================================================
-         REGISTRATION FEE
-         ====================================================================== -->
-    <section id="fee" class="relative mx-auto max-w-4xl px-6 py-24 sm:py-32">
-      <div v-motion-fade-visible-once class="text-center">
-        <p class="eyebrow">Transparent pricing</p>
-        <h2 class="section-title mt-3">Registration Fee</h2>
-        <p class="mt-3 text-sm text-[#4A5568]">Actual trip expenses</p>
-      </div>
-
-      <!-- Pricing table -->
-      <div v-motion-fade-visible-once class="mt-12 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-[0_1px_3px_rgba(10,37,64,0.05),0_10px_40px_-20px_rgba(10,37,64,0.15)]">
-        <ul class="divide-y divide-[#EEF2F7]">
-          <li v-for="line in pricing.breakdown" :key="line.label" class="flex items-center justify-between px-6 py-5 sm:px-8">
-            <span class="text-sm font-medium text-[#4A5568] sm:text-base">{{ line.label }}</span>
-            <span class="text-base font-semibold tabular-nums text-[#0A2540] sm:text-lg">
-              {{ pricing.currency }}{{ line.amount.toLocaleString('en-IN') }}
-            </span>
-          </li>
-          <li class="flex items-center justify-between bg-[#F8FAFC] px-6 py-5 sm:px-8">
-            <span class="text-sm font-semibold uppercase tracking-wider text-[#0A2540] sm:text-base">Actual Cost</span>
-            <span class="text-lg font-bold tabular-nums text-[#0A2540] sm:text-xl">
-              {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Alumni-sponsored hero card -->
-      <div
-        v-motion-fade-visible-once
-        class="relative mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#059669] via-[#10B981] to-[#34D399] p-8 text-white shadow-[0_20px_50px_-15px_rgba(16,185,129,0.55)] sm:p-12"
-      >
-        <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/15 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-20 -left-16 h-72 w-72 rounded-full bg-white/10 blur-3xl"></div>
-
-        <div class="relative">
-          <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] backdrop-blur">
-            <span aria-hidden="true">🎉</span> Alumni Sponsored
-          </span>
-
-          <div class="mt-8 grid gap-8 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
-            <div>
-              <p class="text-xs font-medium uppercase tracking-[0.22em] text-white/70">Actual Cost</p>
-              <p class="mt-1 text-4xl font-semibold tracking-tight text-white/60 line-through decoration-white/50 sm:text-5xl">
-                {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
-              </p>
-            </div>
-
-            <div class="hidden text-white/70 sm:block" aria-hidden="true">
-              <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none">
-                <path d="M12 4v16m0 0-6-6m6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <div>
-              <p class="text-xs font-medium uppercase tracking-[0.22em] text-white/85">Your Contribution</p>
-              <p class="mt-1 flex items-baseline gap-2 text-6xl font-bold tracking-tight sm:text-7xl">
-                {{ pricing.currency }}{{ pricing.studentContribution }}
-                <span class="text-sm font-semibold uppercase tracking-[0.22em] text-white/85">only</span>
-              </p>
-            </div>
-          </div>
-
-          <p class="mt-8 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">
-            {{ pricing.sponsorNote }}
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         PAYMENT
-         ====================================================================== -->
-    <section id="payment" class="relative bg-[#F8FAFC] py-24 sm:py-32">
-      <div class="mx-auto max-w-5xl px-6">
-        <div v-motion-fade-visible-once class="mx-auto max-w-2xl text-center">
-          <p class="eyebrow">Payment</p>
-          <h2 class="section-title mt-3">Complete Your Payment</h2>
-          <p class="mt-4 text-base text-[#4A5568]">
-            Pay ₹{{ pricing.studentContribution }} using any UPI app, then upload the screenshot below to confirm your seat.
-          </p>
-        </div>
-
-        <div class="mt-14 grid gap-6 sm:mt-16 lg:grid-cols-2">
-          <!-- QR card -->
-          <div v-motion-fade-visible-once class="premium-card flex flex-col items-center p-8 sm:p-10">
-            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0071E3]">Scan to pay</p>
-            <div class="mt-6 rounded-2xl border border-black/5 bg-white p-4 shadow-inner">
-              <img
-                v-if="!qrImageBroken"
-                :src="payment.qrImage"
-                alt="UPI QR code"
-                class="h-56 w-56 object-contain sm:h-64 sm:w-64"
-                @error="qrImageBroken = true"
-              />
-              <div v-else class="grid h-56 w-56 place-items-center rounded-xl bg-gradient-to-br from-[#EFF6FF] to-white text-center sm:h-64 sm:w-64">
-                <div class="px-6">
-                  <span class="grid h-14 w-14 place-items-center rounded-2xl bg-white text-2xl text-[#0071E3] shadow-sm ring-1 ring-black/5" aria-hidden="true">📱</span>
-                  <p class="mt-4 text-xs font-medium text-[#4A5568]">
-                    Add <code class="rounded bg-white px-1.5 py-0.5 text-[10px] font-mono text-[#0A2540] ring-1 ring-black/5">public/refresh-retreat/upi-qr.png</code> to display the QR code here.
+                <div class="destination-plate-top">
+                  <span class="destination-index">{{ String(i + 1).padStart(2, '0') }}</span>
+                  <h3 class="mt-2 text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-5xl">
+                    {{ d.name }}
+                  </h3>
+                  <p class="mt-1.5 text-sm font-medium uppercase tracking-[0.25em] text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
+                    {{ d.state }}
                   </p>
                 </div>
+
+                <div class="destination-plate-bottom">
+                  <span v-if="d.unesco" class="inline-flex items-center gap-2 self-start rounded-full bg-black/35 px-3.5 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white ring-1 ring-inset ring-white/30 backdrop-blur-sm">
+                    UNESCO World Heritage
+                  </span>
+                  <p class="mt-3 font-serif text-xl italic text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
+                    {{ d.tagline }}
+                  </p>
+                </div>
+
+                <!-- Licence attribution; required wherever the photo is shown.
+                     Omitted for CC0 images, which carry no such condition. -->
+                <p v-if="d.credit" class="destination-credit">Photo: {{ d.credit.author }} · {{ d.credit.license }}</p>
+              </div>
+
+              <!-- Detail -->
+              <div class="destination-body lg:[direction:ltr]">
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <!-- Only Guruvayur carries a fixed date; the rest are set per campus. -->
+                  <span v-if="d.date" class="meta-pill meta-pill--date">
+                    <component :is="icon('calendar')" /> {{ d.date }}
+                  </span>
+                  <span class="meta-pill"><component :is="icon('clock')" /> {{ d.duration }}</span>
+                </div>
+
+                <p class="mt-6 text-base leading-relaxed text-[#5A4632]">{{ d.blurb }}</p>
+
+                <ul class="mt-6 space-y-2.5">
+                  <li v-for="h in d.highlights" :key="h" class="flex items-start gap-2.5 text-sm text-[#5A4632]">
+                    <span class="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full" :style="{ background: d.accent }" aria-hidden="true"></span>
+                    <span>{{ h }}</span>
+                  </li>
+                </ul>
+
+                <p class="mt-7 border-l-2 pl-4 font-serif text-base italic text-[#1B2A4A]" :style="{ borderColor: d.accent }">
+                  {{ d.lens }}
+                </p>
               </div>
             </div>
-            <p class="mt-6 text-sm font-medium text-[#4A5568]">Scan using any UPI app</p>
-          </div>
+          </article>
+        </div>
 
-          <!-- UPI details card -->
-          <div v-motion-fade-visible-once class="premium-card flex flex-col p-8 sm:p-10">
-            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0071E3]">Or use UPI details</p>
+        <!-- The six above are this edition, not the whole map. -->
+        <div class="more-places">
+          <p class="eyebrow">{{ moreDestinations.title }}</p>
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
+            {{ moreDestinations.body }}
+          </p>
+          <ul class="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+            <li v-for="n in moreDestinations.names" :key="n" class="more-pill">{{ n }}</li>
+            <li class="more-pill more-pill--muted">and more to come</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-            <dl class="mt-6 space-y-5">
-              <div>
-                <dt class="text-xs font-medium uppercase tracking-wider text-[#64748B]">UPI ID</dt>
-                <dd class="mt-2 flex items-center justify-between gap-3 rounded-2xl border border-black/5 bg-[#F8FAFC] px-4 py-3">
-                  <span class="font-mono text-base font-semibold tracking-tight text-[#0A2540] sm:text-lg">{{ payment.upiId }}</span>
-                  <button
-                    type="button"
-                    class="btn-copy"
-                    :class="{ 'btn-copy--done': upiCopied }"
-                    @click="copyUpi"
-                  >
-                    <svg v-if="!upiCopied" class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                      <path d="M13 4H6a2 2 0 0 0-2 2v9M8 8h6a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <svg v-else class="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                      <path d="m4 10 4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    {{ upiCopied ? 'Copied' : 'Copy UPI' }}
-                  </button>
-                </dd>
-              </div>
-
-              <div>
-                <dt class="text-xs font-medium uppercase tracking-wider text-[#64748B]">Account Name</dt>
-                <dd class="mt-2 rounded-2xl border border-black/5 bg-[#F8FAFC] px-4 py-3 text-base font-semibold text-[#0A2540]">
-                  {{ payment.accountName }}
-                </dd>
-              </div>
-
-              <div v-if="payment.bank">
-                <dt class="text-xs font-medium uppercase tracking-wider text-[#64748B]">Bank</dt>
-                <dd class="mt-2 rounded-2xl border border-black/5 bg-[#F8FAFC] px-4 py-3 text-base font-semibold text-[#0A2540]">
-                  {{ payment.bank }}
-                </dd>
-              </div>
-            </dl>
-
-            <div class="mt-auto pt-6 text-xs text-[#64748B]">
-              Once you've paid, upload the screenshot in the registration form below.
-            </div>
+    <!-- ======================================================================
+         INCLUSIONS
+         ====================================================================== -->
+    <section id="included" class="relative mx-auto max-w-6xl px-6 py-24 sm:py-28">
+      <div class="text-center">
+        <p class="eyebrow">What's Included</p>
+        <h2 class="section-title mt-3">Everything, arranged</h2>
+      </div>
+      <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="item in inclusions" :key="item.label" class="inclusion-card">
+          <span class="inclusion-icon"><component :is="icon(item.icon)" /></span>
+          <div>
+            <p class="detail-label">{{ item.label }}</p>
+            <p class="detail-value">{{ item.value }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================
-         REGISTRATION FORM
+         HOW IT WORKS
          ====================================================================== -->
-    <section id="register" class="relative mx-auto max-w-3xl px-6 py-24 sm:py-32">
-      <!-- Success screen -->
-      <div v-if="submitState === 'success'" v-motion-fade-visible-once class="premium-card p-10 text-center sm:p-14">
-        <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#059669] to-[#34D399] shadow-[0_20px_40px_-15px_rgba(16,185,129,0.55)]">
+    <section id="how" class="relative bg-[#1B2A4A] py-24 sm:py-28">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="text-center">
+          <p class="inline-block rounded-full bg-white/[0.08] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#D4A017]">
+            How It Works
+          </p>
+          <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Four steps to your seat</h2>
+        </div>
+        <ol class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <li v-for="s in steps" :key="s.n" class="step-card">
+            <span class="font-serif text-4xl italic text-[#D4A017]">{{ s.n }}</span>
+            <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">{{ s.title }}</h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-white/70">{{ s.body }}</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         REGISTRATION
+         ====================================================================== -->
+    <section id="register" class="relative mx-auto max-w-3xl scroll-mt-24 px-6 py-24 sm:py-32">
+      <!-- ---------- Thank you ---------- -->
+      <div v-if="submitState === 'success'" class="premium-card p-10 text-center sm:p-14">
+        <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#B8860B] to-[#D4A017] shadow-[0_20px_40px_-15px_rgba(184,134,11,0.6)]">
           <svg class="h-10 w-10 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path class="check-path" d="m5 13 4 4 10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
-        <h2 class="mt-8 text-3xl font-semibold tracking-tight sm:text-4xl">🎉 Registration Submitted!</h2>
-        <p class="mx-auto mt-4 max-w-lg text-base leading-relaxed text-[#4A5568]">
-          Thank you for registering for Refresh Retreat.
+        <h2 class="mt-8 text-3xl font-semibold tracking-tight text-[#1B2A4A] sm:text-4xl">Thank you — we have your registration</h2>
+        <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-[#5A4632]">
+          Your details and payment proof have reached us. Our team verifies every payment by hand and will write to
+          you once your seat is confirmed.
         </p>
-        <p class="mx-auto mt-2 max-w-lg text-base leading-relaxed text-[#4A5568]">
-          We have received your registration details and payment proof. Our team will verify your submission and contact you soon with further updates.
-        </p>
-        <p class="mx-auto mt-6 max-w-lg text-lg font-medium text-[#0A2540]">
-          Stay excited! See you in Guruvayur.
+        <div v-if="confirmedDestination" class="mx-auto mt-8 inline-flex flex-col items-center rounded-2xl border border-[#B8860B]/25 bg-[#FDF6E7] px-8 py-5">
+          <span class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Your destination</span>
+          <span class="mt-1.5 text-2xl font-semibold tracking-tight text-[#1B2A4A]">{{ confirmedDestination }}</span>
+          <span v-if="confirmedSpot" class="mt-1 font-serif text-base italic text-[#5A4632]">
+            {{ confirmedSpot.tagline }}
+          </span>
+          <span v-if="confirmedSpot" class="mt-2 text-xs text-[#8A7449]">
+            <template v-if="confirmedSpot.date">{{ confirmedSpot.date }} · </template>{{ confirmedSpot.duration }}
+          </span>
+        </div>
+        <p class="mx-auto mt-8 max-w-lg text-sm text-[#7A6A56]">
+          Please keep your transaction reference safe until you hear from us. Submitting this form does not by itself
+          reserve a seat.
         </p>
         <div class="mt-10">
-          <NuxtLink to="/" class="btn-primary px-8 py-3.5 text-base">Back to Home</NuxtLink>
+          <NuxtLink to="/" class="btn-secondary px-8 py-3.5 text-base">Back to Home</NuxtLink>
         </div>
       </div>
 
-      <!-- Duplicate screen -->
-      <div v-else-if="submitState === 'duplicate'" v-motion-fade-visible-once class="premium-card p-10 text-center sm:p-12">
+      <!-- ---------- Already registered ---------- -->
+      <div v-else-if="submitState === 'duplicate'" class="premium-card p-10 text-center sm:p-12">
         <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100 text-3xl text-amber-600">!</div>
-        <h2 class="mt-6 text-2xl font-semibold tracking-tight sm:text-3xl">Already registered</h2>
-        <p class="mx-auto mt-3 max-w-md text-base text-[#4A5568]">
+        <h2 class="mt-6 text-2xl font-semibold tracking-tight text-[#1B2A4A] sm:text-3xl">Already registered</h2>
+        <p class="mx-auto mt-3 max-w-md text-base text-[#5A4632]">
           A registration with this mobile number is already on record. Our team will reach out with next steps.
         </p>
-        <button type="button" class="btn-secondary mt-8" @click="resetForm">Use a different mobile number</button>
+        <button type="button" class="btn-secondary mt-8 px-6 py-3" @click="resetForm">
+          Use a different mobile number
+        </button>
       </div>
 
-      <!-- Form -->
+      <!-- ---------- Form ---------- -->
       <template v-else>
-        <div v-motion-fade-visible-once class="text-center">
+        <div class="text-center">
           <p class="eyebrow">Registration</p>
-          <h2 class="section-title mt-3">Register for Refresh Retreat</h2>
-          <p class="mt-3 text-sm text-[#4A5568]">Fill in your details — takes under a minute.</p>
+          <h2 class="section-title mt-3">Reserve your place</h2>
+          <p class="mt-4 text-sm text-[#7A6A56]">Two steps: your details, then payment. Allow about five minutes.</p>
         </div>
 
-        <form
-          v-motion-fade-visible-once
-          class="premium-card mt-12 p-8 sm:p-10"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <div class="grid gap-6 sm:grid-cols-2">
-            <div class="sm:col-span-2">
-              <label class="lbl">Full Name <span class="req">*</span></label>
-              <input
-                v-model.trim="form.fullName"
-                type="text"
-                class="field"
-                :class="errors.fullName && 'field-error'"
-                placeholder="e.g. Aarav Sharma"
-                autocomplete="name"
-              />
-              <p v-if="errors.fullName" class="field-msg">{{ errors.fullName }}</p>
+        <!-- Step rail -->
+        <div class="mx-auto mt-10 flex max-w-sm items-center gap-3">
+          <template v-for="s in 2" :key="s">
+            <div class="flex items-center gap-2.5">
+              <span class="step-dot" :class="step >= s ? 'step-dot--on' : ''">{{ s }}</span>
+              <span class="text-xs font-semibold uppercase tracking-[0.16em]" :class="step >= s ? 'text-[#1B2A4A]' : 'text-[#A89880]'">
+                {{ s === 1 ? 'Your details' : 'Payment' }}
+              </span>
             </div>
+            <span v-if="s === 1" class="h-px flex-1 bg-[#E4D8C4]"></span>
+          </template>
+        </div>
 
-            <div>
-              <label class="lbl">Institute <span class="req">*</span></label>
-              <div class="relative">
-                <select
-                  v-model="form.institute"
-                  class="field appearance-none pr-11"
-                  :class="[errors.institute && 'field-error', !form.institute && 'text-[#94A3B8]']"
-                >
-                  <option value="" disabled>Select institute</option>
-                  <option v-for="i in institutes" :key="i" :value="i">{{ i }}</option>
-                </select>
-                <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B]" aria-hidden="true">
-                  <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </span>
+        <form class="premium-card mt-10 p-8 sm:p-10" novalidate @submit.prevent="onSubmit">
+          <!-- ================= STEP 1 ================= -->
+          <div v-show="step === 1" class="grid gap-9">
+            <!-- ---- About you ---- -->
+            <fieldset class="grid gap-5">
+              <legend class="fieldset-legend">About you</legend>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label for="hw-name" class="lbl">Full Name <span class="req">*</span></label>
+                  <input
+                    id="hw-name"
+                    v-model.trim="form.fullName"
+                    type="text"
+                    class="field"
+                    :class="errors.fullName && 'field-error'"
+                    placeholder="e.g. Aarav Sharma"
+                    autocomplete="name"
+                  />
+                  <p v-if="errors.fullName" class="field-msg">{{ errors.fullName }}</p>
+                </div>
+
+                <div>
+                  <label for="hw-mobile" class="lbl">Mobile Number <span class="req">*</span></label>
+                  <input
+                    id="hw-mobile"
+                    v-model.trim="form.mobile"
+                    type="tel"
+                    inputmode="tel"
+                    class="field"
+                    :class="errors.mobile && 'field-error'"
+                    placeholder="10-digit mobile"
+                    autocomplete="tel"
+                  />
+                  <p v-if="errors.mobile" class="field-msg">{{ errors.mobile }}</p>
+                </div>
+
+                <div>
+                  <label for="hw-gender" class="lbl">Gender <span class="req">*</span></label>
+                  <div class="relative">
+                    <select
+                      id="hw-gender"
+                      v-model="form.gender"
+                      class="field appearance-none pr-11"
+                      :class="[errors.gender && 'field-error', !form.gender && 'text-[#A89880]']"
+                    >
+                      <option value="" disabled>Select</option>
+                      <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
+                    </select>
+                    <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
+                  </div>
+                  <p v-if="errors.gender" class="field-msg">{{ errors.gender }}</p>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label for="hw-email" class="lbl">Email <span class="req">*</span></label>
+                  <input
+                    id="hw-email"
+                    v-model.trim="form.email"
+                    type="email"
+                    inputmode="email"
+                    class="field"
+                    :class="errors.email && 'field-error'"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                  />
+                  <p v-if="errors.email" class="field-msg">{{ errors.email }}</p>
+                </div>
               </div>
-              <p v-if="errors.institute" class="field-msg">{{ errors.institute }}</p>
+            </fieldset>
+
+            <!-- ---- Your campus ---- -->
+            <fieldset class="grid gap-5">
+              <legend class="fieldset-legend">Your campus</legend>
+
+              <div>
+                <label for="hw-college" class="lbl">College <span class="req">*</span></label>
+                <div class="relative">
+                  <select
+                    id="hw-college"
+                    v-model="form.college"
+                    class="field appearance-none pr-11"
+                    :class="[errors.college && 'field-error', !form.college && 'text-[#A89880]']"
+                  >
+                    <option value="" disabled>Select your college</option>
+                    <option v-for="c in collegeOptions" :key="c" :value="c">{{ c }}</option>
+                  </select>
+                  <span class="select-caret" aria-hidden="true"><component :is="icon('caret')" /></span>
+                </div>
+                <p v-if="errors.college" class="field-msg">{{ errors.college }}</p>
+              </div>
+
+              <!-- Allotted destination, revealed as soon as a college is picked -->
+              <Transition name="reveal">
+                <div v-if="allottedSpot" class="allotment" :style="{ '--accent': allottedSpot.accent }">
+                  <div class="flex items-start gap-4">
+                    <span class="allotment-icon"><component :is="icon('pin')" /></span>
+                    <div>
+                      <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">
+                        Your destination
+                      </p>
+                      <p class="mt-1 text-2xl font-semibold tracking-tight text-[#1B2A4A]">
+                        {{ allottedSpot.name }}<span class="text-[#8A7449]">, {{ allottedSpot.state }}</span>
+                      </p>
+                      <p class="mt-1.5 font-serif text-base italic text-[#5A4632]">{{ allottedSpot.tagline }}</p>
+                      <p class="mt-3 text-xs text-[#7A6A56]">
+                        <template v-if="allottedSpot.date">{{ allottedSpot.date }} · {{ allottedSpot.duration }} · allotted by your campus</template>
+                        <template v-else>{{ allottedSpot.duration }} · allotted by your campus · dates shared once your group is confirmed</template>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+
+              <!-- ================================================================
+                   Retreat detail, experience and pricing for the featured
+                   campus. Every campus has its own retreat; these blocks
+                   describe NIT Calicut's, so they appear only once it is picked.
+                   ================================================================ -->
+              <Transition name="reveal">
+                <div v-if="isFeaturedCollege" class="grid gap-5">
+                  <!-- Retreat Details -->
+                  <div class="retreat-panel">
+                    <p class="retreat-panel-title">Retreat Details</p>
+                    <dl class="mt-4 grid gap-x-6 gap-y-3.5 sm:grid-cols-2">
+                      <div v-for="d in retreatDetails" :key="d.label" class="flex items-start gap-3">
+                        <span class="retreat-icon"><component :is="icon(d.icon)" /></span>
+                        <div class="min-w-0">
+                          <dt class="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[#8A7449]">
+                            {{ d.label }}
+                          </dt>
+                          <dd class="mt-0.5 text-sm font-semibold text-[#1B2A4A]">{{ d.value }}</dd>
+                        </div>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <!-- What You'll Experience -->
+                  <div class="retreat-panel">
+                    <p class="retreat-panel-title">What You'll Experience</p>
+                    <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+                      <li v-for="e in experiences" :key="e.title" class="flex items-start gap-3">
+                        <span class="text-xl leading-none" aria-hidden="true">{{ e.emoji }}</span>
+                        <div class="min-w-0">
+                          <p class="text-sm font-semibold text-[#1B2A4A]">{{ e.title }}</p>
+                          <p class="mt-0.5 text-xs leading-relaxed text-[#5A4632]">{{ e.body }}</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Transparent pricing -->
+                  <div class="retreat-panel">
+                    <p class="retreat-panel-title">Transparent Pricing — Registration Fee</p>
+                    <ul class="mt-4 divide-y divide-[#EFE4D2]">
+                      <li v-for="b in pricing.breakdown" :key="b.label" class="flex items-center justify-between py-2.5">
+                        <span class="text-sm text-[#5A4632]">{{ b.label }}</span>
+                        <span class="text-sm font-semibold text-[#1B2A4A]">
+                          {{ pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
+                        </span>
+                      </li>
+                      <li class="flex items-center justify-between py-2.5">
+                        <span class="text-sm font-semibold text-[#1B2A4A]">Actual cost per student</span>
+                        <span class="text-sm font-semibold text-[#1B2A4A]">
+                          {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
+                        </span>
+                      </li>
+                      <li class="flex items-center justify-between py-2.5">
+                        <span class="text-sm text-[#5A4632]">Covered by alumni sponsorship</span>
+                        <span class="text-sm font-semibold text-[#B8860B]">
+                          − {{ pricing.currency }}{{ (pricing.actualCost - pricing.studentContribution).toLocaleString('en-IN') }}
+                        </span>
+                      </li>
+                    </ul>
+                    <div class="mt-4 flex items-center justify-between rounded-2xl bg-[#FDF6E7] px-5 py-4">
+                      <span class="text-sm font-semibold uppercase tracking-[0.14em] text-[#8A7449]">You pay</span>
+                      <span class="text-2xl font-semibold tracking-tight text-[#1B2A4A]">
+                        {{ pricing.currency }}{{ pricing.studentContribution.toLocaleString('en-IN') }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+
+            </fieldset>
+
+            <div class="flex justify-end">
+              <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="goToStep2">
+                Continue to payment
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ================= STEP 2 ================= -->
+          <div v-show="step === 2" class="grid gap-7">
+            <!-- Summary of step 1 -->
+            <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#FBF7F0] px-5 py-4">
+              <div class="text-sm text-[#5A4632]">
+                <span class="font-semibold text-[#1B2A4A]">{{ form.fullName }}</span>
+                <span class="mx-2 text-[#C9B892]">·</span>{{ form.college }}
+                <template v-if="allottedSpot">
+                  <span class="mx-2 text-[#C9B892]">·</span>
+                  <span class="font-semibold" :style="{ color: allottedSpot.accent }">{{ allottedSpot.name }}</span>
+                </template>
+              </div>
+              <button type="button" class="text-xs font-semibold text-[#B8860B] underline-offset-4 hover:underline" @click="step = 1">
+                Edit
+              </button>
             </div>
 
+            <!-- Amount -->
+            <div class="rounded-2xl border border-[#B8860B]/25 bg-[#FDF6E7] p-6 text-center">
+              <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Your contribution</p>
+              <p class="mt-2 flex items-baseline justify-center gap-3">
+                <span v-if="payment.fullCost" class="text-xl font-medium text-[#A89880] line-through">
+                  {{ payment.currency }}{{ payment.fullCost.toLocaleString('en-IN') }}
+                </span>
+                <span class="text-4xl font-semibold tracking-tight text-[#1B2A4A]">
+                  {{ payment.currency }}{{ payment.amount.toLocaleString('en-IN') }}
+                </span>
+              </p>
+              <p v-if="payment.fullCost" class="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#B8860B]">
+                {{ payment.currency }}{{ (payment.fullCost - payment.amount).toLocaleString('en-IN') }} sponsored by
+                {{ form.college ? `${form.college} alumni` : 'alumni' }}
+              </p>
+              <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#5A4632]">{{ payment.note }}</p>
+            </div>
+
+            <!-- QR + UPI -->
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div class="flex flex-col items-center justify-center rounded-2xl border border-[#E4D8C4] bg-white p-6">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Scan to pay</p>
+                <img
+                  v-if="!qrBroken"
+                  ref="qrImgEl"
+                  :src="payment.qrImage"
+                  alt="UPI QR code for the Heritage Walk contribution"
+                  class="mt-4 h-44 w-44 rounded-xl object-contain ring-1 ring-black/5"
+                  @error="qrBroken = true"
+                />
+                <div v-else class="mt-4 grid h-44 w-44 place-items-center rounded-xl border-2 border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-4 text-center">
+                  <span class="text-xs leading-relaxed text-[#8A7449]">
+                    <template v-if="payment.upiId">QR code not uploaded yet.<br />Use the UPI ID alongside.</template>
+                    <template v-else>QR code not uploaded yet.</template>
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-center rounded-2xl border border-[#E4D8C4] bg-white p-6">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Or pay by UPI ID</p>
+                <template v-if="payment.upiId">
+                  <p class="mt-3 break-all text-base font-semibold text-[#1B2A4A]">{{ payment.upiId }}</p>
+                  <p v-if="payment.accountName" class="mt-1 text-sm text-[#7A6A56]">{{ payment.accountName }}</p>
+                  <button type="button" class="btn-copy mt-4 self-start" :class="upiCopied && 'btn-copy--done'" @click="copyUpi">
+                    {{ upiCopied ? 'Copied' : 'Copy UPI ID' }}
+                  </button>
+                </template>
+                <p v-else-if="!qrBroken" class="mt-3 text-sm leading-relaxed text-[#8A7449]">
+                  UPI details are being finalised. Please pay using the QR code alongside.
+                </p>
+                <p v-else class="mt-3 text-sm leading-relaxed text-[#8A7449]">
+                  Payment details are being finalised. Please write to
+                  <a :href="`mailto:${footer.email}`" class="font-semibold text-[#1B2A4A] underline">{{ footer.email }}</a>
+                  and we will send them to you directly.
+                </p>
+                <p class="mt-5 text-xs leading-relaxed text-[#7A6A56]">
+                  After paying, take a screenshot of the transaction and upload it below.
+                </p>
+              </div>
+            </div>
+
+            <!-- Upload -->
             <div>
-              <label class="lbl">Mobile Number <span class="req">*</span></label>
-              <input
-                v-model.trim="form.mobile"
-                type="tel"
-                inputmode="tel"
-                class="field"
-                :class="errors.mobile && 'field-error'"
-                placeholder="10-digit mobile"
-                autocomplete="tel"
-              />
-              <p v-if="errors.mobile" class="field-msg">{{ errors.mobile }}</p>
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="lbl">Email Address <span class="text-[#94A3B8]">(optional)</span></label>
-              <input
-                v-model.trim="form.email"
-                type="email"
-                class="field"
-                :class="errors.email && 'field-error'"
-                placeholder="you@example.com"
-                autocomplete="email"
-              />
-              <p v-if="errors.email" class="field-msg">{{ errors.email }}</p>
-            </div>
-
-            <!-- Payment screenshot upload -->
-            <div class="sm:col-span-2">
               <label class="lbl">Payment Screenshot <span class="req">*</span></label>
               <div
                 class="upload-drop"
-                :class="{
-                  'upload-drop--active': isDragging,
-                  'upload-drop--filled': !!file,
-                  'field-error': errors.file,
-                }"
+                :class="{ 'upload-drop--active': isDragging, 'upload-drop--filled': !!file, 'field-error': errors.file }"
+                role="button"
+                tabindex="0"
                 @click="fileInputRef?.click()"
+                @keydown.enter.prevent="fileInputRef?.click()"
+                @keydown.space.prevent="fileInputRef?.click()"
                 @dragenter.prevent="isDragging = true"
                 @dragover.prevent="isDragging = true"
                 @dragleave.prevent="isDragging = false"
@@ -495,30 +609,23 @@
                 />
 
                 <div v-if="!file" class="text-center">
-                  <span class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#0071E3] shadow-sm ring-1 ring-black/5" aria-hidden="true">
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                  <span class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#B8860B] shadow-sm ring-1 ring-black/5" aria-hidden="true">
+                    <component :is="icon('upload')" />
                   </span>
-                  <p class="mt-4 text-sm font-semibold text-[#0A2540]">
-                    Drag &amp; drop your payment screenshot here
-                  </p>
-                  <p class="mt-1 text-xs text-[#64748B]">
-                    or <span class="font-semibold text-[#0071E3]">click to browse</span>
-                  </p>
-                  <p class="mt-3 text-[11px] uppercase tracking-wider text-[#94A3B8]">PNG · JPG · PDF · Max 4 MB</p>
+                  <p class="mt-4 text-sm font-semibold text-[#1B2A4A]">Click to upload, or drag your screenshot here</p>
+                  <p class="mt-1 text-xs text-[#8A7449]">PNG, JPG or PDF · up to 4 MB</p>
                 </div>
 
-                <div v-else class="flex items-center gap-4 text-left">
-                  <div class="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#EFF6FF] text-2xl">
-                    <img v-if="filePreview" :src="filePreview" alt="Preview" class="h-full w-full object-cover" />
-                    <span v-else aria-hidden="true">📄</span>
-                  </div>
+                <div v-else class="flex w-full items-center gap-4">
+                  <img v-if="filePreview" :src="filePreview" alt="" class="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-black/5" />
+                  <span v-else class="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-[#FBF7F0] text-[#B8860B] ring-1 ring-black/5">
+                    <component :is="icon('file')" />
+                  </span>
                   <div class="min-w-0 flex-1">
-                    <p class="truncate text-sm font-semibold text-[#0A2540]">{{ file.name }}</p>
-                    <p class="text-xs text-[#64748B]">{{ formatBytes(file.size) }} · {{ file.type || 'file' }}</p>
+                    <p class="truncate text-sm font-semibold text-[#1B2A4A]">{{ file.name }}</p>
+                    <p class="mt-0.5 text-xs text-[#8A7449]">{{ formatBytes(file.size) }}</p>
                   </div>
-                  <button type="button" class="text-xs font-semibold text-[#0071E3] transition hover:text-[#0A2540]" @click.stop="clearFile">
+                  <button type="button" class="shrink-0 text-xs font-semibold text-[#B8860B] underline-offset-4 hover:underline" @click.stop="clearFile">
                     Replace
                   </button>
                 </div>
@@ -526,83 +633,124 @@
               <p v-if="errors.file" class="field-msg">{{ errors.file }}</p>
             </div>
 
-            <!-- Checkboxes -->
-            <div class="sm:col-span-2 space-y-3">
-              <label class="checkbox-row" :class="errors.confirmedPayment && 'ring-red-400/40 bg-red-50/40'">
-                <input v-model="form.confirmedPayment" type="checkbox" class="checkbox-input" />
-                <span class="text-sm leading-relaxed text-[#334155]">
-                  I have transferred ₹{{ pricing.studentContribution }} and confirm that the payment details are correct.
-                </span>
+            <!-- Consent -->
+            <div>
+              <div class="rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-5">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Participation terms</p>
+                <ul class="mt-3 space-y-2">
+                  <li v-for="c in consent.points" :key="c" class="flex items-start gap-2.5 text-xs leading-relaxed text-[#5A4632]">
+                    <span class="mt-[0.3rem] text-[#B8860B]" aria-hidden="true">◆</span>
+                    <span>{{ c }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <label class="checkbox-row mt-3" :class="errors.consent && 'ring-red-300'">
+                <input v-model="form.consentAccepted" type="checkbox" class="checkbox-input" />
+                <span class="text-sm text-[#5A4632]">{{ consent.label }} <span class="req">*</span></span>
               </label>
-              <label class="checkbox-row" :class="errors.acknowledgedVerification && 'ring-red-400/40 bg-red-50/40'">
-                <input v-model="form.acknowledgedVerification" type="checkbox" class="checkbox-input" />
-                <span class="text-sm leading-relaxed text-[#334155]">
-                  I understand that submitting this form does not guarantee confirmation until verified.
-                </span>
-              </label>
+              <p v-if="errors.consent" class="field-msg">Please accept the participation terms to submit.</p>
+            </div>
+
+            <p v-if="serverError" class="rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+              {{ serverError }}
+            </p>
+
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <button type="button" class="btn-secondary px-6 py-3" @click="step = 1">Back</button>
+              <button type="submit" class="btn-primary px-8 py-3.5 text-base" :disabled="submitState === 'submitting'">
+                {{ submitState === 'submitting' ? 'Submitting…' : 'Submit registration' }}
+              </button>
             </div>
           </div>
-
-          <!-- Server error -->
-          <p v-if="serverError" class="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-            {{ serverError }}
-          </p>
-
-          <!-- Submit -->
-          <button
-            type="submit"
-            class="btn-primary mt-8 w-full justify-center py-4 text-base font-semibold"
-            :disabled="submitState === 'submitting'"
-          >
-            <span v-if="submitState === 'submitting'" class="flex items-center gap-2">
-              <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4Z" />
-              </svg>
-              Submitting…
-            </span>
-            <span v-else class="flex items-center gap-2">
-              Register Now
-              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <path d="M4 10h12m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-          </button>
-          <p class="mt-4 text-center text-xs text-[#94A3B8]">
-            Your details are stored securely and used only for this retreat.
-          </p>
         </form>
       </template>
     </section>
 
     <!-- ======================================================================
-         WHY REGISTER — trust bullets
+         VOICES
          ====================================================================== -->
-    <section id="why" class="relative bg-[#F8FAFC] py-20">
-      <div class="mx-auto max-w-4xl px-6 text-center">
-        <p class="eyebrow">Why Register</p>
-        <h2 class="section-title mt-3 text-2xl sm:text-3xl">Peace of mind, included</h2>
-        <ul class="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <li v-for="t in trustBullets" :key="t" class="trust-pill">
-            <span class="text-[#10B981]" aria-hidden="true">✓</span>
-            {{ t }}
-          </li>
-        </ul>
+    <section id="voices" class="relative bg-[#F6EFE3] py-24 sm:py-32">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="text-center">
+          <p class="eyebrow">In Appreciation</p>
+          <h2 class="section-title mt-3">Voices on Gita Unlocked</h2>
+        </div>
+        <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <figure v-for="t in testimonials" :key="t.name" class="voice-card">
+            <span class="font-serif text-5xl leading-none text-[#B8860B]/40" aria-hidden="true">&ldquo;</span>
+            <blockquote class="mt-2 flex-1 text-sm leading-relaxed text-[#5A4632]">{{ t.quote }}</blockquote>
+            <figcaption class="mt-6 flex items-center gap-3.5 border-t border-[#E4D8C4] pt-5">
+              <img v-if="t.photo" :src="t.photo" :alt="t.name" class="h-12 w-12 shrink-0 rounded-full object-cover object-top ring-1 ring-black/5" />
+              <span v-else class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#1B2A4A] text-sm font-semibold text-[#D4A017]">
+                {{ initials(t.name) }}
+              </span>
+              <div class="min-w-0">
+                <p class="truncate text-sm font-semibold text-[#1B2A4A]">{{ t.name }}</p>
+                <p class="truncate text-xs text-[#8A7449]">{{ t.role }}</p>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TEAM
+         ====================================================================== -->
+    <section id="team" class="relative mx-auto max-w-6xl px-6 py-24 sm:py-28">
+      <div class="text-center">
+        <p class="eyebrow">Who You Travel With</p>
+        <h2 class="section-title mt-3">The team on ground</h2>
+      </div>
+      <div class="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+        <div v-for="m in team" :key="m.name" class="team-card">
+          <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-24 w-24 rounded-full object-cover object-top ring-2 ring-[#B8860B]/20" />
+          <span v-else class="grid h-24 w-24 place-items-center rounded-full bg-[#1B2A4A] text-lg font-semibold text-[#D4A017]">
+            {{ initials(m.name) }}
+          </span>
+          <p class="mt-4 text-sm font-semibold leading-snug text-[#1B2A4A]">{{ m.name }}</p>
+          <p class="mt-1 text-xs text-[#8A7449]">{{ m.detail }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         FAQ
+         ====================================================================== -->
+    <section id="faq" class="relative bg-[#FBF7F0] py-24 sm:py-28">
+      <div class="mx-auto max-w-3xl px-6">
+        <div class="text-center">
+          <p class="eyebrow">Questions</p>
+          <h2 class="section-title mt-3">Before you register</h2>
+        </div>
+        <div class="mt-12 space-y-3">
+          <details v-for="(f, i) in faqs" :key="i" class="faq-item">
+            <summary class="faq-summary">
+              <span>{{ f.q }}</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                  <path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </summary>
+            <p class="px-6 pb-5 text-sm leading-relaxed text-[#5A4632]">{{ f.a }}</p>
+          </details>
+        </div>
       </div>
     </section>
 
     <!-- ======================================================================
          FOOTER
          ====================================================================== -->
-    <footer class="border-t border-black/5 bg-white py-14">
+    <footer class="bg-[#1B2A4A] py-14">
       <div class="mx-auto max-w-6xl px-6 text-center">
-        <img :src="brand.logo" alt="Gita Unlocked" class="mx-auto h-10 w-auto" />
-        <p class="mt-4 text-base font-semibold tracking-tight text-[#0A2540]">{{ footer.presenter }}</p>
-        <p class="mt-1 text-sm text-[#64748B]">{{ footer.ecosystem }}</p>
-        <div class="mx-auto mt-6 h-px w-16 bg-gradient-to-r from-transparent via-[#0071E3]/40 to-transparent"></div>
-        <p class="mt-6 text-sm font-semibold tracking-tight text-[#0A2540]">{{ footer.retreatName }}</p>
-        <p class="mt-1 text-xs uppercase tracking-[0.22em] text-[#64748B]">{{ footer.retreatTagline }}</p>
-        <p class="mt-8 text-xs text-[#94A3B8]">© {{ year }} Success Engineering · All rights reserved.</p>
+        <p class="font-serif text-2xl italic text-[#D4A017]">{{ footer.name }}</p>
+        <p class="mt-1.5 text-sm text-white/70">{{ footer.tagline }}</p>
+        <div class="mx-auto mt-6 h-px w-20 bg-white/[0.15]"></div>
+        <p class="mt-6 text-sm font-semibold text-white">{{ footer.presenter }}</p>
+        <p class="mt-1 text-xs text-white/50">{{ footer.ecosystem }}</p>
+        <p class="mt-8 text-xs text-white/40">© {{ year }} Gita Unlocked. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -613,16 +761,28 @@ import { h, reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {
   brand,
   hero,
+  eligibility,
+  destinations,
+  destinationById,
+  moreDestinations,
+  collegeOptions,
+  genderOptions,
+  spotForCollege,
+  unmappedColleges,
+  featuredCollege,
   retreatDetails,
-  activities,
   experiences,
   pricing,
+  inclusions,
+  steps,
   payment,
-  institutes,
-  trustBullets,
-  footer,
+  consent,
+  testimonials,
+  team,
+  faqs,
   seo,
-} from '~/data/refreshRetreat'
+  footer,
+} from '~/data/refreshRetreat2026'
 
 definePageMeta({ layout: 'landing' })
 useHead({
@@ -636,54 +796,113 @@ useHead({
   link: [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap' },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap',
+    },
   ],
 })
 
 const year = new Date().getFullYear()
+const isDev = import.meta.dev
+const unapprovedCount = testimonials.filter((t) => !t.approved).length
+
+// A college listed in couponColleges but missing from collegeRegions would
+// appear in the dropdown and then allot nothing. Surface it while developing
+// rather than letting a student hit it.
+if (import.meta.dev && unmappedColleges.length) {
+  console.warn(
+    `[refresh-retreat] no destination mapped for: ${unmappedColleges.join(', ')}. ` +
+      'Add them to collegeRegions in data/refreshRetreat2026.js.',
+  )
+}
+
+const navLinks = [
+  { id: 'destinations', label: 'Destinations' },
+  { id: 'included', label: 'Included' },
+  { id: 'how', label: 'How It Works' },
+  { id: 'voices', label: 'Voices' },
+  { id: 'faq', label: 'FAQ' },
+]
 
 // --- Nav shadow on scroll ---
 const scrolled = ref(false)
-const onScroll = () => { scrolled.value = window.scrollY > 30 }
+const onScroll = () => {
+  scrolled.value = window.scrollY > 30
+}
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 const scrollToId = (id) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-// --- Asset fallbacks (both are graceful — never break the layout) ---
-const heroImageBroken = ref(false)
-const qrImageBroken = ref(false)
+const initials = (name) =>
+  name
+    .replace(/^(Dr|Mr|Ms|Mrs)\.?\s+/i, '')
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
 
-// --- UPI copy ---
-const upiCopied = ref(false)
-async function copyUpi() {
-  try {
-    if (import.meta.client) {
-      await navigator.clipboard.writeText(payment.upiId)
-      upiCopied.value = true
-      setTimeout(() => (upiCopied.value = false), 1800)
-    }
-  } catch {
-    // Non-fatal — user can just read the UPI ID on screen.
-  }
-}
-
-// --- Registration form state ---
+// --- Form state ---
+const step = ref(1)
 const form = reactive({
   fullName: '',
-  institute: '',
   mobile: '',
   email: '',
-  confirmedPayment: false,
-  acknowledgedVerification: false,
+  gender: '',
+  college: '',
+  consentAccepted: false,
 })
 const errors = reactive({})
 // 'idle' | 'submitting' | 'success' | 'duplicate'
 const submitState = ref('idle')
 const serverError = ref('')
+const confirmedSpot = ref(null)
+const confirmedDestination = ref('')
+
+// The destination follows from the college — the student never picks it.
+const allottedSpot = computed(() => (form.college ? spotForCollege(form.college) : null))
+
+// Every campus runs its own retreat. The detail, experience and pricing blocks
+// describe the featured campus's, so they stay hidden until it is selected.
+const isFeaturedCollege = computed(() => form.college === featuredCollege)
+
+// --- UPI copy ---
+const qrBroken = ref(false)
+const qrImgEl = ref(null)
+
+// The browser starts loading the QR from the server-rendered HTML, so a 404 can
+// fire before Vue hydrates and @error is never seen. Re-check once on mount.
+onMounted(() => {
+  const img = qrImgEl.value
+  if (img?.complete && img.naturalWidth === 0) qrBroken.value = true
+})
+
+// Everything on this page that is still a placeholder, gathered into the one
+// dev banner so nothing ships half-finished.
+const blockers = computed(() => {
+  const list = []
+  if (unapprovedCount) list.push(`${unapprovedCount} testimonial quotes unapproved`)
+  if (qrBroken.value) list.push('payment QR missing')
+  if (!payment.upiId) list.push('UPI ID unset')
+  if (unmappedColleges.length) list.push(`${unmappedColleges.length} colleges unmapped`)
+  return list
+})
+const upiCopied = ref(false)
+async function copyUpi() {
+  try {
+    if (import.meta.client && payment.upiId) {
+      await navigator.clipboard.writeText(payment.upiId)
+      upiCopied.value = true
+      setTimeout(() => (upiCopied.value = false), 1800)
+    }
+  } catch {
+    // Non-fatal — the UPI ID is on screen to read.
+  }
+}
 
 // --- File upload ---
 const fileInputRef = ref(null)
@@ -708,11 +927,13 @@ function acceptFile(f) {
   filePreview.value = ''
   if (f.type.startsWith('image/')) {
     const reader = new FileReader()
-    reader.onload = (e) => { filePreview.value = e.target?.result || '' }
+    reader.onload = (e) => {
+      filePreview.value = e.target?.result || ''
+    }
     reader.readAsDataURL(f)
   }
 }
-function onFileChange(e) { acceptFile(e.target.files?.[0]) }
+const onFileChange = (e) => acceptFile(e.target.files?.[0])
 function onDrop(e) {
   isDragging.value = false
   acceptFile(e.dataTransfer?.files?.[0])
@@ -728,184 +949,306 @@ function formatBytes(bytes) {
   return `${(bytes / 1024 / 1024).toFixed(2)} MB`
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-function validate() {
-  Object.keys(errors).forEach((k) => delete errors[k])
+// --- Validation ---
+const STEP_1_FIELDS = ['fullName', 'mobile', 'email', 'gender', 'college']
+
+function validateStep1() {
+  STEP_1_FIELDS.forEach((f) => delete errors[f])
+
   if (!form.fullName) errors.fullName = 'Please enter your full name.'
-  if (!institutes.includes(form.institute)) errors.institute = 'Please select your institute.'
-  if (form.mobile.replace(/\D/g, '').length < 10) errors.mobile = 'Enter a valid 10-digit mobile number.'
-  if (form.email && !EMAIL_RE.test(form.email)) errors.email = 'Enter a valid email address (or leave it blank).'
-  if (!file.value) errors.file = 'Please upload your payment screenshot.'
-  if (!form.confirmedPayment) errors.confirmedPayment = true
-  if (!form.acknowledgedVerification) errors.acknowledgedVerification = true
-  return Object.keys(errors).length === 0
+  if (form.mobile.replace(/\D/g, '').length !== 10) errors.mobile = 'Enter a valid 10-digit mobile number.'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errors.email = 'Enter a valid email address.'
+  if (!genderOptions.includes(form.gender)) errors.gender = 'Please select an option.'
+  if (!collegeOptions.includes(form.college)) errors.college = 'Please select your college.'
+
+  return STEP_1_FIELDS.every((f) => !errors[f])
 }
 
-async function submit() {
+function validateStep2() {
+  delete errors.file
+  delete errors.consent
+  if (!file.value) errors.file = 'Please upload your payment screenshot.'
+  if (!form.consentAccepted) errors.consent = true
+  return !errors.file && !errors.consent
+}
+
+function goToStep2() {
+  if (!validateStep1()) {
+    scrollToFirstError()
+    return
+  }
+  step.value = 2
+  if (import.meta.client) setTimeout(() => scrollToId('register'), 50)
+}
+
+function scrollToFirstError() {
+  if (!import.meta.client) return
+  document.querySelector('.field-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+async function onSubmit() {
   serverError.value = ''
-  if (!validate()) {
-    // Scroll to the first error field for a nicer UX
-    if (import.meta.client) {
-      const firstErrorField = document.querySelector('.field-error, .upload-drop.field-error')
-      firstErrorField?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
+  // Step 1 is re-checked here too: the fields are only hidden, not unmounted,
+  // so a value could have been cleared after passing the first check.
+  if (!validateStep1()) {
+    step.value = 1
+    scrollToFirstError()
+    return
+  }
+  if (!validateStep2()) {
+    scrollToFirstError()
     return
   }
 
   submitState.value = 'submitting'
   try {
     const fd = new FormData()
-    fd.append('fullName', form.fullName)
-    fd.append('institute', form.institute)
-    fd.append('mobile', form.mobile)
-    fd.append('email', form.email)
-    fd.append('confirmedPayment', String(form.confirmedPayment))
-    fd.append('acknowledgedVerification', String(form.acknowledgedVerification))
+    Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)))
     fd.append('paymentScreenshot', file.value)
 
-    const res = await $fetch('/api/refresh-retreat-register', {
-      method: 'POST',
-      body: fd,
-    })
+    const res = await $fetch('/api/refresh-retreat-register', { method: 'POST', body: fd })
 
     if (res?.duplicate) {
       submitState.value = 'duplicate'
       return
     }
+    // Shown on the thank-you card. Keyed off the server response so the student
+    // sees the circuit that was actually recorded, not just the one on screen.
+    confirmedSpot.value = destinationById[res?.destinationId] || allottedSpot.value || null
+    confirmedDestination.value = confirmedSpot.value
+      ? `${confirmedSpot.value.name}, ${confirmedSpot.value.state}`
+      : res?.destination || ''
     submitState.value = 'success'
-    // Small delay then scroll to the success card so the user sees it clearly
-    if (import.meta.client) {
-      setTimeout(() => scrollToId('register'), 100)
-    }
+    if (import.meta.client) setTimeout(() => scrollToId('register'), 100)
   } catch (err) {
     console.error('refresh-retreat register error:', err)
     serverError.value =
-      err?.data?.statusMessage ||
-      'Something went wrong while submitting. Please try again in a moment.'
+      err?.data?.statusMessage || 'Something went wrong while submitting. Please try again in a moment.'
     submitState.value = 'idle'
   }
 }
 
 function resetForm() {
   Object.keys(form).forEach((k) => {
-    form[k] = typeof form[k] === 'boolean' ? false : ''
+    form[k] = k === 'consentAccepted' ? false : ''
   })
   Object.keys(errors).forEach((k) => delete errors[k])
   clearFile()
   serverError.value = ''
+  confirmedSpot.value = null
+  confirmedDestination.value = ''
+  step.value = 1
   submitState.value = 'idle'
 }
 
 // ---------------------------------------------------------------------------
-// Inline SVG icons for the retreat detail cards. Keeping them here (instead of
-// pulling in an icon library) keeps the bundle small and every stroke on-brand.
+// Inline SVG icons. Kept here rather than pulling in an icon library so the
+// bundle stays small and every stroke matches the page.
 // ---------------------------------------------------------------------------
-const iconStroke = { stroke: 'currentColor', 'stroke-width': 1.6, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }
+const stroke = { stroke: 'currentColor', 'stroke-width': 1.6, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }
 const wrap = (paths) =>
-  h('svg', { viewBox: '0 0 24 24', fill: 'none', class: 'h-5 w-5' },
-    paths.map((d) => h('path', { d, ...iconStroke })),
-  )
+  h('svg', { viewBox: '0 0 24 24', fill: 'none', class: 'h-5 w-5' }, paths.map((d) => h('path', { d, ...stroke })))
 
 const ICONS = {
   calendar: () => wrap(['M3 9h18', 'M8 3v4', 'M16 3v4', 'M4 6h16v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6Z']),
-  pin: () => wrap(['M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z', 'M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z']),
   clock: () => wrap(['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'M12 7v5l3 2']),
-  users: () => wrap(['M16 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1', 'M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7', 'M21 20v-1a4 4 0 0 0-3-3.87', 'M15 4.13A3.5 3.5 0 0 1 15 11']),
+  caret: () => wrap(['m7 10 5 5 5-5']),
+  pin: () => wrap(['M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z', 'M12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z']),
   bus: () => wrap(['M4 10h16', 'M5 6h14a1 1 0 0 1 1 1v11H4V7a1 1 0 0 1 1-1Z', 'M8 18v2', 'M16 18v2', 'M7.5 14.5h.01', 'M16.5 14.5h.01']),
-  meal: () => wrap(['M6 3v6a3 3 0 0 0 6 0V3', 'M9 3v6', 'M15 3c0 0 3 1 3 5v13', 'M17 15h2']),
   bed: () => wrap(['M4 19V6', 'M20 19v-6a3 3 0 0 0-3-3H4', 'M4 15h16', 'M8 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z']),
+  meal: () => wrap(['M6 3v6a3 3 0 0 0 6 0V3', 'M9 3v6', 'M15 3c0 0 3 1 3 5v13', 'M17 15h2']),
+  guide: () => wrap(['M4 5h7a2 2 0 0 1 2 2v13a1.5 1.5 0 0 0-1.5-1.5H4Z', 'M20 5h-7a2 2 0 0 0-2 2v13a1.5 1.5 0 0 1 1.5-1.5H20Z']),
+  ticket: () => wrap(['M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H6a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z', 'M13 6v10']),
+  shield: () => wrap(['M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z', 'm9 12 2 2 4-4']),
+  users: () => wrap(['M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z', 'M2.5 20a6.5 6.5 0 0 1 13 0', 'M16 4.5a3.5 3.5 0 0 1 0 7', 'M17.5 14a6.5 6.5 0 0 1 4 6']),
+  seal: () => wrap(['M12 3l2.2 1.6 2.7-.3 1 2.5 2.4 1.2-.7 2.6.7 2.6-2.4 1.2-1 2.5-2.7-.3L12 18.4l-2.2-1.6-2.7.3-1-2.5L3.7 13.4l.7-2.6-.7-2.6 2.4-1.2 1-2.5 2.7.3Z', 'm9.5 11.5 1.8 1.8 3.4-3.4']),
+  upload: () => wrap(['M12 16V4', 'm7.5 8.5 4.5-4.5 4.5 4.5', 'M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16']),
+  file: () => wrap(['M14 3v5h5', 'M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8l-5-5Z']),
 }
-function iconComponent(key) {
-  return ICONS[key] || ICONS.pin
-}
+const icon = (key) => ICONS[key] || ICONS.pin
 </script>
 
 <style scoped>
 /* -------------------------------------------------------------------------
- * Typography — SF-Pro-ish stack with Plus Jakarta Sans for headings.
+ * Typography — Inter for text, Plus Jakarta Sans for headings, and Cormorant
+ * Garamond italic for the display lines that carry the heritage feel.
  * ------------------------------------------------------------------------- */
-.refresh-retreat {
+.heritage {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', ui-sans-serif, sans-serif;
+  background: #fbf7f0;
+  color: #2d1b0e;
   letter-spacing: -0.01em;
 }
-.refresh-retreat h1,
-.refresh-retreat h2,
-.refresh-retreat h3 {
+.heritage h1,
+.heritage h2,
+.heritage h3 {
   font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, sans-serif;
   letter-spacing: -0.025em;
+}
+.heritage :deep(.font-serif),
+.heritage .font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
 /* -------------------------------------------------------------------------
  * Section primitives
  * ------------------------------------------------------------------------- */
 .eyebrow {
-  @apply inline-block rounded-full bg-[#EFF6FF] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0071E3];
+  @apply inline-block rounded-full bg-[#FDF6E7] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#B8860B];
 }
 .section-title {
-  @apply text-3xl font-semibold tracking-tight text-[#0A2540] sm:text-5xl;
+  @apply text-3xl font-semibold tracking-tight text-[#1B2A4A] sm:text-5xl;
+}
+.badge-gold {
+  @apply inline-flex items-center gap-2 rounded-full border border-[#B8860B]/30 bg-white/70 px-4 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-[#B8860B] backdrop-blur;
+}
+.nav-link {
+  @apply text-sm font-medium text-[#5A4632] transition hover:text-[#B8860B];
 }
 
 /* -------------------------------------------------------------------------
- * Buttons — Apple-flavoured primary / calm secondary
+ * Buttons
  * ------------------------------------------------------------------------- */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#0071E3] to-[#0A84FF] font-semibold text-white shadow-[0_10px_30px_-10px_rgba(0,113,227,0.5)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(0,113,227,0.55)] focus:outline-none focus:ring-4 focus:ring-[#0071E3]/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#B8860B] to-[#D4A017] font-semibold text-white shadow-[0_10px_30px_-10px_rgba(184,134,11,0.55)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(184,134,11,0.6)] focus:outline-none focus:ring-4 focus:ring-[#B8860B]/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
 }
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white px-6 py-2.5 text-sm font-semibold text-[#0A2540] shadow-sm transition hover:-translate-y-0.5 hover:border-[#0071E3]/30 hover:text-[#0071E3];
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#1B2A4A]/15 bg-white text-sm font-semibold text-[#1B2A4A] shadow-sm transition hover:-translate-y-0.5 hover:border-[#B8860B]/40 hover:text-[#B8860B];
 }
 .btn-copy {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-[#0071E3]/20 bg-white px-3 py-1.5 text-xs font-semibold text-[#0071E3] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0071E3]/5;
+  @apply inline-flex items-center gap-1.5 rounded-full border border-[#B8860B]/25 bg-white px-3 py-1.5 text-xs font-semibold text-[#B8860B] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#FDF6E7];
 }
 .btn-copy--done {
   @apply border-emerald-200 bg-emerald-50 text-emerald-600;
 }
 
 /* -------------------------------------------------------------------------
+ * Hero
+ * ------------------------------------------------------------------------- */
+.hero-wash {
+  background:
+    radial-gradient(900px 600px at 15% 10%, rgba(212, 160, 23, 0.18), transparent 60%),
+    radial-gradient(800px 600px at 85% 25%, rgba(194, 65, 12, 0.12), transparent 62%),
+    linear-gradient(180deg, #fdf9f2 0%, #fbf7f0 60%, #f6efe3 100%);
+}
+
+/* -------------------------------------------------------------------------
  * Cards
  * ------------------------------------------------------------------------- */
 .premium-card {
-  @apply rounded-3xl border border-black/5 bg-white shadow-[0_1px_2px_rgba(10,37,64,0.04),0_20px_60px_-30px_rgba(10,37,64,0.22)];
+  @apply rounded-3xl border border-[#E4D8C4] bg-white shadow-[0_1px_2px_rgba(45,27,14,0.04),0_24px_70px_-40px_rgba(27,42,74,0.3)];
 }
 
-/* Retreat detail cards */
-.detail-card {
-  @apply flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-5 shadow-[0_1px_2px_rgba(10,37,64,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#0071E3]/25 hover:shadow-[0_20px_40px_-20px_rgba(0,113,227,0.35)];
+/* Destination panels */
+.destination-card {
+  @apply overflow-hidden rounded-[2rem] border border-[#E4D8C4] bg-white shadow-[0_1px_2px_rgba(45,27,14,0.04),0_30px_70px_-45px_rgba(27,42,74,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_40px_90px_-50px_rgba(27,42,74,0.45)];
 }
-.detail-icon {
-  @apply grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#EFF6FF] text-[#0071E3] ring-1 ring-[#0071E3]/10;
+.destination-plate {
+  @apply relative flex min-h-[22rem] flex-col justify-between overflow-hidden p-9 sm:p-11 lg:min-h-[26rem];
+  background: var(--accent);
+}
+.destination-photo {
+  @apply absolute inset-0 h-full w-full object-cover;
+}
+/* Keeps the white type legible over any photo, and ties the image back to the
+   circuit's accent colour. */
+.destination-scrim {
+  @apply pointer-events-none absolute inset-0;
+  background:
+    linear-gradient(176deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.06) 38%, rgba(0, 0, 0, 0.68) 100%),
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 62%);
+}
+.destination-plate-top,
+.destination-plate-bottom {
+  @apply relative z-10;
+}
+.destination-index {
+  @apply block font-serif text-5xl italic leading-none text-white/60;
+}
+.destination-credit {
+  @apply absolute bottom-2.5 right-4 z-10 text-[0.6rem] font-medium tracking-wide text-white/55;
+}
+
+/* "And many more" */
+.more-places {
+  @apply mt-16 rounded-[2rem] border border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-8 py-12 text-center sm:px-12;
+}
+.more-pill {
+  @apply rounded-full border border-[#E4D8C4] bg-white px-4 py-1.5 text-sm font-medium text-[#5A4632];
+}
+.more-pill--muted {
+  @apply border-transparent bg-transparent font-serif italic text-[#8A7449];
+}
+.destination-body {
+  @apply p-9 sm:p-11;
+}
+.meta-pill {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-[#E4D8C4] bg-[#FBF7F0] px-3 py-1.5 text-xs font-semibold text-[#5A4632];
+}
+.meta-pill :deep(svg) {
+  @apply h-3.5 w-3.5;
+}
+.meta-pill--date {
+  @apply border-[#B8860B]/40 bg-[#FDF6E7] text-[#8A6A12];
+}
+
+/* Inclusions */
+.inclusion-card {
+  @apply flex items-start gap-4 rounded-2xl border border-[#E4D8C4] bg-white p-5 shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#B8860B]/35 hover:shadow-[0_20px_40px_-25px_rgba(184,134,11,0.45)];
+}
+.inclusion-icon {
+  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#FDF6E7] text-[#B8860B] ring-1 ring-[#B8860B]/15;
 }
 .detail-label {
-  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B];
+  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
 }
 .detail-value {
-  @apply mt-1 text-base font-semibold tracking-tight text-[#0A2540];
+  @apply mt-1 text-base font-semibold tracking-tight text-[#1B2A4A];
 }
 
-/* Experience cards */
-.experience-card {
-  @apply rounded-3xl border border-black/5 bg-white p-7 shadow-[0_1px_2px_rgba(10,37,64,0.04)] transition duration-300 hover:-translate-y-1.5 hover:border-[#0071E3]/25 hover:shadow-[0_28px_60px_-25px_rgba(0,113,227,0.35)];
-}
-.experience-emoji {
-  @apply inline-grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#EFF6FF] to-white text-2xl shadow-sm ring-1 ring-black/5 transition duration-300 group-hover:scale-110;
+/* Steps */
+.step-card {
+  @apply rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 transition duration-300 hover:border-[#D4A017]/35 hover:bg-white/[0.07];
 }
 
-/* Trust pills */
-.trust-pill {
-  @apply inline-flex items-center gap-2 rounded-full border border-black/5 bg-white px-4 py-2 text-sm font-medium text-[#0A2540] shadow-sm;
+/* Voices */
+.voice-card {
+  @apply flex h-full flex-col rounded-3xl border border-[#E4D8C4] bg-white p-7 shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1.5 hover:border-[#B8860B]/30 hover:shadow-[0_28px_60px_-35px_rgba(184,134,11,0.45)];
+}
+
+/* Team */
+.team-card {
+  @apply flex flex-col items-center rounded-2xl border border-[#E4D8C4] bg-white p-6 text-center shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#B8860B]/30 hover:shadow-[0_22px_45px_-28px_rgba(184,134,11,0.4)];
+}
+
+/* FAQ */
+.faq-item {
+  @apply overflow-hidden rounded-2xl border border-[#E4D8C4] bg-white;
+}
+.faq-summary {
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-sm font-semibold text-[#1B2A4A] transition hover:text-[#B8860B];
+}
+.faq-summary::-webkit-details-marker {
+  display: none;
+}
+.faq-chevron {
+  @apply shrink-0 text-[#B8860B] transition duration-200;
+}
+.faq-item[open] .faq-chevron {
+  @apply rotate-180;
 }
 
 /* -------------------------------------------------------------------------
  * Form
  * ------------------------------------------------------------------------- */
 .lbl {
-  @apply block text-sm font-semibold text-[#0A2540];
+  @apply block text-sm font-semibold text-[#1B2A4A];
 }
 .req {
-  @apply text-[#0071E3];
+  @apply text-[#B8860B];
 }
 .field {
-  @apply mt-2 block w-full rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3 text-base text-[#0A2540] placeholder:text-[#94A3B8] outline-none transition focus:border-[#0071E3] focus:ring-4 focus:ring-[#0071E3]/10;
+  @apply mt-2 block w-full rounded-2xl border border-[#E4D8C4] bg-white px-4 py-3 text-base text-[#1B2A4A] outline-none transition placeholder:text-[#A89880] focus:border-[#B8860B] focus:ring-4 focus:ring-[#B8860B]/10;
 }
 .field-error {
   @apply border-red-400 focus:border-red-400 focus:ring-red-200/60;
@@ -913,81 +1256,91 @@ function iconComponent(key) {
 .field-msg {
   @apply mt-1.5 text-xs font-medium text-red-500;
 }
+.field-hint {
+  @apply mt-1.5 text-xs text-[#8A7449];
+}
+.fieldset-legend {
+  @apply mb-1 w-full border-b border-[#EFE4D2] pb-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+}
 
-/* Upload drop zone */
+/* Retreat detail / experience / pricing blocks, shown for the featured campus */
+.retreat-panel {
+  @apply rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-6;
+}
+.retreat-panel-title {
+  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+}
+.retreat-icon {
+  @apply grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-[#B8860B] shadow-sm ring-1 ring-black/5;
+}
+.retreat-icon :deep(svg) {
+  @apply h-4 w-4;
+}
+.select-caret {
+  @apply pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#8A7449];
+}
+.select-caret :deep(svg) {
+  @apply h-4 w-4;
+}
+.step-dot {
+  @apply grid h-8 w-8 place-items-center rounded-full border border-[#E4D8C4] bg-white text-xs font-semibold text-[#A89880] transition;
+}
+.step-dot--on {
+  @apply border-transparent bg-gradient-to-r from-[#B8860B] to-[#D4A017] text-white;
+}
+.allotment {
+  @apply rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-5;
+  border-left: 3px solid var(--accent);
+}
+.allotment-icon {
+  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#B8860B] ring-1 ring-[#B8860B]/15;
+}
 .upload-drop {
-  @apply mt-2 flex min-h-[168px] cursor-pointer items-center justify-center rounded-3xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] px-6 py-8 transition;
+  @apply mt-2 flex min-h-[168px] cursor-pointer items-center justify-center rounded-3xl border-2 border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-6 py-8 transition;
 }
 .upload-drop:hover {
-  @apply border-[#0071E3]/40 bg-[#EFF6FF]/60;
+  @apply border-[#B8860B]/50 bg-[#FDF6E7];
 }
 .upload-drop--active {
-  @apply border-[#0071E3] bg-[#EFF6FF];
+  @apply border-[#B8860B] bg-[#FDF6E7];
 }
 .upload-drop--filled {
-  @apply border-solid border-[#CBD5E1] bg-white;
+  @apply border-solid border-[#E4D8C4] bg-white;
 }
-
-/* Checkbox rows */
 .checkbox-row {
-  @apply flex cursor-pointer items-start gap-3 rounded-2xl border border-black/5 bg-white px-4 py-3 ring-1 ring-inset ring-transparent transition hover:bg-[#F8FAFC];
+  @apply flex cursor-pointer items-start gap-3 rounded-2xl border border-[#E4D8C4] bg-white px-4 py-3.5 ring-1 ring-inset ring-transparent transition hover:bg-[#FBF7F0];
 }
 .checkbox-input {
-  @apply mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-md border-[#CBD5E1] text-[#0071E3] focus:ring-[#0071E3]/30;
+  @apply mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-md border-[#D8C7A8] text-[#B8860B] focus:ring-[#B8860B]/30;
 }
 
 /* -------------------------------------------------------------------------
- * Hero
+ * Motion
  * ------------------------------------------------------------------------- */
-.hero-fallback {
-  background:
-    radial-gradient(1200px 800px at 20% 20%, rgba(0, 113, 227, 0.45), transparent 60%),
-    radial-gradient(900px 700px at 80% 60%, rgba(16, 185, 129, 0.35), transparent 65%),
-    linear-gradient(135deg, #0a2540 0%, #0b3b6d 40%, #0a2540 100%);
+.reveal-enter-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
-/* Animated scroll-hint mouse */
-.scroll-mouse {
-  display: inline-block;
-  width: 22px;
-  height: 36px;
-  border: 1.5px solid currentColor;
-  border-radius: 12px;
-  position: relative;
+.reveal-enter-from {
+  opacity: 0;
+  transform: translateY(-6px);
 }
-.scroll-mouse::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 6px;
-  width: 3px;
-  height: 8px;
-  border-radius: 2px;
-  background: currentColor;
-  transform: translateX(-50%);
-  animation: scroll-hint 1.6s ease-in-out infinite;
-}
-@keyframes scroll-hint {
-  0% { transform: translate(-50%, 0); opacity: 0.9; }
-  60% { transform: translate(-50%, 12px); opacity: 0; }
-  100% { transform: translate(-50%, 0); opacity: 0; }
-}
-
-/* Draw-in check on success */
 .check-path {
   stroke-dasharray: 40;
   stroke-dashoffset: 40;
   animation: draw-check 0.55s cubic-bezier(0.4, 0.2, 0.2, 1) 120ms forwards;
 }
 @keyframes draw-check {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .scroll-mouse::before,
   .check-path {
     animation: none;
+    stroke-dashoffset: 0;
   }
-  .check-path { stroke-dashoffset: 0; }
+  .reveal-enter-active {
+    transition: none;
+  }
 }
 </style>

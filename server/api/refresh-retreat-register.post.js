@@ -2,6 +2,7 @@ import { readMultipartFormData } from 'h3'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { getMongoDb } from '../utils/mongo'
+import { collegeRegions, regionSpot, destinationById, genderOptions } from '~/data/refreshRetreat2026.js'
 
 // Coerce every field to a trimmed, length-capped string (prevents NoSQL
 // operator injection — we never let an object/array reach a Mongo document).
@@ -10,22 +11,20 @@ const str = (v, max = 500) => {
   return s.length > max ? s.slice(0, max) : s
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const ELIGIBLE_INSTITUTES = ['IIT Palakkad', 'NIT Calicut']
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf']
 // Vercel serverless functions cap request bodies at ~4.5 MB. We keep the
 // screenshot itself under 4 MB so the base64-encoded document still fits.
 const MAX_FILE_BYTES = 4 * 1024 * 1024
 
+// A new collection for this round. The August 2026 Guruvayur retreat's four
+// registrations stay untouched in `refreshRetreatRegistrations`, which had a
+// different set of fields.
 const COLLECTION = () =>
-  (process.env.MONGODB_REFRESH_RETREAT_COLLECTION || 'refreshRetreatRegistrations').trim()
+  (process.env.MONGODB_REFRESH_RETREAT_NOV_COLLECTION || 'refreshRetreatNov2026').trim()
 
 // Local fallback file — keeps registrations working in dev even without a
-// MongoDB URI (mirrors the pattern used by inner-programming-register).
-const FALLBACK_FILE = path.resolve(
-  process.cwd(),
-  'server/data/refresh-retreat-2026.json',
-)
+// MongoDB URI.
+const FALLBACK_FILE = path.resolve(process.cwd(), 'server/data/refresh-retreat-nov-2026.json')
 
 async function saveToFallback(record) {
   await fs.mkdir(path.dirname(FALLBACK_FILE), { recursive: true })
@@ -36,9 +35,7 @@ async function saveToFallback(record) {
   } catch {
     /* first-time write */
   }
-  if (existing.some((r) => r.mobile === record.mobile)) {
-    return { duplicate: true }
-  }
+  if (existing.some((r) => r.mobile === record.mobile)) return { duplicate: true }
   existing.push(record)
   await fs.writeFile(FALLBACK_FILE, JSON.stringify(existing, null, 2), 'utf8')
   return { duplicate: false }
@@ -64,29 +61,39 @@ export default defineEventHandler(async (event) => {
 
   const reg = {
     fullName: str(partText(parts, 'fullName'), 120),
-    institute: str(partText(parts, 'institute'), 60),
     mobile: str(partText(parts, 'mobile'), 20),
-    email: str(partText(parts, 'email'), 200).toLowerCase(),
-    confirmedPayment: partText(parts, 'confirmedPayment') === 'true',
-    acknowledgedVerification: partText(parts, 'acknowledgedVerification') === 'true',
+    email: str(partText(parts, 'email'), 160).toLowerCase(),
+    gender: str(partText(parts, 'gender'), 40),
+    college: str(partText(parts, 'college'), 120),
+    consentAccepted: partText(parts, 'consentAccepted') === 'true',
   }
 
   // ---- Field validation (server-side, never trust the client) ----
   if (!reg.fullName) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter your full name.' })
   }
-  if (!ELIGIBLE_INSTITUTES.includes(reg.institute)) {
-    throw createError({ statusCode: 400, statusMessage: 'Please select a valid institute.' })
-  }
-  if (reg.mobile.replace(/\D/g, '').length < 10) {
+  if (reg.mobile.replace(/\D/g, '').length !== 10) {
     throw createError({ statusCode: 400, statusMessage: 'Please enter a valid 10-digit mobile number.' })
   }
-  if (reg.email && !EMAIL_RE.test(reg.email)) {
-    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid email address (or leave it blank).' })
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reg.email)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please enter a valid email address.' })
   }
-  if (!reg.confirmedPayment || !reg.acknowledgedVerification) {
-    throw createError({ statusCode: 400, statusMessage: 'Please check both confirmation boxes to submit.' })
+  if (!genderOptions.includes(reg.gender)) {
+    throw createError({ statusCode: 400, statusMessage: 'Please select a gender option from the list.' })
   }
+  // The college must be one we actually run a destination for. Checking against
+  // the mapping rather than a separate list means a college can never pass
+  // validation and then be allotted nowhere.
+  if (!collegeRegions[reg.college]) {
+    throw createError({ statusCode: 400, statusMessage: 'Please select your college from the list.' })
+  }
+  if (!reg.consentAccepted) {
+    throw createError({ statusCode: 400, statusMessage: 'Please accept the participation terms to submit.' })
+  }
+
+  // The destination is derived here, not read from the form: the client shows
+  // it for confirmation, but a posted value could say anything.
+  const destination = destinationById[regionSpot[collegeRegions[reg.college]]]
 
   // ---- Payment screenshot (required, PNG/JPG/PDF, <= 4 MB) ----
   const file = parts.find((f) => f.name === 'paymentScreenshot' && f.filename)
@@ -100,19 +107,20 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 413, statusMessage: 'Payment screenshot must be under 4 MB.' })
   }
 
-  const screenshot = {
-    filename: str(file.filename || 'payment-screenshot', 200),
-    contentType: str(file.type, 80),
-    sizeBytes: file.data.length,
-    data: file.data.toString('base64'),
-  }
-
   const record = {
     ...reg,
-    event: 'refresh-retreat-2026',
-    paymentAmount: 250,
-    currency: 'INR',
-    paymentScreenshot: screenshot,
+    destination: destination.name,
+    destinationId: destination.id,
+    region: collegeRegions[reg.college],
+    event: 'success-engineering',
+    programme: 'refresh-retreat',
+    edition: 'november-2026',
+    paymentScreenshot: {
+      filename: str(file.filename || 'payment-screenshot', 200),
+      contentType: str(file.type, 80),
+      sizeBytes: file.data.length,
+      data: file.data.toString('base64'),
+    },
     verified: false,
     createdAt: new Date().toISOString(),
   }
@@ -123,19 +131,18 @@ export default defineEventHandler(async (event) => {
   const hasRealUri = uri && !/[<>]|xxxxx/.test(uri)
 
   // Prefer MongoDB; fall back to a local JSON file when no URI is configured
-  // (or the DB is unreachable) so registrations are never silently lost in dev.
+  // (or the DB is unreachable) so registrations are never silently lost.
   if (hasRealUri) {
     try {
       const db = await getMongoDb()
       const collection = db.collection(COLLECTION())
-      // De-dupe on mobile number (an email is optional so we can't rely on it).
       await collection.createIndex({ mobile: 1 }, { unique: true }).catch(() => {})
 
       const existing = await collection.findOne({ mobile: reg.mobile }, { projection: { _id: 1 } })
       if (existing) return { success: false, duplicate: true }
 
       await collection.insertOne({ ...record, createdAt: new Date() })
-      return { success: true, storedIn: 'mongodb' }
+      return { success: true, destinationId: destination.id, destination: destination.name, storedIn: 'mongodb' }
     } catch (err) {
       if (err?.code === 11000) return { success: false, duplicate: true }
       console.error('refresh-retreat-register (mongo) error:', err?.message || err)
@@ -146,7 +153,7 @@ export default defineEventHandler(async (event) => {
   try {
     const { duplicate } = await saveToFallback(record)
     if (duplicate) return { success: false, duplicate: true }
-    return { success: true, storedIn: 'local-file' }
+    return { success: true, destinationId: destination.id, destination: destination.name, storedIn: 'local-file' }
   } catch (err) {
     console.error('refresh-retreat-register (file) error:', err?.message || err)
     throw createError({
