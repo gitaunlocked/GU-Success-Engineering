@@ -63,6 +63,7 @@ export const hero = {
     "Five days of engineering lectures will teach you how the world works. One morning inside a thousand-year-old temple will teach you why it was built. The Refresh Retreat is the second half of that education.",
   primaryCta: "Register Now",
   secondaryCta: "See the Destinations",
+  image: "/refresh-retreat/hero.jpg",
 };
 
 // Same shortlisting rules as the Heritage Walk; only the wording that names
@@ -106,16 +107,29 @@ export const guruvayur = {
     "Darshan at the Guruvayur Sri Krishna temple",
     "Punnathurkotta — the elephant sanctuary at Anakotta",
     "A sadya, the traditional Kerala meal served on a banana leaf",
-    "Discourses rooted in the Bhagavad Gita and life design",
+    "Interactive fun activities and memorable experiences",
   ],
   lens: "A thousand years of routine, still running without a manager.",
-  accent: "#A16207",
+  accent: "#0F766E",
 };
 
+// The Heritage Walk's accents are ambers, reds and violets, which fight the
+// blue-green theme here. Each place keeps a distinct colour, drawn from the
+// cool family instead. Overridden per page, never mutated on the shared data.
+const coolAccents = {
+  jaipur: "#0369A1",
+  hampi: "#0E7490",
+  shillong: "#047857",
+  rishikesh: "#1D4ED8",
+  ayodhya: "#0891B2",
+  tirupati: "#15803D",
+};
+const recolour = (d) => ({ ...d, accent: coolAccents[d.id] || d.accent });
+
 export const destinations = [
-  ...hwDestinations.slice(0, 2),
+  ...hwDestinations.slice(0, 2).map(recolour),
   guruvayur,
-  ...hwDestinations.slice(2),
+  ...hwDestinations.slice(2).map(recolour),
 ];
 
 export const destinationById = Object.fromEntries(
@@ -150,7 +164,6 @@ export const featuredCollege = "NIT Calicut";
 export const retreatDetails = [
   { icon: "calendar", label: "Date", value: `${retreatDate} (${retreatDay})` },
   { icon: "pin", label: "Destination", value: "Guruvayur, Kerala" },
-  { icon: "clock", label: "Reporting Time", value: "9:00 AM" },
   { icon: "users", label: "Eligibility", value: "NIT Calicut students" },
   { icon: "bus", label: "Transportation", value: "To & From Included" },
   { icon: "meal", label: "Meals", value: "Breakfast + Lunch + Snacks" },
@@ -221,7 +234,7 @@ export const steps = [
   {
     n: "01",
     title: "Get shortlisted",
-    body: "Complete the Human Advantage Ecosystem application. Shortlisted students are notified by email and WhatsApp.",
+    body: "Complete the Human Advantage Ecosystem application, attend all the sessions and be interactive with the seniors. Shortlisted students are notified by email and WhatsApp.",
   },
   {
     n: "02",
@@ -268,6 +281,12 @@ export const team = [
     name: "Srinivas Kandula",
     detail: "PD Engineer, Texas Instruments · IIT BHU",
     photo: "/Srinivas_Pr.jpg",
+  },
+  {
+    // No photograph on file for Animesh yet, so the card falls back to his
+    // initials. Drop one at /public/team/animesh-dhara.jpg and add the path.
+    name: "Animesh Dhara",
+    detail: "Embedded SW Engineer, Texas Instruments · Jadavpur University",
   },
   {
     name: "Indraneel Natu",

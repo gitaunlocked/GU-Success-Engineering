@@ -1,5 +1,5 @@
 <template>
-  <div class="heritage">
+  <div class="refresh-retreat">
     <!-- ======================================================================
          DEV-ONLY WARNING — content that is still placeholder
          Shown only while developing. A banner like this on the live page would
@@ -18,12 +18,12 @@
          ====================================================================== -->
     <header
       class="sticky top-0 z-50 transition duration-300"
-      :class="scrolled ? 'bg-[#FBF7F0]/90 shadow-[0_1px_0_rgba(45,27,14,0.08)] backdrop-blur-xl' : 'bg-transparent'"
+      :class="scrolled ? 'bg-[#F8FAFC]/90 shadow-[0_1px_0_rgba(10,37,64,0.08)] backdrop-blur-xl' : 'bg-transparent'"
     >
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <NuxtLink to="/" class="flex items-center gap-3">
           <img :src="brand.logo" alt="" class="h-9 w-auto" />
-          <span class="hidden text-sm font-semibold tracking-tight text-[#2D1B0E] sm:block">
+          <span class="hidden text-sm font-semibold tracking-tight text-[#0A2540] sm:block">
             {{ brand.presenter }}
           </span>
         </NuxtLink>
@@ -42,27 +42,39 @@
          HERO
          ====================================================================== -->
     <section id="hero" class="relative isolate overflow-hidden">
-      <div class="hero-wash absolute inset-0 -z-10"></div>
-      <div class="absolute inset-0 -z-10 opacity-[0.07] [background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22><path d=%22M20 0 L40 20 L20 40 L0 20 Z%22 fill=%22none%22 stroke=%22%23B8860B%22 stroke-width=%221%22/></svg>')]"></div>
+      <!-- Full-bleed photograph. The gradient wash sits behind it so the hero
+           still reads as designed if the image is ever missing. -->
+      <div class="hero-wash absolute inset-0 -z-20"></div>
+      <img
+        v-if="!heroImageBroken"
+        ref="heroImgEl"
+        :src="hero.image"
+        alt=""
+        class="absolute inset-0 -z-10 h-full w-full object-cover"
+        @error="heroImageBroken = true"
+      />
+      <div class="hero-scrim absolute inset-0 -z-10"></div>
 
-      <div class="mx-auto max-w-5xl px-6 py-24 text-center sm:py-32">
-        <span class="badge-gold">{{ hero.badge }}</span>
+      <div class="mx-auto max-w-5xl px-6 py-28 text-center sm:py-36">
+        <span class="badge-accent">{{ hero.badge }}</span>
 
-        <h1 class="mt-8 text-5xl font-semibold leading-[1.05] tracking-tight text-[#1B2A4A] sm:text-7xl">
+        <h1 class="mt-8 text-5xl font-semibold leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.45)] sm:text-7xl">
           {{ hero.title }}
         </h1>
-        <p class="mt-4 font-serif text-2xl italic text-[#B8860B] sm:text-3xl">{{ hero.subtitle }}</p>
+        <p class="mt-4 font-serif text-2xl italic text-[#7DD3FC] drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)] sm:text-3xl">
+          {{ hero.subtitle }}
+        </p>
 
-        <div class="mx-auto mt-8 h-px w-24 bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
+        <div class="mx-auto mt-8 h-px w-24 bg-gradient-to-r from-transparent via-[#34D399] to-transparent"></div>
 
-        <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-[#5A4632]">{{ hero.tagline }}</p>
-        <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#7A6A56]">{{ hero.intro }}</p>
+        <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-white/90">{{ hero.tagline }}</p>
+        <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/70">{{ hero.intro }}</p>
 
         <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
           <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="scrollToId('register')">
             {{ hero.primaryCta }}
           </button>
-          <button type="button" class="btn-secondary px-7 py-3.5 text-base" @click="scrollToId('destinations')">
+          <button type="button" class="btn-hero-secondary px-7 py-3.5 text-base" @click="scrollToId('destinations')">
             {{ hero.secondaryCta }}
           </button>
         </div>
@@ -70,8 +82,8 @@
         <!-- Destination ticker -->
         <div class="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           <template v-for="(d, i) in destinations" :key="d.id">
-            <span class="text-sm font-medium tracking-wide text-[#5A4632]">{{ d.name }}</span>
-            <span v-if="i < destinations.length - 1" class="text-[#B8860B]" aria-hidden="true">◆</span>
+            <span class="text-sm font-medium tracking-wide text-white/85">{{ d.name }}</span>
+            <span v-if="i < destinations.length - 1" class="text-[#34D399]" aria-hidden="true">◆</span>
           </template>
         </div>
       </div>
@@ -81,21 +93,21 @@
          ELIGIBILITY
          ====================================================================== -->
     <section id="eligibility" class="relative mx-auto max-w-5xl px-6 pb-20">
-      <div class="rounded-[2rem] border border-[#B8860B]/[0.25] bg-white p-8 shadow-[0_24px_70px_-40px_rgba(27,42,74,0.35)] sm:p-12">
+      <div class="rounded-[2rem] border border-[#0071E3]/[0.25] bg-white p-8 shadow-[0_24px_70px_-40px_rgba(10,37,64,0.35)] sm:p-12">
         <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
           <div class="shrink-0">
-            <span class="grid h-14 w-14 place-items-center rounded-2xl bg-[#FDF6E7] text-[#B8860B] ring-1 ring-[#B8860B]/20">
+            <span class="grid h-14 w-14 place-items-center rounded-2xl bg-[#EFF6FF] text-[#0071E3] ring-1 ring-[#0071E3]/20">
               <component :is="icon('seal')" />
             </span>
           </div>
           <div>
-            <h2 class="text-2xl font-semibold tracking-tight text-[#1B2A4A] sm:text-3xl">
+            <h2 class="text-2xl font-semibold tracking-tight text-[#0A2540] sm:text-3xl">
               {{ eligibility.title }}
             </h2>
-            <p class="mt-3 text-base leading-relaxed text-[#5A4632]">{{ eligibility.body }}</p>
+            <p class="mt-3 text-base leading-relaxed text-[#4A5568]">{{ eligibility.body }}</p>
             <ul class="mt-6 grid gap-3 sm:grid-cols-2">
-              <li v-for="p in eligibility.points" :key="p" class="flex items-start gap-2.5 text-sm text-[#5A4632]">
-                <span class="mt-[0.3rem] text-[#B8860B]" aria-hidden="true">◆</span>
+              <li v-for="p in eligibility.points" :key="p" class="flex items-start gap-2.5 text-sm text-[#4A5568]">
+                <span class="mt-[0.3rem] text-[#0071E3]" aria-hidden="true">◆</span>
                 <span>{{ p }}</span>
               </li>
             </ul>
@@ -107,12 +119,12 @@
     <!-- ======================================================================
          DESTINATIONS — one panel per destination, each with its own departure
          ====================================================================== -->
-    <section id="destinations" class="relative bg-[#F6EFE3] py-24 sm:py-32">
+    <section id="destinations" class="relative bg-[#F1F5F9] py-24 sm:py-32">
       <div class="mx-auto max-w-6xl px-6">
         <div class="text-center">
           <p class="eyebrow">The Destinations</p>
           <h2 class="section-title mt-3">{{ destinations.length }} places that still teach</h2>
-          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#4A5568]">
             Each destination travels as one group. Your campus decides which one you join — you will see yours
             the moment you pick your college in the form below.
           </p>
@@ -171,16 +183,16 @@
                   <span class="meta-pill"><component :is="icon('clock')" /> {{ d.duration }}</span>
                 </div>
 
-                <p class="mt-6 text-base leading-relaxed text-[#5A4632]">{{ d.blurb }}</p>
+                <p class="mt-6 text-base leading-relaxed text-[#4A5568]">{{ d.blurb }}</p>
 
                 <ul class="mt-6 space-y-2.5">
-                  <li v-for="h in d.highlights" :key="h" class="flex items-start gap-2.5 text-sm text-[#5A4632]">
+                  <li v-for="h in d.highlights" :key="h" class="flex items-start gap-2.5 text-sm text-[#4A5568]">
                     <span class="mt-[0.35rem] h-1.5 w-1.5 shrink-0 rounded-full" :style="{ background: d.accent }" aria-hidden="true"></span>
                     <span>{{ h }}</span>
                   </li>
                 </ul>
 
-                <p class="mt-7 border-l-2 pl-4 font-serif text-base italic text-[#1B2A4A]" :style="{ borderColor: d.accent }">
+                <p class="mt-7 border-l-2 pl-4 font-serif text-base italic text-[#0A2540]" :style="{ borderColor: d.accent }">
                   {{ d.lens }}
                 </p>
               </div>
@@ -191,7 +203,7 @@
         <!-- The six above are this edition, not the whole map. -->
         <div class="more-places">
           <p class="eyebrow">{{ moreDestinations.title }}</p>
-          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#5A4632]">
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#4A5568]">
             {{ moreDestinations.body }}
           </p>
           <ul class="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
@@ -224,17 +236,17 @@
     <!-- ======================================================================
          HOW IT WORKS
          ====================================================================== -->
-    <section id="how" class="relative bg-[#1B2A4A] py-24 sm:py-28">
+    <section id="how" class="relative bg-[#0A2540] py-24 sm:py-28">
       <div class="mx-auto max-w-6xl px-6">
         <div class="text-center">
-          <p class="inline-block rounded-full bg-white/[0.08] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#D4A017]">
+          <p class="inline-block rounded-full bg-white/[0.08] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0A84FF]">
             How It Works
           </p>
           <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Four steps to your seat</h2>
         </div>
         <ol class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <li v-for="s in steps" :key="s.n" class="step-card">
-            <span class="font-serif text-4xl italic text-[#D4A017]">{{ s.n }}</span>
+            <span class="font-serif text-4xl italic text-[#0A84FF]">{{ s.n }}</span>
             <h3 class="mt-4 text-lg font-semibold tracking-tight text-white">{{ s.title }}</h3>
             <p class="mt-2.5 text-sm leading-relaxed text-white/70">{{ s.body }}</p>
           </li>
@@ -248,27 +260,27 @@
     <section id="register" class="relative mx-auto max-w-3xl scroll-mt-24 px-6 py-24 sm:py-32">
       <!-- ---------- Thank you ---------- -->
       <div v-if="submitState === 'success'" class="premium-card p-10 text-center sm:p-14">
-        <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#B8860B] to-[#D4A017] shadow-[0_20px_40px_-15px_rgba(184,134,11,0.6)]">
+        <div class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#059669] to-[#34D399] shadow-[0_20px_40px_-15px_rgba(5,150,105,0.6)]">
           <svg class="h-10 w-10 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path class="check-path" d="m5 13 4 4 10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
-        <h2 class="mt-8 text-3xl font-semibold tracking-tight text-[#1B2A4A] sm:text-4xl">Thank you — we have your registration</h2>
-        <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-[#5A4632]">
+        <h2 class="mt-8 text-3xl font-semibold tracking-tight text-[#0A2540] sm:text-4xl">Thank you — we have your registration</h2>
+        <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-[#4A5568]">
           Your details and payment proof have reached us. Our team verifies every payment by hand and will write to
           you once your seat is confirmed.
         </p>
-        <div v-if="confirmedDestination" class="mx-auto mt-8 inline-flex flex-col items-center rounded-2xl border border-[#B8860B]/25 bg-[#FDF6E7] px-8 py-5">
-          <span class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Your destination</span>
-          <span class="mt-1.5 text-2xl font-semibold tracking-tight text-[#1B2A4A]">{{ confirmedDestination }}</span>
-          <span v-if="confirmedSpot" class="mt-1 font-serif text-base italic text-[#5A4632]">
+        <div v-if="confirmedDestination" class="mx-auto mt-8 inline-flex flex-col items-center rounded-2xl border border-[#0071E3]/25 bg-[#EFF6FF] px-8 py-5">
+          <span class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">Your destination</span>
+          <span class="mt-1.5 text-2xl font-semibold tracking-tight text-[#0A2540]">{{ confirmedDestination }}</span>
+          <span v-if="confirmedSpot" class="mt-1 font-serif text-base italic text-[#4A5568]">
             {{ confirmedSpot.tagline }}
           </span>
-          <span v-if="confirmedSpot" class="mt-2 text-xs text-[#8A7449]">
+          <span v-if="confirmedSpot" class="mt-2 text-xs text-[#64748B]">
             <template v-if="confirmedSpot.date">{{ confirmedSpot.date }} · </template>{{ confirmedSpot.duration }}
           </span>
         </div>
-        <p class="mx-auto mt-8 max-w-lg text-sm text-[#7A6A56]">
+        <p class="mx-auto mt-8 max-w-lg text-sm text-[#94A3B8]">
           Please keep your transaction reference safe until you hear from us. Submitting this form does not by itself
           reserve a seat.
         </p>
@@ -280,8 +292,8 @@
       <!-- ---------- Already registered ---------- -->
       <div v-else-if="submitState === 'duplicate'" class="premium-card p-10 text-center sm:p-12">
         <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-amber-100 text-3xl text-amber-600">!</div>
-        <h2 class="mt-6 text-2xl font-semibold tracking-tight text-[#1B2A4A] sm:text-3xl">Already registered</h2>
-        <p class="mx-auto mt-3 max-w-md text-base text-[#5A4632]">
+        <h2 class="mt-6 text-2xl font-semibold tracking-tight text-[#0A2540] sm:text-3xl">Already registered</h2>
+        <p class="mx-auto mt-3 max-w-md text-base text-[#4A5568]">
           A registration with this mobile number is already on record. Our team will reach out with next steps.
         </p>
         <button type="button" class="btn-secondary mt-8 px-6 py-3" @click="resetForm">
@@ -294,7 +306,7 @@
         <div class="text-center">
           <p class="eyebrow">Registration</p>
           <h2 class="section-title mt-3">Reserve your place</h2>
-          <p class="mt-4 text-sm text-[#7A6A56]">Two steps: your details, then payment. Allow about five minutes.</p>
+          <p class="mt-4 text-sm text-[#94A3B8]">Two steps: your details, then payment. Allow about five minutes.</p>
         </div>
 
         <!-- Step rail -->
@@ -302,11 +314,11 @@
           <template v-for="s in 2" :key="s">
             <div class="flex items-center gap-2.5">
               <span class="step-dot" :class="step >= s ? 'step-dot--on' : ''">{{ s }}</span>
-              <span class="text-xs font-semibold uppercase tracking-[0.16em]" :class="step >= s ? 'text-[#1B2A4A]' : 'text-[#A89880]'">
+              <span class="text-xs font-semibold uppercase tracking-[0.16em]" :class="step >= s ? 'text-[#0A2540]' : 'text-[#94A3B8]'">
                 {{ s === 1 ? 'Your details' : 'Payment' }}
               </span>
             </div>
-            <span v-if="s === 1" class="h-px flex-1 bg-[#E4D8C4]"></span>
+            <span v-if="s === 1" class="h-px flex-1 bg-[#E2E8F0]"></span>
           </template>
         </div>
 
@@ -354,7 +366,7 @@
                       id="hw-gender"
                       v-model="form.gender"
                       class="field appearance-none pr-11"
-                      :class="[errors.gender && 'field-error', !form.gender && 'text-[#A89880]']"
+                      :class="[errors.gender && 'field-error', !form.gender && 'text-[#94A3B8]']"
                     >
                       <option value="" disabled>Select</option>
                       <option v-for="g in genderOptions" :key="g" :value="g">{{ g }}</option>
@@ -392,7 +404,7 @@
                     id="hw-college"
                     v-model="form.college"
                     class="field appearance-none pr-11"
-                    :class="[errors.college && 'field-error', !form.college && 'text-[#A89880]']"
+                    :class="[errors.college && 'field-error', !form.college && 'text-[#94A3B8]']"
                   >
                     <option value="" disabled>Select your college</option>
                     <option v-for="c in collegeOptions" :key="c" :value="c">{{ c }}</option>
@@ -408,87 +420,30 @@
                   <div class="flex items-start gap-4">
                     <span class="allotment-icon"><component :is="icon('pin')" /></span>
                     <div>
-                      <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">
+                      <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">
                         Your destination
                       </p>
-                      <p class="mt-1 text-2xl font-semibold tracking-tight text-[#1B2A4A]">
-                        {{ allottedSpot.name }}<span class="text-[#8A7449]">, {{ allottedSpot.state }}</span>
+                      <p class="mt-1 text-2xl font-semibold tracking-tight text-[#0A2540]">
+                        {{ allottedSpot.name }}<span class="text-[#64748B]">, {{ allottedSpot.state }}</span>
                       </p>
-                      <p class="mt-1.5 font-serif text-base italic text-[#5A4632]">{{ allottedSpot.tagline }}</p>
-                      <p class="mt-3 text-xs text-[#7A6A56]">
+                      <p class="mt-1.5 font-serif text-base italic text-[#4A5568]">{{ allottedSpot.tagline }}</p>
+                      <p class="mt-3 text-xs text-[#94A3B8]">
                         <template v-if="allottedSpot.date">{{ allottedSpot.date }} · {{ allottedSpot.duration }} · allotted by your campus</template>
                         <template v-else>{{ allottedSpot.duration }} · allotted by your campus · dates shared once your group is confirmed</template>
                       </p>
-                    </div>
-                  </div>
-                </div>
-              </Transition>
-
-              <!-- ================================================================
-                   Retreat detail, experience and pricing for the featured
-                   campus. Every campus has its own retreat; these blocks
-                   describe NIT Calicut's, so they appear only once it is picked.
-                   ================================================================ -->
-              <Transition name="reveal">
-                <div v-if="isFeaturedCollege" class="grid gap-5">
-                  <!-- Retreat Details -->
-                  <div class="retreat-panel">
-                    <p class="retreat-panel-title">Retreat Details</p>
-                    <dl class="mt-4 grid gap-x-6 gap-y-3.5 sm:grid-cols-2">
-                      <div v-for="d in retreatDetails" :key="d.label" class="flex items-start gap-3">
-                        <span class="retreat-icon"><component :is="icon(d.icon)" /></span>
-                        <div class="min-w-0">
-                          <dt class="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[#8A7449]">
-                            {{ d.label }}
-                          </dt>
-                          <dd class="mt-0.5 text-sm font-semibold text-[#1B2A4A]">{{ d.value }}</dd>
-                        </div>
-                      </div>
-                    </dl>
-                  </div>
-
-                  <!-- What You'll Experience -->
-                  <div class="retreat-panel">
-                    <p class="retreat-panel-title">What You'll Experience</p>
-                    <ul class="mt-4 grid gap-3 sm:grid-cols-2">
-                      <li v-for="e in experiences" :key="e.title" class="flex items-start gap-3">
-                        <span class="text-xl leading-none" aria-hidden="true">{{ e.emoji }}</span>
-                        <div class="min-w-0">
-                          <p class="text-sm font-semibold text-[#1B2A4A]">{{ e.title }}</p>
-                          <p class="mt-0.5 text-xs leading-relaxed text-[#5A4632]">{{ e.body }}</p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <!-- Transparent pricing -->
-                  <div class="retreat-panel">
-                    <p class="retreat-panel-title">Transparent Pricing — Registration Fee</p>
-                    <ul class="mt-4 divide-y divide-[#EFE4D2]">
-                      <li v-for="b in pricing.breakdown" :key="b.label" class="flex items-center justify-between py-2.5">
-                        <span class="text-sm text-[#5A4632]">{{ b.label }}</span>
-                        <span class="text-sm font-semibold text-[#1B2A4A]">
-                          {{ pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
-                        </span>
-                      </li>
-                      <li class="flex items-center justify-between py-2.5">
-                        <span class="text-sm font-semibold text-[#1B2A4A]">Actual cost per student</span>
-                        <span class="text-sm font-semibold text-[#1B2A4A]">
-                          {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
-                        </span>
-                      </li>
-                      <li class="flex items-center justify-between py-2.5">
-                        <span class="text-sm text-[#5A4632]">Covered by alumni sponsorship</span>
-                        <span class="text-sm font-semibold text-[#B8860B]">
-                          − {{ pricing.currency }}{{ (pricing.actualCost - pricing.studentContribution).toLocaleString('en-IN') }}
-                        </span>
-                      </li>
-                    </ul>
-                    <div class="mt-4 flex items-center justify-between rounded-2xl bg-[#FDF6E7] px-5 py-4">
-                      <span class="text-sm font-semibold uppercase tracking-[0.14em] text-[#8A7449]">You pay</span>
-                      <span class="text-2xl font-semibold tracking-tight text-[#1B2A4A]">
-                        {{ pricing.currency }}{{ pricing.studentContribution.toLocaleString('en-IN') }}
-                      </span>
+                      <!-- The full detail lives in its own section rather than
+                           inside the form, which got crowded fast. -->
+                      <button
+                        v-if="isFeaturedCollege"
+                        type="button"
+                        class="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0071E3] transition hover:gap-2.5"
+                        @click="scrollToId('retreat-detail')"
+                      >
+                        See the full retreat details, inclusions and pricing
+                        <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                          <path d="M10 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -509,42 +464,42 @@
           <!-- ================= STEP 2 ================= -->
           <div v-show="step === 2" class="grid gap-7">
             <!-- Summary of step 1 -->
-            <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#FBF7F0] px-5 py-4">
-              <div class="text-sm text-[#5A4632]">
-                <span class="font-semibold text-[#1B2A4A]">{{ form.fullName }}</span>
-                <span class="mx-2 text-[#C9B892]">·</span>{{ form.college }}
+            <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#F8FAFC] px-5 py-4">
+              <div class="text-sm text-[#4A5568]">
+                <span class="font-semibold text-[#0A2540]">{{ form.fullName }}</span>
+                <span class="mx-2 text-[#CBD5E1]">·</span>{{ form.college }}
                 <template v-if="allottedSpot">
-                  <span class="mx-2 text-[#C9B892]">·</span>
+                  <span class="mx-2 text-[#CBD5E1]">·</span>
                   <span class="font-semibold" :style="{ color: allottedSpot.accent }">{{ allottedSpot.name }}</span>
                 </template>
               </div>
-              <button type="button" class="text-xs font-semibold text-[#B8860B] underline-offset-4 hover:underline" @click="step = 1">
+              <button type="button" class="text-xs font-semibold text-[#0071E3] underline-offset-4 hover:underline" @click="step = 1">
                 Edit
               </button>
             </div>
 
             <!-- Amount -->
-            <div class="rounded-2xl border border-[#B8860B]/25 bg-[#FDF6E7] p-6 text-center">
-              <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Your contribution</p>
+            <div class="rounded-2xl border border-[#0071E3]/25 bg-[#EFF6FF] p-6 text-center">
+              <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">Your contribution</p>
               <p class="mt-2 flex items-baseline justify-center gap-3">
-                <span v-if="payment.fullCost" class="text-xl font-medium text-[#A89880] line-through">
+                <span v-if="payment.fullCost" class="text-xl font-medium text-[#94A3B8] line-through">
                   {{ payment.currency }}{{ payment.fullCost.toLocaleString('en-IN') }}
                 </span>
-                <span class="text-4xl font-semibold tracking-tight text-[#1B2A4A]">
+                <span class="text-4xl font-semibold tracking-tight text-[#0A2540]">
                   {{ payment.currency }}{{ payment.amount.toLocaleString('en-IN') }}
                 </span>
               </p>
-              <p v-if="payment.fullCost" class="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#B8860B]">
+              <p v-if="payment.fullCost" class="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#047857]">
                 {{ payment.currency }}{{ (payment.fullCost - payment.amount).toLocaleString('en-IN') }} sponsored by
                 {{ form.college ? `${form.college} alumni` : 'alumni' }}
               </p>
-              <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#5A4632]">{{ payment.note }}</p>
+              <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#4A5568]">{{ payment.note }}</p>
             </div>
 
             <!-- QR + UPI -->
             <div class="grid gap-5 sm:grid-cols-2">
-              <div class="flex flex-col items-center justify-center rounded-2xl border border-[#E4D8C4] bg-white p-6">
-                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Scan to pay</p>
+              <div class="flex flex-col items-center justify-center rounded-2xl border border-[#E2E8F0] bg-white p-6">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">Scan to pay</p>
                 <img
                   v-if="!qrBroken"
                   ref="qrImgEl"
@@ -553,32 +508,32 @@
                   class="mt-4 h-44 w-44 rounded-xl object-contain ring-1 ring-black/5"
                   @error="qrBroken = true"
                 />
-                <div v-else class="mt-4 grid h-44 w-44 place-items-center rounded-xl border-2 border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-4 text-center">
-                  <span class="text-xs leading-relaxed text-[#8A7449]">
+                <div v-else class="mt-4 grid h-44 w-44 place-items-center rounded-xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] px-4 text-center">
+                  <span class="text-xs leading-relaxed text-[#64748B]">
                     <template v-if="payment.upiId">QR code not uploaded yet.<br />Use the UPI ID alongside.</template>
                     <template v-else>QR code not uploaded yet.</template>
                   </span>
                 </div>
               </div>
 
-              <div class="flex flex-col justify-center rounded-2xl border border-[#E4D8C4] bg-white p-6">
-                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Or pay by UPI ID</p>
+              <div class="flex flex-col justify-center rounded-2xl border border-[#E2E8F0] bg-white p-6">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">Or pay by UPI ID</p>
                 <template v-if="payment.upiId">
-                  <p class="mt-3 break-all text-base font-semibold text-[#1B2A4A]">{{ payment.upiId }}</p>
-                  <p v-if="payment.accountName" class="mt-1 text-sm text-[#7A6A56]">{{ payment.accountName }}</p>
+                  <p class="mt-3 break-all text-base font-semibold text-[#0A2540]">{{ payment.upiId }}</p>
+                  <p v-if="payment.accountName" class="mt-1 text-sm text-[#94A3B8]">{{ payment.accountName }}</p>
                   <button type="button" class="btn-copy mt-4 self-start" :class="upiCopied && 'btn-copy--done'" @click="copyUpi">
                     {{ upiCopied ? 'Copied' : 'Copy UPI ID' }}
                   </button>
                 </template>
-                <p v-else-if="!qrBroken" class="mt-3 text-sm leading-relaxed text-[#8A7449]">
+                <p v-else-if="!qrBroken" class="mt-3 text-sm leading-relaxed text-[#64748B]">
                   UPI details are being finalised. Please pay using the QR code alongside.
                 </p>
-                <p v-else class="mt-3 text-sm leading-relaxed text-[#8A7449]">
+                <p v-else class="mt-3 text-sm leading-relaxed text-[#64748B]">
                   Payment details are being finalised. Please write to
-                  <a :href="`mailto:${footer.email}`" class="font-semibold text-[#1B2A4A] underline">{{ footer.email }}</a>
+                  <a :href="`mailto:${footer.email}`" class="font-semibold text-[#0A2540] underline">{{ footer.email }}</a>
                   and we will send them to you directly.
                 </p>
-                <p class="mt-5 text-xs leading-relaxed text-[#7A6A56]">
+                <p class="mt-5 text-xs leading-relaxed text-[#94A3B8]">
                   After paying, take a screenshot of the transaction and upload it below.
                 </p>
               </div>
@@ -609,23 +564,23 @@
                 />
 
                 <div v-if="!file" class="text-center">
-                  <span class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#B8860B] shadow-sm ring-1 ring-black/5" aria-hidden="true">
+                  <span class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#0071E3] shadow-sm ring-1 ring-black/5" aria-hidden="true">
                     <component :is="icon('upload')" />
                   </span>
-                  <p class="mt-4 text-sm font-semibold text-[#1B2A4A]">Click to upload, or drag your screenshot here</p>
-                  <p class="mt-1 text-xs text-[#8A7449]">PNG, JPG or PDF · up to 4 MB</p>
+                  <p class="mt-4 text-sm font-semibold text-[#0A2540]">Click to upload, or drag your screenshot here</p>
+                  <p class="mt-1 text-xs text-[#64748B]">PNG, JPG or PDF · up to 4 MB</p>
                 </div>
 
                 <div v-else class="flex w-full items-center gap-4">
                   <img v-if="filePreview" :src="filePreview" alt="" class="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-black/5" />
-                  <span v-else class="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-[#FBF7F0] text-[#B8860B] ring-1 ring-black/5">
+                  <span v-else class="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-[#F8FAFC] text-[#0071E3] ring-1 ring-black/5">
                     <component :is="icon('file')" />
                   </span>
                   <div class="min-w-0 flex-1">
-                    <p class="truncate text-sm font-semibold text-[#1B2A4A]">{{ file.name }}</p>
-                    <p class="mt-0.5 text-xs text-[#8A7449]">{{ formatBytes(file.size) }}</p>
+                    <p class="truncate text-sm font-semibold text-[#0A2540]">{{ file.name }}</p>
+                    <p class="mt-0.5 text-xs text-[#64748B]">{{ formatBytes(file.size) }}</p>
                   </div>
-                  <button type="button" class="shrink-0 text-xs font-semibold text-[#B8860B] underline-offset-4 hover:underline" @click.stop="clearFile">
+                  <button type="button" class="shrink-0 text-xs font-semibold text-[#0071E3] underline-offset-4 hover:underline" @click.stop="clearFile">
                     Replace
                   </button>
                 </div>
@@ -635,11 +590,11 @@
 
             <!-- Consent -->
             <div>
-              <div class="rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-5">
-                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449]">Participation terms</p>
+              <div class="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-5">
+                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B]">Participation terms</p>
                 <ul class="mt-3 space-y-2">
-                  <li v-for="c in consent.points" :key="c" class="flex items-start gap-2.5 text-xs leading-relaxed text-[#5A4632]">
-                    <span class="mt-[0.3rem] text-[#B8860B]" aria-hidden="true">◆</span>
+                  <li v-for="c in consent.points" :key="c" class="flex items-start gap-2.5 text-xs leading-relaxed text-[#4A5568]">
+                    <span class="mt-[0.3rem] text-[#0071E3]" aria-hidden="true">◆</span>
                     <span>{{ c }}</span>
                   </li>
                 </ul>
@@ -647,7 +602,7 @@
 
               <label class="checkbox-row mt-3" :class="errors.consent && 'ring-red-300'">
                 <input v-model="form.consentAccepted" type="checkbox" class="checkbox-input" />
-                <span class="text-sm text-[#5A4632]">{{ consent.label }} <span class="req">*</span></span>
+                <span class="text-sm text-[#4A5568]">{{ consent.label }} <span class="req">*</span></span>
               </label>
               <p v-if="errors.consent" class="field-msg">Please accept the participation terms to submit.</p>
             </div>
@@ -668,26 +623,123 @@
     </section>
 
     <!-- ======================================================================
+         RETREAT DETAIL — full width, revealed for the featured campus
+         Every campus has its own retreat, so this describes NIT Calicut's and
+         appears only once that college is selected in the form above. It lives
+         out here rather than inside the form, which got crowded fast.
+         ====================================================================== -->
+    <Transition name="reveal">
+      <section
+        v-if="isFeaturedCollege"
+        id="retreat-detail"
+        class="relative scroll-mt-24 bg-[#0A2540] py-24 sm:py-28"
+      >
+        <div class="retreat-detail-wash absolute inset-0"></div>
+        <div class="relative mx-auto max-w-6xl px-6">
+          <div class="text-center">
+            <p class="eyebrow-on-dark">{{ featuredCollege }}</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+              Your retreat, in full
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+              Everything {{ featuredCollege }} students travelling to {{ guruvayur.name }} on
+              {{ retreatDate }} need to know.
+            </p>
+          </div>
+
+          <!-- Retreat Details -->
+          <dl class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-for="d in retreatDetails" :key="d.label" class="detail-card">
+              <span class="detail-icon"><component :is="icon(d.icon)" /></span>
+              <div class="min-w-0">
+                <dt class="detail-label">{{ d.label }}</dt>
+                <dd class="detail-value">{{ d.value }}</dd>
+              </div>
+            </div>
+          </dl>
+
+          <!-- What You'll Experience -->
+          <div class="mt-20">
+            <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              What You'll Experience
+            </h3>
+            <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <div v-for="e in experiences" :key="e.title" class="experience-card">
+                <span class="experience-emoji" aria-hidden="true">{{ e.emoji }}</span>
+                <p class="mt-5 text-base font-semibold tracking-tight text-white">{{ e.title }}</p>
+                <p class="mt-2 text-sm leading-relaxed text-white/65">{{ e.body }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transparent pricing -->
+          <div class="mt-20">
+            <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              Transparent Pricing — Registration Fee
+            </h3>
+            <p class="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-white/60">
+              The real cost of the day, and how much of it the alumni carry.
+            </p>
+            <div class="mx-auto mt-10 max-w-xl rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-sm sm:p-9">
+              <ul class="divide-y divide-white/10">
+                <li v-for="b in pricing.breakdown" :key="b.label" class="flex items-center justify-between py-3">
+                  <span class="text-sm text-white/70">{{ b.label }}</span>
+                  <span class="text-sm font-semibold text-white">
+                    {{ pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
+                  </span>
+                </li>
+                <li class="flex items-center justify-between py-3">
+                  <span class="text-sm font-semibold text-white">Actual cost per student</span>
+                  <span class="text-sm font-semibold text-white">
+                    {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
+                  </span>
+                </li>
+                <li class="flex items-center justify-between py-3">
+                  <span class="text-sm text-white/70">Covered by {{ featuredCollege }} alumni</span>
+                  <span class="text-sm font-semibold text-[#34D399]">
+                    − {{ pricing.currency }}{{ (pricing.actualCost - pricing.studentContribution).toLocaleString('en-IN') }}
+                  </span>
+                </li>
+              </ul>
+              <div class="mt-6 flex items-center justify-between rounded-2xl border border-[#34D399]/25 bg-[#34D399]/10 px-6 py-5">
+                <span class="text-sm font-semibold uppercase tracking-[0.16em] text-[#34D399]">You pay</span>
+                <span class="text-3xl font-semibold tracking-tight text-white">
+                  {{ pricing.currency }}{{ pricing.studentContribution.toLocaleString('en-IN') }}
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-10 text-center">
+              <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="scrollToId('register')">
+                Continue your registration
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Transition>
+
+    <!-- ======================================================================
          VOICES
          ====================================================================== -->
-    <section id="voices" class="relative bg-[#F6EFE3] py-24 sm:py-32">
+    <section id="voices" class="relative bg-[#F1F5F9] py-24 sm:py-32">
       <div class="mx-auto max-w-6xl px-6">
         <div class="text-center">
           <p class="eyebrow">In Appreciation</p>
-          <h2 class="section-title mt-3">Voices on Gita Unlocked</h2>
+          <h2 class="section-title mt-3">Voices on Gita Unlocked — Success Engineering</h2>
         </div>
         <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <figure v-for="t in testimonials" :key="t.name" class="voice-card">
-            <span class="font-serif text-5xl leading-none text-[#B8860B]/40" aria-hidden="true">&ldquo;</span>
-            <blockquote class="mt-2 flex-1 text-sm leading-relaxed text-[#5A4632]">{{ t.quote }}</blockquote>
-            <figcaption class="mt-6 flex items-center gap-3.5 border-t border-[#E4D8C4] pt-5">
+            <span class="font-serif text-5xl leading-none text-[#0071E3]/40" aria-hidden="true">&ldquo;</span>
+            <blockquote class="mt-2 flex-1 text-sm leading-relaxed text-[#4A5568]">{{ t.quote }}</blockquote>
+            <figcaption class="mt-6 flex items-center gap-3.5 border-t border-[#E2E8F0] pt-5">
               <img v-if="t.photo" :src="t.photo" :alt="t.name" class="h-12 w-12 shrink-0 rounded-full object-cover object-top ring-1 ring-black/5" />
-              <span v-else class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#1B2A4A] text-sm font-semibold text-[#D4A017]">
+              <span v-else class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#0A2540] text-sm font-semibold text-[#0A84FF]">
                 {{ initials(t.name) }}
               </span>
               <div class="min-w-0">
-                <p class="truncate text-sm font-semibold text-[#1B2A4A]">{{ t.name }}</p>
-                <p class="truncate text-xs text-[#8A7449]">{{ t.role }}</p>
+                <p class="truncate text-sm font-semibold text-[#0A2540]">{{ t.name }}</p>
+                <p class="truncate text-xs text-[#64748B]">{{ t.role }}</p>
               </div>
             </figcaption>
           </figure>
@@ -705,12 +757,12 @@
       </div>
       <div class="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
         <div v-for="m in team" :key="m.name" class="team-card">
-          <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-24 w-24 rounded-full object-cover object-top ring-2 ring-[#B8860B]/20" />
-          <span v-else class="grid h-24 w-24 place-items-center rounded-full bg-[#1B2A4A] text-lg font-semibold text-[#D4A017]">
+          <img v-if="m.photo" :src="m.photo" :alt="m.name" class="h-24 w-24 rounded-full object-cover object-top ring-2 ring-[#0071E3]/20" />
+          <span v-else class="grid h-24 w-24 place-items-center rounded-full bg-[#0A2540] text-lg font-semibold text-[#0A84FF]">
             {{ initials(m.name) }}
           </span>
-          <p class="mt-4 text-sm font-semibold leading-snug text-[#1B2A4A]">{{ m.name }}</p>
-          <p class="mt-1 text-xs text-[#8A7449]">{{ m.detail }}</p>
+          <p class="mt-4 text-sm font-semibold leading-snug text-[#0A2540]">{{ m.name }}</p>
+          <p class="mt-1 text-xs text-[#64748B]">{{ m.detail }}</p>
         </div>
       </div>
     </section>
@@ -718,7 +770,7 @@
     <!-- ======================================================================
          FAQ
          ====================================================================== -->
-    <section id="faq" class="relative bg-[#FBF7F0] py-24 sm:py-28">
+    <section id="faq" class="relative bg-[#F8FAFC] py-24 sm:py-28">
       <div class="mx-auto max-w-3xl px-6">
         <div class="text-center">
           <p class="eyebrow">Questions</p>
@@ -734,7 +786,7 @@
                 </svg>
               </span>
             </summary>
-            <p class="px-6 pb-5 text-sm leading-relaxed text-[#5A4632]">{{ f.a }}</p>
+            <p class="px-6 pb-5 text-sm leading-relaxed text-[#4A5568]">{{ f.a }}</p>
           </details>
         </div>
       </div>
@@ -743,9 +795,9 @@
     <!-- ======================================================================
          FOOTER
          ====================================================================== -->
-    <footer class="bg-[#1B2A4A] py-14">
+    <footer class="bg-[#0A2540] py-14">
       <div class="mx-auto max-w-6xl px-6 text-center">
-        <p class="font-serif text-2xl italic text-[#D4A017]">{{ footer.name }}</p>
+        <p class="font-serif text-2xl italic text-[#0A84FF]">{{ footer.name }}</p>
         <p class="mt-1.5 text-sm text-white/70">{{ footer.tagline }}</p>
         <div class="mx-auto mt-6 h-px w-20 bg-white/[0.15]"></div>
         <p class="mt-6 text-sm font-semibold text-white">{{ footer.presenter }}</p>
@@ -782,6 +834,8 @@ import {
   faqs,
   seo,
   footer,
+  guruvayur,
+  retreatDate,
 } from '~/data/refreshRetreat2026'
 
 definePageMeta({ layout: 'landing' })
@@ -870,15 +924,18 @@ const allottedSpot = computed(() => (form.college ? spotForCollege(form.college)
 // describe the featured campus's, so they stay hidden until it is selected.
 const isFeaturedCollege = computed(() => form.college === featuredCollege)
 
-// --- UPI copy ---
+// --- Images that fall back when the file is missing ---
 const qrBroken = ref(false)
 const qrImgEl = ref(null)
+const heroImageBroken = ref(false)
+const heroImgEl = ref(null)
 
-// The browser starts loading the QR from the server-rendered HTML, so a 404 can
+// The browser starts loading these from the server-rendered HTML, so a 404 can
 // fire before Vue hydrates and @error is never seen. Re-check once on mount.
 onMounted(() => {
-  const img = qrImgEl.value
-  if (img?.complete && img.naturalWidth === 0) qrBroken.value = true
+  const broken = (img) => img?.complete && img.naturalWidth === 0
+  if (broken(qrImgEl.value)) qrBroken.value = true
+  if (broken(heroImgEl.value)) heroImageBroken.value = true
 })
 
 // Everything on this page that is still a placeholder, gathered into the one
@@ -1071,22 +1128,22 @@ const icon = (key) => ICONS[key] || ICONS.pin
 <style scoped>
 /* -------------------------------------------------------------------------
  * Typography — Inter for text, Plus Jakarta Sans for headings, and Cormorant
- * Garamond italic for the display lines that carry the heritage feel.
+ * Garamond italic for the display lines.
  * ------------------------------------------------------------------------- */
-.heritage {
+.refresh-retreat {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', ui-sans-serif, sans-serif;
-  background: #fbf7f0;
-  color: #2d1b0e;
+  background: #F8FAFC;
+  color: #0A2540;
   letter-spacing: -0.01em;
 }
-.heritage h1,
-.heritage h2,
-.heritage h3 {
+.refresh-retreat h1,
+.refresh-retreat h2,
+.refresh-retreat h3 {
   font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, sans-serif;
   letter-spacing: -0.025em;
 }
-.heritage :deep(.font-serif),
-.heritage .font-serif {
+.refresh-retreat :deep(.font-serif),
+.refresh-retreat .font-serif {
   font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
@@ -1094,29 +1151,34 @@ const icon = (key) => ICONS[key] || ICONS.pin
  * Section primitives
  * ------------------------------------------------------------------------- */
 .eyebrow {
-  @apply inline-block rounded-full bg-[#FDF6E7] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#B8860B];
+  @apply inline-block rounded-full bg-[#EFF6FF] px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#0071E3];
 }
 .section-title {
-  @apply text-3xl font-semibold tracking-tight text-[#1B2A4A] sm:text-5xl;
+  @apply text-3xl font-semibold tracking-tight text-[#0A2540] sm:text-5xl;
 }
-.badge-gold {
-  @apply inline-flex items-center gap-2 rounded-full border border-[#B8860B]/30 bg-white/70 px-4 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-[#B8860B] backdrop-blur;
+.badge-accent {
+  @apply inline-flex items-center gap-2 rounded-full border border-[#0071E3]/30 bg-white/70 px-4 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-[#0071E3] backdrop-blur;
 }
 .nav-link {
-  @apply text-sm font-medium text-[#5A4632] transition hover:text-[#B8860B];
+  @apply text-sm font-medium text-[#4A5568] transition hover:text-[#0071E3];
 }
 
 /* -------------------------------------------------------------------------
  * Buttons
  * ------------------------------------------------------------------------- */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#B8860B] to-[#D4A017] font-semibold text-white shadow-[0_10px_30px_-10px_rgba(184,134,11,0.55)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(184,134,11,0.6)] focus:outline-none focus:ring-4 focus:ring-[#B8860B]/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#0071E3] to-[#0A84FF] font-semibold text-white shadow-[0_10px_30px_-10px_rgba(0,113,227,0.55)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(0,113,227,0.6)] focus:outline-none focus:ring-4 focus:ring-[#0071E3]/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
 }
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#1B2A4A]/15 bg-white text-sm font-semibold text-[#1B2A4A] shadow-sm transition hover:-translate-y-0.5 hover:border-[#B8860B]/40 hover:text-[#B8860B];
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#0A2540]/15 bg-white text-sm font-semibold text-[#0A2540] shadow-sm transition hover:-translate-y-0.5 hover:border-[#0071E3]/40 hover:text-[#0071E3];
 }
 .btn-copy {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-[#B8860B]/25 bg-white px-3 py-1.5 text-xs font-semibold text-[#B8860B] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#FDF6E7];
+  @apply inline-flex items-center gap-1.5 rounded-full border border-[#0071E3]/25 bg-white px-3 py-1.5 text-xs font-semibold text-[#0071E3] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EFF6FF];
+}
+/* Secondary CTA sitting on the photographic hero, where the white-on-white
+   .btn-secondary would disappear. */
+.btn-hero-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/20;
 }
 .btn-copy--done {
   @apply border-emerald-200 bg-emerald-50 text-emerald-600;
@@ -1125,23 +1187,33 @@ const icon = (key) => ICONS[key] || ICONS.pin
 /* -------------------------------------------------------------------------
  * Hero
  * ------------------------------------------------------------------------- */
+/* Fallback behind the hero photograph. */
 .hero-wash {
   background:
-    radial-gradient(900px 600px at 15% 10%, rgba(212, 160, 23, 0.18), transparent 60%),
-    radial-gradient(800px 600px at 85% 25%, rgba(194, 65, 12, 0.12), transparent 62%),
-    linear-gradient(180deg, #fdf9f2 0%, #fbf7f0 60%, #f6efe3 100%);
+    radial-gradient(900px 600px at 15% 10%, rgba(0, 113, 227, 0.35), transparent 60%),
+    radial-gradient(800px 600px at 85% 25%, rgba(16, 185, 129, 0.28), transparent 62%),
+    linear-gradient(180deg, #0A2540 0%, #0b3b6d 60%, #0A2540 100%);
+}
+/* Darkens the photograph enough for white text to stay legible, with a blue
+   and green cast so the hero reads as part of the theme rather than a stock
+   image dropped behind the type. */
+.hero-scrim {
+  background:
+    linear-gradient(180deg, rgba(10, 37, 64, 0.78) 0%, rgba(10, 37, 64, 0.55) 42%, rgba(10, 37, 64, 0.88) 100%),
+    radial-gradient(ellipse at 50% 35%, rgba(0, 113, 227, 0.3), transparent 62%),
+    radial-gradient(ellipse at 80% 85%, rgba(16, 185, 129, 0.22), transparent 60%);
 }
 
 /* -------------------------------------------------------------------------
  * Cards
  * ------------------------------------------------------------------------- */
 .premium-card {
-  @apply rounded-3xl border border-[#E4D8C4] bg-white shadow-[0_1px_2px_rgba(45,27,14,0.04),0_24px_70px_-40px_rgba(27,42,74,0.3)];
+  @apply rounded-3xl border border-[#E2E8F0] bg-white shadow-[0_1px_2px_rgba(10,37,64,0.04),0_24px_70px_-40px_rgba(10,37,64,0.3)];
 }
 
 /* Destination panels */
 .destination-card {
-  @apply overflow-hidden rounded-[2rem] border border-[#E4D8C4] bg-white shadow-[0_1px_2px_rgba(45,27,14,0.04),0_30px_70px_-45px_rgba(27,42,74,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_40px_90px_-50px_rgba(27,42,74,0.45)];
+  @apply overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-[0_1px_2px_rgba(10,37,64,0.04),0_30px_70px_-45px_rgba(10,37,64,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_40px_90px_-50px_rgba(10,37,64,0.45)];
 }
 .destination-plate {
   @apply relative flex min-h-[22rem] flex-col justify-between overflow-hidden p-9 sm:p-11 lg:min-h-[26rem];
@@ -1171,68 +1243,68 @@ const icon = (key) => ICONS[key] || ICONS.pin
 
 /* "And many more" */
 .more-places {
-  @apply mt-16 rounded-[2rem] border border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-8 py-12 text-center sm:px-12;
+  @apply mt-16 rounded-[2rem] border border-dashed border-[#CBD5E1] bg-[#F8FAFC] px-8 py-12 text-center sm:px-12;
 }
 .more-pill {
-  @apply rounded-full border border-[#E4D8C4] bg-white px-4 py-1.5 text-sm font-medium text-[#5A4632];
+  @apply rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-sm font-medium text-[#4A5568];
 }
 .more-pill--muted {
-  @apply border-transparent bg-transparent font-serif italic text-[#8A7449];
+  @apply border-transparent bg-transparent font-serif italic text-[#64748B];
 }
 .destination-body {
   @apply p-9 sm:p-11;
 }
 .meta-pill {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-[#E4D8C4] bg-[#FBF7F0] px-3 py-1.5 text-xs font-semibold text-[#5A4632];
+  @apply inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-1.5 text-xs font-semibold text-[#4A5568];
 }
 .meta-pill :deep(svg) {
   @apply h-3.5 w-3.5;
 }
 .meta-pill--date {
-  @apply border-[#B8860B]/40 bg-[#FDF6E7] text-[#8A6A12];
+  @apply border-[#0071E3]/40 bg-[#EFF6FF] text-[#0369A1];
 }
 
 /* Inclusions */
 .inclusion-card {
-  @apply flex items-start gap-4 rounded-2xl border border-[#E4D8C4] bg-white p-5 shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#B8860B]/35 hover:shadow-[0_20px_40px_-25px_rgba(184,134,11,0.45)];
+  @apply flex items-start gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_1px_2px_rgba(10,37,64,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#0071E3]/35 hover:shadow-[0_20px_40px_-25px_rgba(0,113,227,0.45)];
 }
 .inclusion-icon {
-  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#FDF6E7] text-[#B8860B] ring-1 ring-[#B8860B]/15;
+  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#EFF6FF] text-[#0071E3] ring-1 ring-[#0071E3]/15;
 }
 .detail-label {
-  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B];
 }
 .detail-value {
-  @apply mt-1 text-base font-semibold tracking-tight text-[#1B2A4A];
+  @apply mt-1 text-base font-semibold tracking-tight text-[#0A2540];
 }
 
 /* Steps */
 .step-card {
-  @apply rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 transition duration-300 hover:border-[#D4A017]/35 hover:bg-white/[0.07];
+  @apply rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 transition duration-300 hover:border-[#0A84FF]/35 hover:bg-white/[0.07];
 }
 
 /* Voices */
 .voice-card {
-  @apply flex h-full flex-col rounded-3xl border border-[#E4D8C4] bg-white p-7 shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1.5 hover:border-[#B8860B]/30 hover:shadow-[0_28px_60px_-35px_rgba(184,134,11,0.45)];
+  @apply flex h-full flex-col rounded-3xl border border-[#E2E8F0] bg-white p-7 shadow-[0_1px_2px_rgba(10,37,64,0.04)] transition duration-300 hover:-translate-y-1.5 hover:border-[#0071E3]/30 hover:shadow-[0_28px_60px_-35px_rgba(0,113,227,0.45)];
 }
 
 /* Team */
 .team-card {
-  @apply flex flex-col items-center rounded-2xl border border-[#E4D8C4] bg-white p-6 text-center shadow-[0_1px_2px_rgba(45,27,14,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#B8860B]/30 hover:shadow-[0_22px_45px_-28px_rgba(184,134,11,0.4)];
+  @apply flex flex-col items-center rounded-2xl border border-[#E2E8F0] bg-white p-6 text-center shadow-[0_1px_2px_rgba(10,37,64,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#0071E3]/30 hover:shadow-[0_22px_45px_-28px_rgba(0,113,227,0.4)];
 }
 
 /* FAQ */
 .faq-item {
-  @apply overflow-hidden rounded-2xl border border-[#E4D8C4] bg-white;
+  @apply overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white;
 }
 .faq-summary {
-  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-sm font-semibold text-[#1B2A4A] transition hover:text-[#B8860B];
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-sm font-semibold text-[#0A2540] transition hover:text-[#0071E3];
 }
 .faq-summary::-webkit-details-marker {
   display: none;
 }
 .faq-chevron {
-  @apply shrink-0 text-[#B8860B] transition duration-200;
+  @apply shrink-0 text-[#0071E3] transition duration-200;
 }
 .faq-item[open] .faq-chevron {
   @apply rotate-180;
@@ -1242,13 +1314,13 @@ const icon = (key) => ICONS[key] || ICONS.pin
  * Form
  * ------------------------------------------------------------------------- */
 .lbl {
-  @apply block text-sm font-semibold text-[#1B2A4A];
+  @apply block text-sm font-semibold text-[#0A2540];
 }
 .req {
-  @apply text-[#B8860B];
+  @apply text-[#0071E3];
 }
 .field {
-  @apply mt-2 block w-full rounded-2xl border border-[#E4D8C4] bg-white px-4 py-3 text-base text-[#1B2A4A] outline-none transition placeholder:text-[#A89880] focus:border-[#B8860B] focus:ring-4 focus:ring-[#B8860B]/10;
+  @apply mt-2 block w-full rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3 text-base text-[#0A2540] outline-none transition placeholder:text-[#94A3B8] focus:border-[#0071E3] focus:ring-4 focus:ring-[#0071E3]/10;
 }
 .field-error {
   @apply border-red-400 focus:border-red-400 focus:ring-red-200/60;
@@ -1257,61 +1329,80 @@ const icon = (key) => ICONS[key] || ICONS.pin
   @apply mt-1.5 text-xs font-medium text-red-500;
 }
 .field-hint {
-  @apply mt-1.5 text-xs text-[#8A7449];
+  @apply mt-1.5 text-xs text-[#64748B];
 }
 .fieldset-legend {
-  @apply mb-1 w-full border-b border-[#EFE4D2] pb-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+  @apply mb-1 w-full border-b border-[#E2E8F0] pb-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B];
 }
 
-/* Retreat detail / experience / pricing blocks, shown for the featured campus */
-.retreat-panel {
-  @apply rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-6;
+/* -------------------------------------------------------------------------
+ * Retreat detail section — dark band, shown only for the featured campus
+ * ------------------------------------------------------------------------- */
+.retreat-detail-wash {
+  background:
+    radial-gradient(900px 500px at 12% 8%, rgba(0, 113, 227, 0.28), transparent 62%),
+    radial-gradient(800px 500px at 88% 92%, rgba(16, 185, 129, 0.22), transparent 60%);
 }
-.retreat-panel-title {
-  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#8A7449];
+.eyebrow-on-dark {
+  @apply inline-block rounded-full border border-[#34D399]/30 bg-[#34D399]/10 px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#34D399];
 }
-.retreat-icon {
-  @apply grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-[#B8860B] shadow-sm ring-1 ring-black/5;
+.detail-card {
+  @apply flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-[#34D399]/30 hover:bg-white/[0.07];
 }
-.retreat-icon :deep(svg) {
+.detail-icon {
+  @apply grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#0071E3]/15 text-[#7DD3FC] ring-1 ring-inset ring-white/10;
+}
+.detail-icon :deep(svg) {
   @apply h-4 w-4;
 }
+.detail-label {
+  @apply text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/50;
+}
+.detail-value {
+  @apply mt-1 text-base font-semibold tracking-tight text-white;
+}
+.experience-card {
+  @apply rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-[#34D399]/30 hover:bg-white/[0.07];
+}
+.experience-emoji {
+  @apply inline-grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-2xl ring-1 ring-inset ring-white/10;
+}
 .select-caret {
-  @apply pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#8A7449];
+  @apply pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B];
 }
 .select-caret :deep(svg) {
   @apply h-4 w-4;
 }
 .step-dot {
-  @apply grid h-8 w-8 place-items-center rounded-full border border-[#E4D8C4] bg-white text-xs font-semibold text-[#A89880] transition;
+  @apply grid h-8 w-8 place-items-center rounded-full border border-[#E2E8F0] bg-white text-xs font-semibold text-[#94A3B8] transition;
 }
 .step-dot--on {
-  @apply border-transparent bg-gradient-to-r from-[#B8860B] to-[#D4A017] text-white;
+  @apply border-transparent bg-gradient-to-r from-[#0071E3] to-[#0A84FF] text-white;
 }
 .allotment {
-  @apply rounded-2xl border border-[#E4D8C4] bg-[#FBF7F0] p-5;
+  @apply rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-5;
   border-left: 3px solid var(--accent);
 }
 .allotment-icon {
-  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#B8860B] ring-1 ring-[#B8860B]/15;
+  @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#0071E3] ring-1 ring-[#0071E3]/15;
 }
 .upload-drop {
-  @apply mt-2 flex min-h-[168px] cursor-pointer items-center justify-center rounded-3xl border-2 border-dashed border-[#D8C7A8] bg-[#FBF7F0] px-6 py-8 transition;
+  @apply mt-2 flex min-h-[168px] cursor-pointer items-center justify-center rounded-3xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] px-6 py-8 transition;
 }
 .upload-drop:hover {
-  @apply border-[#B8860B]/50 bg-[#FDF6E7];
+  @apply border-[#0071E3]/50 bg-[#EFF6FF];
 }
 .upload-drop--active {
-  @apply border-[#B8860B] bg-[#FDF6E7];
+  @apply border-[#0071E3] bg-[#EFF6FF];
 }
 .upload-drop--filled {
-  @apply border-solid border-[#E4D8C4] bg-white;
+  @apply border-solid border-[#E2E8F0] bg-white;
 }
 .checkbox-row {
-  @apply flex cursor-pointer items-start gap-3 rounded-2xl border border-[#E4D8C4] bg-white px-4 py-3.5 ring-1 ring-inset ring-transparent transition hover:bg-[#FBF7F0];
+  @apply flex cursor-pointer items-start gap-3 rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3.5 ring-1 ring-inset ring-transparent transition hover:bg-[#F8FAFC];
 }
 .checkbox-input {
-  @apply mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-md border-[#D8C7A8] text-[#B8860B] focus:ring-[#B8860B]/30;
+  @apply mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-md border-[#CBD5E1] text-[#0071E3] focus:ring-[#0071E3]/30;
 }
 
 /* -------------------------------------------------------------------------
