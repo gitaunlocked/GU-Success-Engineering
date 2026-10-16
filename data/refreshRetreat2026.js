@@ -160,7 +160,9 @@ export const unmappedColleges = collegeOptions.filter((c) => !collegeRegions[c])
 // the retreat detail, experience and pricing blocks.
 export const featuredCollege = "NIT Calicut";
 
-// SECTION — Retreat details (revealed for NIT Calicut) ----------------------
+// SECTION — Retreat details -------------------------------------------------
+// NIT Calicut's retreat, kept as a named export because the payment step shows
+// it directly. `retreatForCollege` below builds the same shape for any campus.
 export const retreatDetails = [
   { icon: "calendar", label: "Date", value: `${retreatDate} (${retreatDay})` },
   { icon: "pin", label: "Destination", value: "Guruvayur, Kerala" },
@@ -213,6 +215,79 @@ export const pricing = {
   ],
   actualCost: 1300,
   studentContribution: 250,
+};
+
+// SECTION — Per-campus retreat ----------------------------------------------
+// Every campus travels somewhere, so the detail section can be previewed for
+// any of them. Only what is actually known gets rendered:
+//
+//   * destination, duration and inclusions come from the existing mapping;
+//   * the date is real only for NIT Calicut — the rest are set per group;
+//   * costed pricing exists only for NIT Calicut. Nothing is invented for the
+//     others, because a made-up figure on a page that takes payments would be
+//     read as a quote. Add a `pricing` entry here as each is costed.
+//
+const pricingByCollege = { [featuredCollege]: pricing };
+
+// Universal to every destination, so they top and tail each campus's list.
+const sharedExperiences = {
+  friends: {
+    emoji: "🤝",
+    title: "Meet New Friends",
+    body: "Bond with peers from your own campus and beyond over a shared, unforgettable journey.",
+  },
+  memories: {
+    emoji: "✨",
+    title: "Create Lifelong Memories",
+    body: "Laughter, reflection and friendships that outlast the retreat itself.",
+  },
+};
+
+// Rotated across a destination's own highlights, which are written as single
+// lines rather than title-and-body pairs.
+const highlightEmojis = ["🛕", "🏛️", "🌄", "🍲", "🧭", "🎒"];
+
+const experiencesFor = (destination) => {
+  if (destination.id === guruvayur.id) return experiences;
+  return [
+    sharedExperiences.friends,
+    ...destination.highlights.map((h, i) => ({
+      emoji: highlightEmojis[i % highlightEmojis.length],
+      title: h,
+    })),
+    sharedExperiences.memories,
+  ];
+};
+
+export const retreatForCollege = (college) => {
+  const destination = spotForCollege(college);
+  if (!destination) return null;
+  return {
+    college,
+    destination,
+    dateKnown: Boolean(destination.date),
+    details: [
+      {
+        icon: "calendar",
+        label: "Date",
+        value: destination.date
+          ? `${retreatDate} (${retreatDay})`
+          : "Announced with your group",
+      },
+      {
+        icon: "pin",
+        label: "Destination",
+        value: `${destination.name}, ${destination.state}`,
+      },
+      { icon: "clock", label: "Duration", value: destination.duration },
+      { icon: "users", label: "Eligibility", value: `${college} students` },
+      { icon: "bus", label: "Transportation", value: "To & From Included" },
+      { icon: "meal", label: "Meals", value: "All meals through the journey" },
+      { icon: "bed", label: "Accommodation", value: "Comfortable shared rooms" },
+    ],
+    experiences: experiencesFor(destination),
+    pricing: pricingByCollege[college] || null,
+  };
 };
 
 // SECTION — Payment ---------------------------------------------------------
@@ -283,10 +358,9 @@ export const team = [
     photo: "/Srinivas_Pr.jpg",
   },
   {
-    // No photograph on file for Animesh yet, so the card falls back to his
-    // initials. Drop one at /public/team/animesh-dhara.jpg and add the path.
     name: "Animesh Dhara",
     detail: "Embedded SW Engineer, Texas Instruments · Jadavpur University",
+    photo: "/team/animesh-dhara.jpg",
   },
   {
     name: "Indraneel Natu",

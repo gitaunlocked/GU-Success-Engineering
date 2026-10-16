@@ -434,7 +434,6 @@
                       <!-- The full detail lives in its own section rather than
                            inside the form, which got crowded fast. -->
                       <button
-                        v-if="isFeaturedCollege"
                         type="button"
                         class="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#0071E3] transition hover:gap-2.5"
                         @click="scrollToId('retreat-detail')"
@@ -494,6 +493,58 @@
                 {{ form.college ? `${form.college} alumni` : 'alumni' }}
               </p>
               <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#4A5568]">{{ payment.note }}</p>
+            </div>
+
+            <!-- What you'll experience, repeated here so it is in front of the
+                 student at the moment they are deciding to pay. -->
+            <div v-if="studentRetreat" class="pay-panel">
+              <p class="pay-panel-title">What You'll Experience</p>
+              <ul class="mt-4 grid gap-3.5 sm:grid-cols-2">
+                <li v-for="e in studentRetreat.experiences" :key="e.title" class="flex items-start gap-3">
+                  <span class="text-xl leading-none" aria-hidden="true">{{ e.emoji }}</span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-[#0A2540]">{{ e.title }}</p>
+                    <p v-if="e.body" class="mt-0.5 text-xs leading-relaxed text-[#4A5568]">{{ e.body }}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Where the money goes, itemised. Only rendered for a retreat
+                 that has actually been costed. -->
+            <div v-if="studentRetreat?.pricing" class="pay-panel">
+              <p class="pay-panel-title">Transparent Pricing — Registration Fee</p>
+              <ul class="mt-4 divide-y divide-[#E2E8F0]">
+                <li
+                  v-for="b in studentRetreat.pricing.breakdown"
+                  :key="b.label"
+                  class="flex items-center justify-between py-2.5"
+                >
+                  <span class="text-sm text-[#4A5568]">{{ b.label }}</span>
+                  <span class="text-sm font-semibold text-[#0A2540]">
+                    {{ studentRetreat.pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
+                  </span>
+                </li>
+                <li class="flex items-center justify-between py-2.5">
+                  <span class="text-sm font-semibold text-[#0A2540]">Actual cost per student</span>
+                  <span class="text-sm font-semibold text-[#0A2540]">
+                    {{ studentRetreat.pricing.currency }}{{ studentRetreat.pricing.actualCost.toLocaleString('en-IN') }}
+                  </span>
+                </li>
+                <li class="flex items-center justify-between py-2.5">
+                  <span class="text-sm text-[#4A5568]">Covered by {{ form.college }} alumni</span>
+                  <span class="text-sm font-semibold text-[#059669]">
+                    − {{ studentRetreat.pricing.currency
+                    }}{{ (studentRetreat.pricing.actualCost - studentRetreat.pricing.studentContribution).toLocaleString('en-IN') }}
+                  </span>
+                </li>
+              </ul>
+              <div class="mt-4 flex items-center justify-between rounded-2xl bg-[#ECFDF5] px-5 py-4 ring-1 ring-[#059669]/15">
+                <span class="text-sm font-semibold uppercase tracking-[0.14em] text-[#047857]">You pay</span>
+                <span class="text-2xl font-semibold tracking-tight text-[#064E3B]">
+                  {{ studentRetreat.pricing.currency }}{{ studentRetreat.pricing.studentContribution.toLocaleString('en-IN') }}
+                </span>
+              </div>
             </div>
 
             <!-- QR + UPI -->
@@ -623,101 +674,136 @@
     </section>
 
     <!-- ======================================================================
-         RETREAT DETAIL — full width, revealed for the featured campus
-         Every campus has its own retreat, so this describes NIT Calicut's and
-         appears only once that college is selected in the form above. It lives
-         out here rather than inside the form, which got crowded fast.
+         RETREAT DETAIL — full width, one campus at a time
+         Every campus travels somewhere, so any of them can be previewed here.
+         The selector starts on the featured campus and follows the college
+         picked in the registration form. It lives out here rather than inside
+         the form, which got crowded fast.
          ====================================================================== -->
-    <Transition name="reveal">
-      <section
-        v-if="isFeaturedCollege"
-        id="retreat-detail"
-        class="relative scroll-mt-24 bg-[#0A2540] py-24 sm:py-28"
-      >
-        <div class="retreat-detail-wash absolute inset-0"></div>
-        <div class="relative mx-auto max-w-6xl px-6">
-          <div class="text-center">
-            <p class="eyebrow-on-dark">{{ featuredCollege }}</p>
-            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-              Your retreat, in full
-            </h2>
-            <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">
-              Everything {{ featuredCollege }} students travelling to {{ guruvayur.name }} on
-              {{ retreatDate }} need to know.
-            </p>
+    <section id="retreat-detail" class="relative scroll-mt-24 bg-[#0A2540] py-24 sm:py-28">
+      <div class="retreat-detail-wash absolute inset-0"></div>
+      <div class="relative mx-auto max-w-6xl px-6">
+        <div class="text-center">
+          <p class="eyebrow-on-dark">{{ detailCollege }}</p>
+          <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+            Your retreat, in full
+          </h2>
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+            Everything {{ detailCollege }} students travelling to
+            {{ detailRetreat.destination.name }}
+            <template v-if="detailRetreat.dateKnown"> on {{ retreatDate }}</template>
+            need to know.
+          </p>
+        </div>
+
+        <!-- Campus picker -->
+        <div class="mt-10">
+          <p class="text-center text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-white/40">
+            Choose your campus
+          </p>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <button
+              v-for="c in collegeOptions"
+              :key="c"
+              type="button"
+              :class="['campus-chip', c === detailCollege && 'campus-chip--on']"
+              @click="detailCollege = c"
+            >
+              {{ c }}
+            </button>
           </div>
+        </div>
 
-          <!-- Retreat Details -->
-          <dl class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div v-for="d in retreatDetails" :key="d.label" class="detail-card">
-              <span class="detail-icon"><component :is="icon(d.icon)" /></span>
-              <div class="min-w-0">
-                <dt class="detail-label">{{ d.label }}</dt>
-                <dd class="detail-value">{{ d.value }}</dd>
-              </div>
-            </div>
-          </dl>
-
-          <!-- What You'll Experience -->
-          <div class="mt-20">
-            <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              What You'll Experience
-            </h3>
-            <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <div v-for="e in experiences" :key="e.title" class="experience-card">
-                <span class="experience-emoji" aria-hidden="true">{{ e.emoji }}</span>
-                <p class="mt-5 text-base font-semibold tracking-tight text-white">{{ e.title }}</p>
-                <p class="mt-2 text-sm leading-relaxed text-white/65">{{ e.body }}</p>
-              </div>
+        <!-- Retreat Details -->
+        <dl class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div v-for="d in detailRetreat.details" :key="d.label" class="detail-card">
+            <span class="detail-icon"><component :is="icon(d.icon)" /></span>
+            <div class="min-w-0">
+              <dt class="detail-label">{{ d.label }}</dt>
+              <dd class="detail-value">{{ d.value }}</dd>
             </div>
           </div>
+        </dl>
 
-          <!-- Transparent pricing -->
-          <div class="mt-20">
-            <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Transparent Pricing — Registration Fee
-            </h3>
+        <!-- What You'll Experience -->
+        <div class="mt-20">
+          <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            What You'll Experience
+          </h3>
+          <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-for="e in detailRetreat.experiences" :key="e.title" class="experience-card">
+              <span class="experience-emoji" aria-hidden="true">{{ e.emoji }}</span>
+              <p class="mt-5 text-base font-semibold tracking-tight text-white">{{ e.title }}</p>
+              <p v-if="e.body" class="mt-2 text-sm leading-relaxed text-white/65">{{ e.body }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transparent pricing. Shown only where the retreat has actually
+             been costed — an indicative figure here would be read as a quote. -->
+        <div class="mt-20">
+          <h3 class="text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            Transparent Pricing — Registration Fee
+          </h3>
+          <template v-if="detailRetreat.pricing">
             <p class="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-white/60">
               The real cost of the day, and how much of it the alumni carry.
             </p>
             <div class="mx-auto mt-10 max-w-xl rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-sm sm:p-9">
               <ul class="divide-y divide-white/10">
-                <li v-for="b in pricing.breakdown" :key="b.label" class="flex items-center justify-between py-3">
+                <li
+                  v-for="b in detailRetreat.pricing.breakdown"
+                  :key="b.label"
+                  class="flex items-center justify-between py-3"
+                >
                   <span class="text-sm text-white/70">{{ b.label }}</span>
                   <span class="text-sm font-semibold text-white">
-                    {{ pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
+                    {{ detailRetreat.pricing.currency }}{{ b.amount.toLocaleString('en-IN') }}
                   </span>
                 </li>
                 <li class="flex items-center justify-between py-3">
                   <span class="text-sm font-semibold text-white">Actual cost per student</span>
                   <span class="text-sm font-semibold text-white">
-                    {{ pricing.currency }}{{ pricing.actualCost.toLocaleString('en-IN') }}
+                    {{ detailRetreat.pricing.currency }}{{ detailRetreat.pricing.actualCost.toLocaleString('en-IN') }}
                   </span>
                 </li>
                 <li class="flex items-center justify-between py-3">
-                  <span class="text-sm text-white/70">Covered by {{ featuredCollege }} alumni</span>
+                  <span class="text-sm text-white/70">Covered by {{ detailCollege }} alumni</span>
                   <span class="text-sm font-semibold text-[#34D399]">
-                    − {{ pricing.currency }}{{ (pricing.actualCost - pricing.studentContribution).toLocaleString('en-IN') }}
+                    − {{ detailRetreat.pricing.currency
+                    }}{{ (detailRetreat.pricing.actualCost - detailRetreat.pricing.studentContribution).toLocaleString('en-IN') }}
                   </span>
                 </li>
               </ul>
               <div class="mt-6 flex items-center justify-between rounded-2xl border border-[#34D399]/25 bg-[#34D399]/10 px-6 py-5">
                 <span class="text-sm font-semibold uppercase tracking-[0.16em] text-[#34D399]">You pay</span>
                 <span class="text-3xl font-semibold tracking-tight text-white">
-                  {{ pricing.currency }}{{ pricing.studentContribution.toLocaleString('en-IN') }}
+                  {{ detailRetreat.pricing.currency }}{{ detailRetreat.pricing.studentContribution.toLocaleString('en-IN') }}
                 </span>
               </div>
             </div>
+          </template>
 
-            <div class="mt-10 text-center">
-              <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="scrollToId('register')">
-                Continue your registration
-              </button>
-            </div>
+          <div
+            v-else
+            class="mx-auto mt-10 max-w-xl rounded-3xl border border-dashed border-white/15 bg-white/[0.03] px-8 py-10 text-center"
+          >
+            <p class="text-base font-semibold text-white">Being costed now</p>
+            <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              The {{ detailRetreat.destination.name }} retreat is still being costed with the
+              {{ detailCollege }} alumni group. You will see the full breakdown — the real cost,
+              what the alumni carry, and what you pay — before anything is asked of you.
+            </p>
+          </div>
+
+          <div class="mt-10 text-center">
+            <button type="button" class="btn-primary px-8 py-3.5 text-base" @click="scrollToId('register')">
+              Continue your registration
+            </button>
           </div>
         </div>
-      </section>
-    </Transition>
+      </div>
+    </section>
 
     <!-- ======================================================================
          VOICES
@@ -809,7 +895,7 @@
 </template>
 
 <script setup>
-import { h, reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { h, reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import {
   brand,
   hero,
@@ -822,9 +908,7 @@ import {
   spotForCollege,
   unmappedColleges,
   featuredCollege,
-  retreatDetails,
-  experiences,
-  pricing,
+  retreatForCollege,
   inclusions,
   steps,
   payment,
@@ -834,7 +918,6 @@ import {
   faqs,
   seo,
   footer,
-  guruvayur,
   retreatDate,
 } from '~/data/refreshRetreat2026'
 
@@ -920,9 +1003,23 @@ const confirmedDestination = ref('')
 // The destination follows from the college — the student never picks it.
 const allottedSpot = computed(() => (form.college ? spotForCollege(form.college) : null))
 
-// Every campus runs its own retreat. The detail, experience and pricing blocks
-// describe the featured campus's, so they stay hidden until it is selected.
-const isFeaturedCollege = computed(() => form.college === featuredCollege)
+// Every campus runs its own retreat, so the detail section can be previewed
+// for any of them. It opens on the featured campus and follows the college
+// picked in the form, which is the one the student actually cares about.
+const detailCollege = ref(featuredCollege)
+watch(
+  () => form.college,
+  (college) => {
+    if (college) detailCollege.value = college
+  },
+)
+const detailRetreat = computed(() => retreatForCollege(detailCollege.value))
+
+// The retreat belonging to the student filling the form, shown on the payment
+// step. Null until a college is chosen, which cannot happen past step 1.
+const studentRetreat = computed(() =>
+  form.college ? retreatForCollege(form.college) : null,
+)
 
 // --- Images that fall back when the file is missing ---
 const qrBroken = ref(false)
@@ -1343,6 +1440,19 @@ const icon = (key) => ICONS[key] || ICONS.pin
     radial-gradient(900px 500px at 12% 8%, rgba(0, 113, 227, 0.28), transparent 62%),
     radial-gradient(800px 500px at 88% 92%, rgba(16, 185, 129, 0.22), transparent 60%);
 }
+/* Reference panels on the payment step */
+.pay-panel {
+  @apply rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6;
+}
+.pay-panel-title {
+  @apply text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#64748B];
+}
+.campus-chip {
+  @apply rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-white/60 transition hover:border-white/30 hover:text-white;
+}
+.campus-chip--on {
+  @apply border-[#34D399]/40 bg-[#34D399]/15 font-semibold text-white;
+}
 .eyebrow-on-dark {
   @apply inline-block rounded-full border border-[#34D399]/30 bg-[#34D399]/10 px-3.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[#34D399];
 }
@@ -1355,10 +1465,12 @@ const icon = (key) => ICONS[key] || ICONS.pin
 .detail-icon :deep(svg) {
   @apply h-4 w-4;
 }
-.detail-label {
+/* Scoped to the dark band: the same class names are used by the inclusion
+   cards on a white background, where white text would be invisible. */
+#retreat-detail .detail-label {
   @apply text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/50;
 }
-.detail-value {
+#retreat-detail .detail-value {
   @apply mt-1 text-base font-semibold tracking-tight text-white;
 }
 .experience-card {
